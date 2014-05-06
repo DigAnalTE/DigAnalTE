@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CommonFunction\CommonFunction.cpp" />
+    <ClCompile Include="CommonFunction\ErrorInfo.cpp" />
+    <ClCompile Include="CommonFunction\HashTable.cpp" />
+    <ClCompile Include="CommonFunction\QikSort.cpp" />
+    <ClCompile Include="NetWorkInfo\AreaInfo.cpp" />
+    <ClCompile Include="NetWorkInfo\BranchBase.cpp" />
+    <ClCompile Include="NetWorkInfo\BranchInfo.cpp" />
+    <ClCompile Include="NetWorkInfo\BusBase.cpp" />
+    <ClCompile Include="NetWorkInfo\BusInfo.cpp" />
+    <ClCompile Include="NetWorkInfo\Compensation.cpp" />
+    <ClCompile Include="NetWorkInfo\EquipmentBase.cpp" />
+    <ClCompile Include="NetWorkInfo\EquipmentInfo.cpp" />
+    <ClCompile Include="NetWorkInfo\Generator.cpp" />
+    <ClCompile Include="NetWorkInfo\NetLoad.cpp" />
+    <ClCompile Include="NetWorkInfo\NetWorkBase.cpp" />
+    <ClCompile Include="NetWorkInfo\NetWorkInfo.cpp" />
+    <ClCompile Include="PowerFlowLib\NRSolution.cpp" />
+    <ClCompile Include="SpareMatrixLib\ComplexLDUSolver.cpp" />
+    <ClCompile Include="SpareMatrixLib\SpareMatrix.cpp" />
+    <ClCompile Include="SpareMatrixLib\ComplexSpareMatrix.cpp" />
+    <ClCompile Include="SpareMatrixLib\ComplexSpareMatrixSolver.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CommonFunction\constdef.h" />
+    <ClInclude Include="CommonFunction\ErrorInfo.h" />
+    <ClInclude Include="CommonFunction\HashTable.h" />
+    <ClInclude Include="CommonFunction\QikSort.h" />
+    <ClInclude Include="NetWorkInfo\AreaInfo.h" />
+    <ClInclude Include="NetWorkInfo\BranchBase.h" />
+    <ClInclude Include="NetWorkInfo\BranchInfo.h" />
+    <ClInclude Include="NetWorkInfo\BusBase.h" />
+    <ClInclude Include="NetWorkInfo\BusInfo.h" />
+    <ClInclude Include="NetWorkInfo\Compensation.h" />
+    <ClInclude Include="NetWorkInfo\EquipmentBase.h" />
+    <ClInclude Include="NetWorkInfo\EquipmentInfo.h" />
+    <ClInclude Include="NetWorkInfo\Generator.h" />
+    <ClInclude Include="NetWorkInfo\NetLoad.h" />
+    <ClInclude Include="NetWorkInfo\NetWorkBase.h" />
+    <ClInclude Include="NetWorkInfo\NetWorkInfo.h" />
+    <ClInclude Include="PowerFlowLib\NRSolution.h" />
+    <ClInclude Include="powerflowlib\powerflowfunction.h" />
+    <ClInclude Include="SpareMatrixLib\ComplexLDUSolver.h" />
+    <ClInclude Include="sparematrixlib\complexsparematrix.h" />
+    <ClInclude Include="SpareMatrixLib\ComplexSpareMatrixSolver.h" />
+    <ClInclude Include="sparematrixlib\sparematrix.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{EFA7C0D0-F1B8-4AB4-BB61-8497464BDB13}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>DigAnalTE</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <OutputFile>Lib\$(TargetName)D$(TargetExt)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <OutputFile>Lib\$(TargetName)$(TargetExt)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
