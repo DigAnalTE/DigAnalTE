@@ -31,7 +31,7 @@ void BUSBASE::PrintInfo(char*Line)
 
 void BUSBASE::OutputPFOFile(FILE*fp)
 {
-	fprintf(fp,"母线'%s'  %7.2fkV %5.1f度   %8.1f有功误差%8.1f无功误差\n",
+	fprintf(fp,"母线'%s'  %7.2fkV %6.3f度   %8.1f有功误差%8.1f无功误差\n",
 		Name,
 		m_fBusV*BaseKv,m_fBusSita,
 		m_fPerr,m_fQerr);

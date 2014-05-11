@@ -63,7 +63,7 @@ if((fp=fopen (filename,type))==NULL)\
 #define FreeArray2D(a) {if(a!=NULL){delete[] a;}a=NULL;}
 
 //分配2维字符数组，Name[n][MaxNameLen];
-#define	MallocCharArray(Name,n,MaxNameLen)  {Name=(char (*)[MaxNameLen]) malloc((n)*MaxNameLen*sizeof(char));  if(Name==NULL){printf("Name2D:out of memory.");_press_enter_exit;}}
+#define	MallocCharArray(Name,n,MaxNameLen)  {Name=(char (*)[MaxNameLen]) malloc((n)*MaxNameLen*sizeof(char));  if(Name==NULL){printf("Name2D:out of memory.");{ printf("a out of memory\n");exit(1);}}}
 
 //常用函数
 #define minv(x,y) ( (x>y)?y:x)
