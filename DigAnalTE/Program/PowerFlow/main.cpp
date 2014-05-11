@@ -18,7 +18,7 @@ int main(int argc,char **argv)
 	{
 		gFileInfo.SetInputFileName(argv[1]);
 	}
-	gFileInfo.InitInputFileName("raw");
+	gFileInfo.InitInputFileName("dat");
 	gFileInfo.IntOutputFileName("pfos");
 	cpGetErrorInfo()->SetMessageFile(gFileInfo.GetOutFile());
 
