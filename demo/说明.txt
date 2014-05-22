@@ -1,0 +1,12 @@
+电力系统数字仿真分析工具包
+作者十年来从事电力系统计算方面软件开发经验，将成果逐步开源，希望能有更多的人参与软件
+作者的邮箱是 DigAnalTE@gmail.com
+
+本文件夹是一个demo底下是三个潮流程序，分别支持三种不同的数据格式：DigAnalTE格式、BPA格式、PSASP格式
+程序的源码能支持上万节点的算例，并经过测试，在合适的时候将逐步将程序源码公开。
+
+目录下程序的使用方法：
+打开DOS命令框后，输入命令行，三个不同的程序的命令行分别为：
+PowerFlow.exe Sample\IEEE009.DAT
+PowerFlowBPA.exe Sample\IEEE009.DAT
+PowerFlowPSASP.exe Sample\
