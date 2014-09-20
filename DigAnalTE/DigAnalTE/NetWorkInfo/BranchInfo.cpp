@@ -11,6 +11,7 @@ BRANCHINFO::BRANCHINFO()
 	IsBuild=0;
 	BranchLinkNo=0;
 	BranchLink=NULL;BRINDX=NULL;BRCONT=NULL;
+	m_BranchHash.InitHashTable(_MaxBranchNo);
 }
 
 void BRANCHINFO::FreeSpace()
@@ -22,6 +23,7 @@ void BRANCHINFO::FreeSpace()
 	}
 	BranchTotal=0;
 	BranchLinkNo=0;FreeArray(BranchLink);FreeArray(BRINDX);FreeArray(BRCONT);
+	m_BranchHash.InitHashTable(_MaxBranchNo);
 }
 
 int BRANCHINFO::AddNewBranch(BRANCHBASE*tBranch)
@@ -30,6 +32,15 @@ int BRANCHINFO::AddNewBranch(BRANCHBASE*tBranch)
 	{
 		sprintf(ErrorMessage[0],"线路数目超过设定值%d",_MaxBranchNo);
 		cpGetErrorInfo()->PrintWarning(6,1);
+		return -1;
+	}
+	int flag;
+	flag = m_BranchHash.InsertElementToHashTable(BranchTotal,tBranch->Name);
+	if (flag>=0)
+	{
+		sprintf(ErrorMessage[0]," 重复的线路数据数据，忽略: ");
+		tBranch->PrintInfo(ErrorMessage[1]);
+		cpGetErrorInfo()->PrintWarning(7,2);
 		return -1;
 	}
 	Branch[BranchTotal] = tBranch;
@@ -104,3 +115,9 @@ void BRANCHINFO::BuildLink(int tBusTotal)
 		}
 	}
 }
+
+int BRANCHINFO::BranchSearch( char *lpszString )
+{
+	return m_BranchHash.ElementSearch(lpszString);
+}
+

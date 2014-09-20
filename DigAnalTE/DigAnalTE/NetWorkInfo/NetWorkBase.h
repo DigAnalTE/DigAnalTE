@@ -58,30 +58,25 @@ public:
 	AREABASE* cpGetArea(int i){return m_AreaInfo.cpGetArea(i);}
 	int iGetZoneNo(char* tZone){return m_AreaInfo.iGetZoneNo(tZone);}
 	int iGetAreaNo(char* tArea){return m_AreaInfo.iGetAreaNo(tArea);}
-	//
-	//	母线信息
-	//
-protected:
+
+protected://母线信息
 	BUSINFO m_BusInfo;
 public:
 	int iGetBusTotal(){return m_BusInfo.iGetBusTotal();}
 	BUSINFO* cpGetBusInfo(){return &m_BusInfo;}
 	BUSBASE* cpGetBus(int i){return m_BusInfo.cpGetBus(i);}
 	int BusSearch( char *lpszString ){return m_BusInfo.BusSearch(lpszString);}
-	//
-	//	线路信息
-	//
-protected:
+
+protected://线路信息
 	BRANCHINFO m_BranchInfo;
 public:
 	int iGetBranchTotal(){return m_BranchInfo.iGetBranchTotal();}
 	BRANCHINFO* cpGetBranchInfo(){return &m_BranchInfo;}
 	BRANCHBASE* cpGetBranch(int i){return m_BranchInfo.cpGetBranch(i);}
-	//
-	//	设备信息
-	//	该设备必须有对应的母线，如果没有该母线，则在BusInfo中建立新的母线
-	//
-protected:
+	int BranchSearch( char *lpszString ){return m_BranchInfo.BranchSearch(lpszString);}
+
+protected://设备信息
+	//该设备必须有对应的母线，如果没有该母线，则在BusInfo中建立新的母线
 	EQUIPMENTINFO m_EquipmentInfo;//包含各种各样的设备，单端口，两端口，多端口
 public:
 	int iGetEquipTotal(){return m_EquipmentInfo.iGetEquipTotal();}

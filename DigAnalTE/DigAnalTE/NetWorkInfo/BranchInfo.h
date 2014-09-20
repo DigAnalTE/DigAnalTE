@@ -6,6 +6,7 @@
 //主要是负责查找
 
 #include "BranchBase.h"
+#include "../CommonFunction/HashTable.h"
 
 class BRANCHINFO
 {
@@ -21,7 +22,13 @@ public:
 	int iGetBranchTotal(){return BranchTotal;}
 	BRANCHBASE *cpGetBranch(int i){return Branch[i];}
 	int AddNewBranch(BRANCHBASE*tBranch);
-//--------------------索引信息--------------------
+//--------------------HASH索引--------------------
+protected://索引//不需要Build索引，在添加的过程中自动添加
+	HASHTABLE m_BranchHash;//使用Hash表法管理Branch
+public:
+	int BranchSearch( char *lpszString );
+
+//--------------------两端索引--------------------
 public:
 	struct BRANCHLINK
 	{
