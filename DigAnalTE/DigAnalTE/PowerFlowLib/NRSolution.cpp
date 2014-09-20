@@ -10,6 +10,30 @@ PFSOLUTION_BASE* makeNRSolver(NETWORKINFO* temp)
 	return tEngine;
 }
 
+int PowerFlowCal(NETWORKINFO* tNetWorkInfo,PFCalPara tCalPara)
+{
+	PFSOLUTION_BASE* tPFCal = makeNRSolver(tNetWorkInfo);
+	if (tPFCal->Calculate(tCalPara)!=1)
+	{
+		return 0;
+	}
+	return 1;
+}
+
+int PowerFlowCal(NETWORKINFO* tNetWorkInfo)
+{
+	PFCalPara tCalPara;
+	tCalPara.MaxIter=50;
+	tCalPara.BusPMaxErr=0.005f;
+	tCalPara.BusQMaxErr=0.005f;
+	PFSOLUTION_BASE* tPFCal = makeNRSolver(tNetWorkInfo);
+	if (tPFCal->Calculate(tCalPara)!=1)
+	{
+		return 0;
+	}
+	return 1;
+}
+
 NRSOLUTION::NRSOLUTION(NETWORKINFO* temp):PFSOLUTION_BASE(temp)
 {
 	RightP=NULL;RightQ=NULL;

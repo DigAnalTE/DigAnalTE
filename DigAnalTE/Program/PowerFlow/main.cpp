@@ -41,17 +41,22 @@ int main(int argc,char **argv)
 		cpGetErrorInfo()->PrintError(1);
 		return 0;
 	}
-
-	PFCalPara tCalPara;
-	tCalPara.MaxIter=50;
-	tCalPara.BusPMaxErr=0.005f;
-	tCalPara.BusQMaxErr=0.005f;
 	
-	PFSOLUTION_BASE* tPFCal = makeNRSolver(&gNetWorkInfo);
-	if (tPFCal->Calculate(tCalPara)!=1)
+	//³±Á÷¼ÆËã
+	if (PowerFlowCal(&gNetWorkInfo)!=1)
 	{
 		return 0;
 	}
+	//PFCalPara tCalPara;
+	//tCalPara.MaxIter=50;
+	//tCalPara.BusPMaxErr=0.005f;
+	//tCalPara.BusQMaxErr=0.005f;
+	//
+	//PFSOLUTION_BASE* tPFCal = makeNRSolver(&gNetWorkInfo);
+	//if (tPFCal->Calculate(tCalPara)!=1)
+	//{
+	//	return 0;
+	//}
 
 	gNetWorkInfo.OutputPFOFile(gFileInfo.GetOutFile());
 

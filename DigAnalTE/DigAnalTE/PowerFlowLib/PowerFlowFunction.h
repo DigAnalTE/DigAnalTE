@@ -60,4 +60,7 @@ public:
 
 PFSOLUTION_BASE* makeNRSolver(NETWORKINFO*);
 
+int PowerFlowCal(NETWORKINFO*);
+int PowerFlowCal(NETWORKINFO*,PFCalPara);//默认使用NR算法进行计算
+
 #endif
