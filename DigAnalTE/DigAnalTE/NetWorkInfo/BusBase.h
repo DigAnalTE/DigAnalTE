@@ -17,9 +17,8 @@ public:
 		cBusType=' ';
 		Name[0]='\0';BaseKv=100.f;
 		Zone[0]='\0';ZoneNo=-1;AreaNo=-1;
-		Owner[0]='\0';
-		m_fBusVmax=1.5f;m_fBusVmin=0.f;
 		m_fBusV=1;m_fBusSita=0;m_fPerr=0;m_fQerr=0;
+		m_fBusVmax=1.5f;m_fBusVmin=0.f;
 	}
 public:
 	int Removed;//不计算
@@ -32,12 +31,9 @@ public:
 	int ZoneNo,AreaNo;
 	float m_fBusVmax,m_fBusVmin;//母线电压上下限，只用于报警
 public:
-	char Owner[_MaxNameLen];
-public:
 	char GetBusType(){return cBusType;}
 	char* GetBusName(){return Name;}
 	char* GetZoneName(){return Zone;}
-	char* GetOwnerName(){return Owner;}
 	float fGetBaseKv(){return BaseKv;}
 public://读写部分
 	virtual int ReadLine(char*Line);

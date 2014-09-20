@@ -100,7 +100,18 @@ void EQUIPMENTINFO::BuildLink(int tBusTotal)
 	}
 	if(EquipLink!=NULL)FreeArray(EquipLink);
 	if (EquipLinkNo<=0)
+	{
+		if(EQINDX!=NULL)FreeArray(EQINDX);
+		if(EQCONT!=NULL)FreeArray(EQCONT);
+		MallocNew(EQINDX,int,BusTotal);
+		MallocNew(EQCONT,int,BusTotal);
+		for (i=0;i<BusTotal;i++)
+		{
+			EQINDX[i]=0;
+			EQCONT[i]=0;
+		}
 		return;
+	}
 	MallocNew(EquipLink,EQUIPLINK,EquipLinkNo);
 	ONEEQUIPMENTBASE* tempOne;
 	TWOEQUIPMENTBASE* tempTwo;
