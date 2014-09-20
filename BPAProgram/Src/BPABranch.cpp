@@ -191,3 +191,40 @@ int TBRANCH::subReadBPALine(char*Line)
 	Gk1=0;Bk1=0;Gk2=0;Bk2=0;
 	return 1;
 }
+
+void BPABRANCH::OutputPFOFile(FILE*fp,int nDirtn)
+{
+	float Pin,Qin,Pout,Qout,Ploss,Qloss;
+	Pin=IP;
+	Qin=IQ;
+	Pout=JP;
+	Qout=JQ;
+	Ploss=Pin+Pout;
+	Qloss=Qin+Qout;
+	if (nDirtn==2)
+	{
+		Pin=Pout;Qin=Qout;
+	}
+	if (fabs(Pin)<0.001)Pin=0.;
+	if (fabs(Qin)<0.001)Qin=0.;
+	if (fabs(Ploss)<0.001)Ploss=0.;
+	if (fabs(Qloss)<0.001)Qloss=0.;
+
+	char OutLine[_MaxLineLen];
+	char BusName[9],OwnerName[4];
+	float baseKV;
+	if(nDirtn==1)
+	{
+		strncpy(BusName,BusName2,8);ReplaceName(BusName,9);
+		baseKV=BaseKv2;
+	}else{
+		strncpy(BusName,BusName1,8);ReplaceName(BusName,9);
+		baseKV=BaseKv1;
+	}
+	sprintf(OutLine,"       %s%6.1f   %c           %8.1f线路有功%8.1f线路无功%7.3f有功损耗%8.2f无功损耗 %s\n",// %8.3f充电功率\n",
+		BusName,baseKV,
+		ID,
+		Pin,Qin,Ploss,Qloss,
+		Owner);
+	fprintf(fp,OutLine);
+}

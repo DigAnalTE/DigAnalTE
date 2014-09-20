@@ -11,6 +11,7 @@ public:
 	{
 		c_BranchType='B';
 		c_BPAType=' ';
+		Owner[0]='\0';
 		Ratio1=Ratio2=1;
 		G1=B1=G2=B2=0;
 		Gk1=Bk1=Gk2=Bk2=0;
@@ -19,6 +20,7 @@ public://BPA派生的类型//子类型
 	char c_BPAType;
 	float BaseKv1,BaseKv2;
 	char ID;
+	char Owner[_MaxNameLen];
 	float G1,B1,G2,B2; //不对称线路
 	float Ratio1,Ratio2;//该值为计算结果
 	float Gk1,Bk1,Gk2,Bk2; //高抗
@@ -27,7 +29,7 @@ public://BPA派生的类型//子类型
 public://读写部分
 	virtual int ReadLine(char*Line);
 	virtual int subReadBPALine(char*)=0;
-	//virtual void OutputPFOFile(FILE*fp);//输出潮流信息
+	virtual void OutputPFOFile(FILE*fp,int nDirtn);//输出潮流信息
 };
 
 class LBRANCH:public BPABRANCH

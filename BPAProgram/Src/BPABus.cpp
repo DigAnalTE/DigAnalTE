@@ -112,3 +112,52 @@ int BPABUS::ReadLine(char* PFLine)
 	}
 	return 1;
 }
+
+void BPABUS::OutputPFOFile(FILE*fp)
+{
+	char OutLine[_MaxLineLen];
+	char BusName[9],ZoneName[3],OwnerName[4];
+
+	strncpy(BusName,Name,8);ReplaceName(BusName,9);
+	strncpy(ZoneName,Zone,2);ReplaceName(ZoneName,3);
+	strncpy(OwnerName,Owner,3);ReplaceName(OwnerName,4);
+
+	float pLoad,qLoad;
+	pLoad=m_fBusPPLoad*m_fBusPLoadPer;
+	qLoad=m_fBusQPLoad*m_fBusQLoadPer;
+
+	sprintf(OutLine,"%s%6.1f %7.2fkV/%5.1f度  %s%8.1f有功出力%8.1f无功出力%7.1f有功负荷%8.1f无功负荷 %s  %7.3f电压pu  B%c\n",
+		BusName,BaseKv,
+		m_fBusV*BaseKv,		m_fBusSita,
+		ZoneName,
+		m_fGenP,m_fGenQ,
+		pLoad,	qLoad,
+		OwnerName,
+		m_fBusV,
+		c_BPAType);
+	if(OutLine[121]==' '){OutLine[121]='\n';OutLine[122]='\0';}
+
+	int k;
+	if (fabs(m_fGenP)<=0.04)
+	{
+		for (k=36;k<52;k++)
+		{
+			OutLine[k]=' ';
+		}
+		if (fabs(m_fGenQ)<=0.04)
+		{
+			for (k=52;k<68;k++)
+			{
+				OutLine[k]=' ';
+			}
+		}
+	}
+	if (fabs(pLoad)+fabs(qLoad)<=0.001)
+	{
+		for (k=68;k<100;k++)
+		{
+			OutLine[k]=' ';
+		}
+	}
+	fprintf(fp,OutLine);
+}
