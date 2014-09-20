@@ -27,11 +27,9 @@ public://线路信息
 	int State;//是否投入运行. =1:投入 其他:停运
 	char BusName1[_MaxNameLen],BusName2[_MaxNameLen];
 	int FromBusNo,ToBusNo;
-	char Owner[_MaxNameLen];
 public://线路的基本参数//注：全部为标么值
 	float R,X,G,B,TK;//可以是变压器
 	float Smax;//最大容量//标幺值
-	float BMVA;//基准容量
 public:
 	int iGetState(){return State;}
 	void iSetState(int tState){State=tState;}
