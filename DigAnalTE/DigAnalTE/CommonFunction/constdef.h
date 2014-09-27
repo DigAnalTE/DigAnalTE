@@ -22,6 +22,7 @@ char *GetVersionStr();
 #define _MaxAreaNo     100
 #define _MaxAreaZoneNo 40 //每个Area中Zone的个数
 #define _MaxIslandNo   ((int)(_MaxBusNo/100)+10)
+#define _MaxDynamicModelNo	(10*_MaxEquipNo)
 
 //所有的元件都有一个标示符，就是名称
 #define _MaxNameLen 256
@@ -70,7 +71,7 @@ if((fp=fopen (filename,type))==NULL)\
 #define maxv(x,y) ( (x>y)?x:y)
 extern "C"{
 	//使用同一个函数避免转换带来的问题
-	bool ReplaceName(char* tName,int Length);//处理BusName中的空格和长度等问题
+	bool ReplaceName(char* tName, int Length);//处理BusName中的空格和长度等问题
 }
 
 #endif

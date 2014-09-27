@@ -11,10 +11,10 @@ class COMPLEXSPAREMATRIXSOLVER
 public:
 	COMPLEXSPAREMATRIXSOLVER()
 	{
-		VA=NULL;flagChange=1;pMatrix=NULL;
-		X=NULL;Y=NULL;
+		VA = NULL; flagChange = 1; pMatrix = NULL;
+		X = NULL; Y = NULL;
 	}
-	~COMPLEXSPAREMATRIXSOLVER(){FreeSpace();}
+	~COMPLEXSPAREMATRIXSOLVER(){ FreeSpace(); }
 public:
 	int flagChange;//是否有元素发生改变，LU算法可以在没有变化的时候不必多次分解
 	COMPLEXSPAREMATRIX *pMatrix;
@@ -27,7 +27,7 @@ protected:
 		cstype RowJ, RowL;
 	};
 	Composite *VA;
-	
+
 	int *NewNo;//新的节点号  NewBusNo=NewNo[OldBusNo]
 	int *OldNo;//旧的节点号  OldBusNo=OldNo[NewBusNo]
 	int *NIA;
@@ -39,13 +39,13 @@ public:
 	void ReSetMatrixElement();//从pMatrix重新读取值到VA中
 	virtual void subInitMatrix(){}
 protected:
-	real *X,*Y;
+	real *X, *Y;
 protected:
-	virtual int Calculate()=0;
+	virtual int Calculate() = 0;
 public:
-	int LinearEquationCal(real *tX,real *tY)//计算
+	int LinearEquationCal(real *tX, real *tY)//计算
 	{
-		X=tX;Y=tY;
+		X = tX; Y = tY;
 		return Calculate();
 	}
 	void FreeSpace()
@@ -54,38 +54,38 @@ public:
 		subFreeSpace();
 	}
 	void subFreeSpace(){}
-	void PrintMatrix(NETWORKINFO*pNet,FILE*fp);
+	void PrintMatrix(NETWORKINFO*pNet, FILE*fp);
 public:
-	void SetChangeFlag(int flag){flagChange=flag;}
-	void SetElement(int L,cstype RH,cstype RJ,cstype RN,cstype RL)
+	void SetChangeFlag(int flag){ flagChange = flag; }
+	void SetElement(int L, cstype RH, cstype RJ, cstype RN, cstype RL)
 	{
-		flagChange=1;
-		VA[L].RowH=RH;
-		VA[L].RowJ=RJ;
-		VA[L].RowN=RN;
-		VA[L].RowL=RL;
+		flagChange = 1;
+		VA[L].RowH = RH;
+		VA[L].RowJ = RJ;
+		VA[L].RowN = RN;
+		VA[L].RowL = RL;
 	}
-	void ModifyElement(int busno,cstype RH,cstype RJ,cstype RN,cstype RL)
+	void ModifyElement(int busno, cstype RH, cstype RJ, cstype RN, cstype RL)
 	{
-		flagChange=1;
-		int L=pMatrix->II[busno];
-		VA[L].RowH+=RH;
-		VA[L].RowJ+=RJ;
-		VA[L].RowN+=RN;
-		VA[L].RowL+=RL;
+		flagChange = 1;
+		int L = pMatrix->II[busno];
+		VA[L].RowH += RH;
+		VA[L].RowJ += RJ;
+		VA[L].RowN += RN;
+		VA[L].RowL += RL;
 	}
-	void ModifyElement(int busno,int busno2,cstype RH,cstype RJ,cstype RN,cstype RL)
+	void ModifyElement(int busno, int busno2, cstype RH, cstype RJ, cstype RN, cstype RL)
 	{
-		flagChange=1;
-		int i,L=0;
-		for (i=0,L=pMatrix->IA[busno];i<pMatrix->NA[busno];i++,L++)
+		flagChange = 1;
+		int i, L = 0;
+		for (i = 0, L = pMatrix->IA[busno]; i < pMatrix->NA[busno]; i++, L++)
 		{
-			if (pMatrix->JA[L]==busno2)
+			if (pMatrix->JA[L] == busno2)
 			{
-				VA[L].RowH+=RH;
-				VA[L].RowJ+=RJ;
-				VA[L].RowN+=RN;
-				VA[L].RowL+=RL;
+				VA[L].RowH += RH;
+				VA[L].RowJ += RJ;
+				VA[L].RowN += RN;
+				VA[L].RowL += RL;
 				return;
 			}
 		}

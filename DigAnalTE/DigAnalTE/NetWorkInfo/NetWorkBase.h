@@ -32,7 +32,7 @@ public:
 public://分析孤岛情况
 	virtual int NetAnalysis();
 
-/*-------------------------PART-1--数据部分-------------------------*/
+	/*-------------------------PART-1--数据部分-------------------------*/
 	//
 	//	总体信息
 	//
@@ -41,55 +41,55 @@ protected:
 	float BMVA;
 	float FreqSys;
 public:
-	float GetBMVA(){return BMVA;}
-	float *pGetBMVA(){return &BMVA;}
-	void SetBMVA(float tBase){BMVA=tBase;}
-	float GetFreqSys(){return FreqSys;}
-	void SetFreqSys(float tFreq){FreqSys=tFreq;}
+	float GetBMVA(){ return BMVA; }
+	float *pGetBMVA(){ return &BMVA; }
+	void SetBMVA(float tBase){ BMVA = tBase; }
+	float GetFreqSys(){ return FreqSys; }
+	void SetFreqSys(float tFreq){ FreqSys = tFreq; }
 	//
 	//	区域信息
 	//
 protected:
 	AREAINFO m_AreaInfo;
 public:
-	int iGetAreaTotal(){return m_AreaInfo.iGetAreaTotal();}
-	int iGetZoneTotal(){return m_AreaInfo.iGetZoneTotal();}
-	AREAINFO* cpGetAreaInfo(){return &m_AreaInfo;}
-	AREABASE* cpGetArea(int i){return m_AreaInfo.cpGetArea(i);}
-	int iGetZoneNo(char* tZone){return m_AreaInfo.iGetZoneNo(tZone);}
-	int iGetAreaNo(char* tArea){return m_AreaInfo.iGetAreaNo(tArea);}
+	int iGetAreaTotal(){ return m_AreaInfo.iGetAreaTotal(); }
+	int iGetZoneTotal(){ return m_AreaInfo.iGetZoneTotal(); }
+	AREAINFO* cpGetAreaInfo(){ return &m_AreaInfo; }
+	AREABASE* cpGetArea(int i){ return m_AreaInfo.cpGetArea(i); }
+	int iGetZoneNo(char* tZone){ return m_AreaInfo.iGetZoneNo(tZone); }
+	int iGetAreaNo(char* tArea){ return m_AreaInfo.iGetAreaNo(tArea); }
 
 protected://母线信息
 	BUSINFO m_BusInfo;
 public:
-	int iGetBusTotal(){return m_BusInfo.iGetBusTotal();}
-	BUSINFO* cpGetBusInfo(){return &m_BusInfo;}
-	BUSBASE* cpGetBus(int i){return m_BusInfo.cpGetBus(i);}
-	int BusSearch( char *lpszString ){return m_BusInfo.BusSearch(lpszString);}
+	int iGetBusTotal(){ return m_BusInfo.iGetBusTotal(); }
+	BUSINFO* cpGetBusInfo(){ return &m_BusInfo; }
+	BUSBASE* cpGetBus(int i){ return m_BusInfo.cpGetBus(i); }
+	int BusSearch(char *lpszString){ return m_BusInfo.BusSearch(lpszString); }
 
 protected://线路信息
 	BRANCHINFO m_BranchInfo;
 public:
-	int iGetBranchTotal(){return m_BranchInfo.iGetBranchTotal();}
-	BRANCHINFO* cpGetBranchInfo(){return &m_BranchInfo;}
-	BRANCHBASE* cpGetBranch(int i){return m_BranchInfo.cpGetBranch(i);}
-	int BranchSearch( char *lpszString ){return m_BranchInfo.BranchSearch(lpszString);}
+	int iGetBranchTotal(){ return m_BranchInfo.iGetBranchTotal(); }
+	BRANCHINFO* cpGetBranchInfo(){ return &m_BranchInfo; }
+	BRANCHBASE* cpGetBranch(int i){ return m_BranchInfo.cpGetBranch(i); }
+	int BranchSearch(char *lpszString){ return m_BranchInfo.BranchSearch(lpszString); }
 
 protected://设备信息
 	//该设备必须有对应的母线，如果没有该母线，则在BusInfo中建立新的母线
 	EQUIPMENTINFO m_EquipmentInfo;//包含各种各样的设备，单端口，两端口，多端口
 public:
-	int iGetEquipTotal(){return m_EquipmentInfo.iGetEquipTotal();}
-	EQUIPMENTINFO* cpGetEquipInfo(){return &m_EquipmentInfo;}
-	EQUIPMENTBASE* cpGetEquip(int i){return m_EquipmentInfo.GetEquipment()[i];}
+	int iGetEquipTotal(){ return m_EquipmentInfo.iGetEquipTotal(); }
+	EQUIPMENTINFO* cpGetEquipInfo(){ return &m_EquipmentInfo; }
+	EQUIPMENTBASE* cpGetEquip(int i){ return m_EquipmentInfo.GetEquipment()[i]; }
 	ONEEQUIPMENTBASE* cpGetOneEquip(int i)
 	{
-		if(!m_EquipmentInfo.GetEquipment()[i]->IsOneEquipment())
+		if (!m_EquipmentInfo.GetEquipment()[i]->IsOneEquipment())
 			return NULL;
 		return (ONEEQUIPMENTBASE*)(m_EquipmentInfo.GetEquipment()[i]);
 	}
 
-/*-------------------------PART-2--数据接口-------------------------*/
+	/*-------------------------PART-2--数据接口-------------------------*/
 public://普通接口
 	int ReadFile(char*file);
 	void WriteFile(char*file);

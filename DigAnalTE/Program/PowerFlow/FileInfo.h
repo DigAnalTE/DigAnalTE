@@ -30,20 +30,20 @@ protected:
 public:
 	//FILE* mfInputFile;
 	FILE* mfOutputFile;
-	FILE* GetOutFile(){return mfOutputFile;}
-	FILE** ppGetOutFile(){return &mfOutputFile;}
+	FILE* GetOutFile(){ return mfOutputFile; }
+	FILE** ppGetOutFile(){ return &mfOutputFile; }
 public:
 	void SetProgram(char*);
 	void SetInputFileName(char*);
 	void InitInputFileName(char*);
-	char* GetInputFileName(){return InputFileName;}
+	char* GetInputFileName(){ return InputFileName; }
 	void IntOutputFileName(char*);
-	char* GetOutputFileName(){return OutputFileName;}
+	char* GetOutputFileName(){ return OutputFileName; }
 	int SetProjectDirection(char*);
 public://读入
 	int LineTotal;
-	char (*LineST)[_MaxLineLen];
-	void ReadAllLines(char* endkey=NULL);//将文件读入进来，endkey为结束符
+	char(*LineST)[_MaxLineLen];
+	void ReadAllLines(char* endkey = NULL);//将文件读入进来，endkey为结束符
 };
 
 #endif

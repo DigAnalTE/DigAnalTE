@@ -29,9 +29,9 @@ class AREAINFO
 {
 public:
 	AREAINFO();
-	virtual ~AREAINFO(){FreeSpace();}
+	virtual ~AREAINFO(){ FreeSpace(); }
 	virtual void FreeSpace();
-//--------------------基本信息--------------------
+	//--------------------基本信息--------------------
 protected://Zone信息
 	int ZoneTotal;
 	char ZoneName[_MaxZoneNo][_MaxNameLen];
@@ -40,14 +40,14 @@ protected://Area的数目比较少，不必使用检索算法
 	int AreaTotal;
 	AREABASE *Area[_MaxAreaNo];
 public:
-	int iGetZoneTotal(){return ZoneTotal;}
-	int iGetAreaTotal(){return AreaTotal;}
-	AREABASE *cpGetArea(int i){return Area[i];}
+	int iGetZoneTotal(){ return ZoneTotal; }
+	int iGetAreaTotal(){ return AreaTotal; }
+	AREABASE *cpGetArea(int i){ return Area[i]; }
 	int AddNewArea(AREABASE*tArea);
 public://读写部分
 	virtual int ReadLine(char*Line);
-	virtual void WriteLine(int,char*Line);
-//--------------------索引部分--------------------
+	virtual void WriteLine(int, char*Line);
+	//--------------------索引部分--------------------
 protected:
 	HASHTABLE m_ZoneHash;//使用Hash表法管理Zone
 public:

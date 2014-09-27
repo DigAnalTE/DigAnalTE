@@ -14,13 +14,13 @@ public:
 		FreeSpace();
 	}
 private:
-	real *RightP,*RightQ;//右端函数
-	real *Volt,*Sita;
+	real *RightP, *RightQ;//右端函数
+	real *Volt, *Sita;
 	COMPLEXSPAREMATRIXSOLVER *m_Solver;
-	int NRSBusTotal,NRSJacElTotal;
+	int NRSBusTotal, NRSJacElTotal;
 private:
 	int MAXITER;//牛顿拉夫逊法缺省最大迭代次数
-	float MAXPERR,MAXQERR;//判断收敛节点的误差限制
+	float MAXPERR, MAXQERR;//判断收敛节点的误差限制
 public:
 	virtual int subCalculate(PFCalPara);//第二步开始计算
 protected:
@@ -29,10 +29,10 @@ protected:
 
 	virtual void FreeSpace()//第三步释放空间
 	{
-		pNet=NULL;
+		pNet = NULL;
 		m_Solver->FreeSpace();
-		NRSBusTotal=0;NRSJacElTotal=0;
-		FreeArray(RightP);FreeArray(RightQ);
+		NRSBusTotal = 0; NRSJacElTotal = 0;
+		FreeArray(RightP); FreeArray(RightQ);
 	}
 private:
 	void FormJacobi();//生成jacobi矩阵

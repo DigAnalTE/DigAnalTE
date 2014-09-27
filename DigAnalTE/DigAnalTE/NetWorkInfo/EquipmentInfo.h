@@ -10,18 +10,18 @@ class EQUIPMENTINFO
 {
 public:
 	EQUIPMENTINFO();
-	virtual ~EQUIPMENTINFO(){FreeSpace();}
+	virtual ~EQUIPMENTINFO(){ FreeSpace(); }
 	virtual void FreeSpace();
-//--------------------基本信息--------------------
+	//--------------------基本信息--------------------
 protected:
 	int EquipmentTotal;
 	EQUIPMENTBASE *Equipment[_MaxEquipNo];
 public:
-	int iGetEquipTotal(){return EquipmentTotal;}
-	EQUIPMENTBASE**GetEquipment(){return Equipment;}
+	int iGetEquipTotal(){ return EquipmentTotal; }
+	EQUIPMENTBASE**GetEquipment(){ return Equipment; }
 	int AddNewEquip(EQUIPMENTBASE *tEquipment);
 	class GENERATOR* AddNewGeneratorEquip();
-//--------------------索引信息--------------------
+	//--------------------索引信息--------------------
 public:
 	struct EQUIPLINK
 	{
@@ -34,7 +34,7 @@ public://索引
 	int BusTotal;
 	int EquipLinkNo;
 	EQUIPLINK *EquipLink;
-	int *EQINDX,*EQCONT;
+	int *EQINDX, *EQCONT;
 public:
 	void BuildLink(int BusTotal);
 };

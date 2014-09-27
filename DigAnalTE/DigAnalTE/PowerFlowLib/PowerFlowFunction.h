@@ -18,17 +18,17 @@ class PFSOLUTION_BASE
 public:
 	PFSOLUTION_BASE(NETWORKINFO* temp)
 	{
-		mPara.MaxIter=50;
-		mPara.BusPMaxErr=0.005f;
-		mPara.BusQMaxErr=0.005f;
-		pNet=temp;
-		autoUpdate=1;
+		mPara.MaxIter = 50;
+		mPara.BusPMaxErr = 0.005f;
+		mPara.BusQMaxErr = 0.005f;
+		pNet = temp;
+		autoUpdate = 1;
 	}
 	~PFSOLUTION_BASE()
 	{
 		FreeSpace();
 	}
-    virtual void FreeSpace(){}
+	virtual void FreeSpace(){}
 protected:
 	PFCalPara       mPara;
 	NETWORKINFO*    pNet;
@@ -37,30 +37,30 @@ public:
 public:
 	int Calculate(PFCalPara tPara)
 	{
-		mPara=tPara;
-        return Calculate();
+		mPara = tPara;
+		return Calculate();
 	}
 	int Calculate()
 	{
-		if (pNet->NetError!=1)
+		if (pNet->NetError != 1)
 		{
-			sprintf(ErrorMessage[0],"数据存在错误，不能进行潮流计算");
+			sprintf(ErrorMessage[0], "数据存在错误，不能进行潮流计算");
 			cpGetErrorInfo()->PrintError(1);
 			return 0;
 		}
-		if (subCalculate(mPara)==1)
+		if (subCalculate(mPara) == 1)
 		{
-			if(autoUpdate)pNet->Update();
+			if (autoUpdate)pNet->Update();
 			return 1;
 		}
 		return 0;
 	}
-	virtual int subCalculate(PFCalPara)=0;//纯虚函数必须派生，纯虚函数的目的是为了检查派生时派生函数名的正确性
+	virtual int subCalculate(PFCalPara) = 0;//纯虚函数必须派生，纯虚函数的目的是为了检查派生时派生函数名的正确性
 };
 
 PFSOLUTION_BASE* makeNRSolver(NETWORKINFO*);
 
 int PowerFlowCal(NETWORKINFO*);
-int PowerFlowCal(NETWORKINFO*,PFCalPara);//默认使用NR算法进行计算
+int PowerFlowCal(NETWORKINFO*, PFCalPara);//默认使用NR算法进行计算
 
 #endif

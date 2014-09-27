@@ -11,10 +11,10 @@
 
 NETWORKINFO gNetWorkInfo;
 
-int main(int argc,char **argv)
+int main(int argc, char **argv)
 {
 	FILEINFO gFileInfo;
-	if(argc>1)
+	if (argc > 1)
 	{
 		gFileInfo.SetInputFileName(argv[1]);
 	}
@@ -22,28 +22,28 @@ int main(int argc,char **argv)
 	gFileInfo.IntOutputFileName("pfos");
 	cpGetErrorInfo()->SetMessageFile(gFileInfo.GetOutFile());
 
-	sprintf(ErrorMessage[0],"欢迎使用潮流计算程序");
-	sprintf(ErrorMessage[1],GetVersionStr());
-	sprintf(ErrorMessage[2],"\n");
-	cpGetErrorInfo()->PrintWarning(-1,3);
-	
+	sprintf(ErrorMessage[0], "欢迎使用潮流计算程序");
+	sprintf(ErrorMessage[1], GetVersionStr());
+	sprintf(ErrorMessage[2], "\n");
+	cpGetErrorInfo()->PrintWarning(-1, 3);
+
 	int flag;
 	flag = gNetWorkInfo.ReadFile(gFileInfo.GetInputFileName());
-	if(flag!=1)
+	if (flag != 1)
 		return 0;
 
 	gNetWorkInfo.NetLink();
 	gNetWorkInfo.NetAnalysis();
-	
-	if (gNetWorkInfo.NetError!=1)
+
+	if (gNetWorkInfo.NetError != 1)
 	{
-		sprintf(ErrorMessage[0],"数据存在错误，不能进行潮流计算");
+		sprintf(ErrorMessage[0], "数据存在错误，不能进行潮流计算");
 		cpGetErrorInfo()->PrintError(1);
 		return 0;
 	}
-	
+
 	//潮流计算
-	if (PowerFlowCal(&gNetWorkInfo)!=1)
+	if (PowerFlowCal(&gNetWorkInfo) != 1)
 	{
 		return 0;
 	}

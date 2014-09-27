@@ -14,35 +14,35 @@
 class EQUIPMENTBASE
 {
 public:
-	EQUIPMENTBASE(){c_EquipType=' ';}
+	EQUIPMENTBASE(){ c_EquipType = ' '; }
 protected:
 	int EquipPortType;//类型：端口数量。这个是禁止外部函数修改的//建议用户不要使用
-		//1 ONEEQUIPMENTBASE
-		//2 TWOEQUIPMENTBASE
-		//3 MLTEQUIPMENTBASE
+	//1 ONEEQUIPMENTBASE
+	//2 TWOEQUIPMENTBASE
+	//3 MLTEQUIPMENTBASE
 public:
-	bool IsOneEquipment(){return EquipPortType==1;}
-	bool IsTwoEquipment(){return EquipPortType==2;}
-	bool IsMltEquipment(){return EquipPortType==3;}
+	bool IsOneEquipment(){ return EquipPortType == 1; }
+	bool IsTwoEquipment(){ return EquipPortType == 2; }
+	bool IsMltEquipment(){ return EquipPortType == 3; }
 public:
 	char c_EquipType;//用于派生类的识别
 public:
 	char Name[_MaxNameLen];//为设备增加识别符，作为元件识别的唯一标示
 	int State;//是否投入运行. =1:投入 =0:停运
-	int iGetState(){return State;}
-	void iSetState(int tState){State=tState;}
+	int iGetState(){ return State; }
+	void iSetState(int tState){ State = tState; }
 public://读写部分
-	virtual int ReadLine(char*Line)=0;
-	virtual void WriteLine(char*Line)=0;
-	virtual void PrintInfo(char*Line)=0;
-	virtual void OutputPFOFile(FILE*fp,int nDirtn){}//输出潮流信息
+	virtual int ReadLine(char*Line) = 0;
+	virtual void WriteLine(char*Line) = 0;
+	virtual void PrintInfo(char*Line) = 0;
+	virtual void OutputPFOFile(FILE*fp, int nDirtn){}//输出潮流信息
 public:
-	virtual void VarientLink(class NETWORK_BASE*)=0;
+	virtual void VarientLink(class NETWORK_BASE*) = 0;
 
 public://潮流计算部分
 	virtual void JacElement(class NETWORKINFO*pNet){}
-	virtual int BeforeIterCal(int iter){return 1;}//在每一次迭代前调用
-	virtual int AfterIterCal(){return 0;}//在每一次迭代完成后调用，用来更改计算状态的//返回值非零表示状态修改
+	virtual int BeforeIterCal(int iter){ return 1; }//在每一次迭代前调用
+	virtual int AfterIterCal(){ return 0; }//在每一次迭代完成后调用，用来更改计算状态的//返回值非零表示状态修改
 	virtual void UpdateValue(class NETWORKINFO*pNet){}
 };
 
@@ -51,8 +51,8 @@ class ONEEQUIPMENTBASE : public EQUIPMENTBASE
 public:
 	ONEEQUIPMENTBASE()
 	{
-		State=1;EquipPortType=1;c_EquipType='1';
-		BusNo=-1;pBus=NULL;
+		State = 1; EquipPortType = 1; c_EquipType = '1';
+		BusNo = -1; pBus = NULL;
 	}
 	~ONEEQUIPMENTBASE(){}
 public:
@@ -63,11 +63,11 @@ public:
 	virtual void VarientLink(class NETWORK_BASE*);
 public:
 	int JacType;
-	real PGNET,QGNET,PGMAX,PGMIN,QGMAX,QGMIN;
-	real PPNET,QPNET;//恒功率
-	real PINET,QINET;//恒电流
-	real PZNET,QZNET;//恒阻抗
-	real PInst,QInst;
+	real PGNET, QGNET, PGMAX, PGMIN, QGMAX, QGMIN;
+	real PPNET, QPNET;//恒功率
+	real PINET, QINET;//恒电流
+	real PZNET, QZNET;//恒阻抗
+	real PInst, QInst;
 	virtual void subJacElement(class NETWORKINFO*pNet);
 	virtual void JacElement(class NETWORKINFO*pNet);
 public://读写部分
@@ -79,9 +79,9 @@ class TWOEQUIPMENTBASE : public EQUIPMENTBASE
 public:
 	TWOEQUIPMENTBASE()
 	{
-		State=1;EquipPortType=2;c_EquipType='2';
-		BusNo1=-1;BusNo2=-1;
-		pBus1=NULL;pBus2=NULL;
+		State = 1; EquipPortType = 2; c_EquipType = '2';
+		BusNo1 = -1; BusNo2 = -1;
+		pBus1 = NULL; pBus2 = NULL;
 	}
 	~TWOEQUIPMENTBASE(){}
 public:
@@ -93,17 +93,17 @@ public:
 	BUSBASE* pBus2;
 public:
 	int JacType1;
-	real PGNET1,QGNET1,PGMAX1,PGMIN1,QGMAX1,QGMIN1;
-	real PPNET1,QPNET1;//恒功率
-	real PINET1,QINET1;//恒电流
-	real PZNET1,QZNET1;//恒阻抗
-	real PInst1,QInst1;
+	real PGNET1, QGNET1, PGMAX1, PGMIN1, QGMAX1, QGMIN1;
+	real PPNET1, QPNET1;//恒功率
+	real PINET1, QINET1;//恒电流
+	real PZNET1, QZNET1;//恒阻抗
+	real PInst1, QInst1;
 	int JacType2;
-	real PGNET2,QGNET2,PGMAX2,PGMIN2,QGMAX2,QGMIN2;
-	real PPNET2,QPNET2;//恒功率
-	real PINET2,QINET2;//恒电流
-	real PZNET2,QZNET2;//恒阻抗
-	real PInst2,QInst2;
+	real PGNET2, QGNET2, PGMAX2, PGMIN2, QGMAX2, QGMIN2;
+	real PPNET2, QPNET2;//恒功率
+	real PINET2, QINET2;//恒电流
+	real PZNET2, QZNET2;//恒阻抗
+	real PInst2, QInst2;
 public:
 	virtual void VarientLink(class NETWORK_BASE*);
 	virtual void subJacElement(class NETWORKINFO*pNet);
@@ -115,24 +115,24 @@ public://读写部分
 class MLTEQUIPMENTBASE : public EQUIPMENTBASE
 {//多端口详细建模元件的基类
 public:
-	MLTEQUIPMENTBASE(){State=1;EquipPortType=3;c_EquipType='3';BusName=NULL;PortNumber=0;}
-	~MLTEQUIPMENTBASE(){FreeSpace();}
+	MLTEQUIPMENTBASE(){ State = 1; EquipPortType = 3; c_EquipType = '3'; BusName = NULL; PortNumber = 0; }
+	~MLTEQUIPMENTBASE(){ FreeSpace(); }
 public:
 	int PortNumber;//端口数
-	char (*BusName)[_MaxNameLen];
+	char(*BusName)[_MaxNameLen];
 	int *BusNo;
 public:
 	virtual void VarientLink(class NETWORK_BASE*);
 	void Malloc()
 	{
-		MallocNew2D(BusName,char,PortNumber,_MaxNameLen);
+		MallocNew2D(BusName, char, PortNumber, _MaxNameLen);
 	}
 	void Malloc(int tPort)
 	{
-		PortNumber=tPort;
-		MallocNew2D(BusName,char,PortNumber,_MaxNameLen);
+		PortNumber = tPort;
+		MallocNew2D(BusName, char, PortNumber, _MaxNameLen);
 	}
-	void FreeSpace(){FreeArray2D(BusName);}
+	void FreeSpace(){ FreeArray2D(BusName); }
 	virtual void JacElement(class NETWORKINFO*pNet);
 public://读写部分
 	virtual void PrintInfo(char*Line);

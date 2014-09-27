@@ -20,8 +20,8 @@
 
 #include "constdef.h"
 
-const int MaxMessage=1000;//MESSAGE需要累积一定数量
-const int MaxMessageType=20;//20种错误
+const int MaxMessage = 1000;//MESSAGE需要累积一定数量
+const int MaxMessageType = 20;//20种错误
 #define _ERROR_MESSAGE_LENGTH 250
 
 extern char ErrorMessage[10][_ERROR_MESSAGE_LENGTH];
@@ -31,11 +31,11 @@ class ERROR_MESG_INFO
 public:
 	ERROR_MESG_INFO()
 	{
-		MessageCount=0;
-		memset(StoredMessage,0,MaxMessage*_ERROR_MESSAGE_LENGTH);
-		IsStoreMessage=1;
-		IsScreenMessage=1;
-		memset(ErrorType,0,MaxMessageType*sizeof(int));
+		MessageCount = 0;
+		memset(StoredMessage, 0, MaxMessage*_ERROR_MESSAGE_LENGTH);
+		IsStoreMessage = 1;
+		IsScreenMessage = 1;
+		memset(ErrorType, 0, MaxMessageType*sizeof(int));
 	}
 	virtual ~ERROR_MESG_INFO(){}
 private:
@@ -47,22 +47,22 @@ private:
 	int IsScreenMessage;//警告信息是否打印到屏幕//错误信息强制打印
 	int IsStoreMessage; //警告信息是否存储起来  //错误信息强制打印
 public://警告的状态。这些状态控制了实时打印
-	void SetMessageFile(FILE*fp){fpFile=fp;}
-	void SetScreenMessage(int YesNo){IsScreenMessage=YesNo;}
-	void SetStoreMessage(int YesNo){IsStoreMessage=YesNo;}
-	FILE* GetErrorFile(){return fpFile;}
-	int GetScreenMessage(){return IsScreenMessage;}
-	int GetStoreMessage(){return IsStoreMessage;}
+	void SetMessageFile(FILE*fp){ fpFile = fp; }
+	void SetScreenMessage(int YesNo){ IsScreenMessage = YesNo; }
+	void SetStoreMessage(int YesNo){ IsStoreMessage = YesNo; }
+	FILE* GetErrorFile(){ return fpFile; }
+	int GetScreenMessage(){ return IsScreenMessage; }
+	int GetStoreMessage(){ return IsStoreMessage; }
 public:
-	int GetMessageTotal(){return MessageCount;}
-	void GetMessage(int Index,char* massage){strcpy(massage,StoredMessage[Index]);}
-	void PrintWarning(int,int);//第一个参数为警告类型，第二个参数为消息ERRBUF的个数
+	int GetMessageTotal(){ return MessageCount; }
+	void GetMessage(int Index, char* massage){ strcpy(massage, StoredMessage[Index]); }
+	void PrintWarning(int, int);//第一个参数为警告类型，第二个参数为消息ERRBUF的个数
 	void PrintError(int);//参数为消息ERRBUF的个数//参数可以为0
 	void PrintOut(char*);
 	void CheckMessageType(int);//检查信息类型，当该类型存在错误时，退出
 	void PrintAllWarning(FILE*fp);//统一打印所有储存的警告信息
 	void PrintAllWarningToScreen();
-	void ClearWarning(){MessageCount=0;}
+	void ClearWarning(){ MessageCount = 0; }
 public:
 	void PassProgram();
 	void StopProgram();
