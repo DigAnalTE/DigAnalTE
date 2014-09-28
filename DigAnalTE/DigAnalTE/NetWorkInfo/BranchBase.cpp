@@ -52,7 +52,7 @@ void BRANCHBASE::OutputPFOFile(FILE*fp, int dirn)
 
 void BRANCHBASE::JacElement(NETWORKINFO*pNet)
 {
-	subJacElement();
+	subJacElement(pNet);
 	pNet->BranchGBModify(FromBusNo, ToBusNo, Y11r, Y11i, Y22r, Y22i, Y12r, Y12i, Y21r, Y21i);
 }
 
@@ -83,7 +83,7 @@ void BRANCHBASE::VarientLink(NETWORK_BASE*pNet)
 	m_pTBusSita = &pNet->cpGetBus(K2)->m_fBusSita;
 }
 
-void BRANCHBASE::subJacElement()
+void BRANCHBASE::subJacElement(NETWORKINFO*pNet)
 {
 	real Z;
 	Z = R*R + X*X;
@@ -96,7 +96,7 @@ void BRANCHBASE::subJacElement()
 
 void BRANCHBASE::UpdateValue(NETWORKINFO*pNet)
 {//¼ÆËã³±Á÷
-	subJacElement();
+	subJacElement(pNet);
 	double dSita, Vi, Vj;
 	Vi = *m_pFBusV;
 	Vj = *m_pTBusV;

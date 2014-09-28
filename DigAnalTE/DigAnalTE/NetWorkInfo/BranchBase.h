@@ -57,7 +57,7 @@ public://潮流计算过程
 	//第一步：修改其中的网络方程部分
 	real Y11r, Y12r, Y21r, Y22r;//部分临时变量//subJacElement计算，然后JacElement加到NETWORKINFO中
 	real Y11i, Y12i, Y21i, Y22i;
-	virtual void subJacElement();
+	virtual void subJacElement(class NETWORKINFO*pNet);
 	virtual void JacElement(class NETWORKINFO*pNet);
 	//第二步：在计算过程中在每步迭代过程中的调整
 	virtual int BeforeIterCal(int iter){ return 1; }//在每一次迭代前调用//返回值不为1，表示出错

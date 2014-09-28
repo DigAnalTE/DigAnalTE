@@ -112,7 +112,6 @@ int BPA_NETWORKINFO::ReadFile(char*tFileName)
 			{
 				tempBranchBase = new LBRANCH();
 				flag = tempBranchBase->ReadLine(LineST[i]);
-				flag = tempBranchBase->ReadLine(LineST[i]);
 				if (flag != 1)
 				{
 					delete tempBranchBase;
@@ -177,8 +176,7 @@ int BPA_NETWORKINFO::ReadFile(char*tFileName)
 	char Name1[_MaxNameLen], Name2[_MaxNameLen], BranchName[_MaxNameLen], ID;
 	float BaseKv1, BaseKv2;
 	char CID[2];
-	int BranchIndex;
-	float Bk1, Bk2; //¸ß¿¹
+	int BusIndex, BranchIndex;
 	char Zone[_MaxNameLen]; int tZoneNo; float LoadPper, LoadQper, GenPper, GenQper;
 	for (i = 0; i < LineTotal; i++)
 	{
@@ -204,16 +202,7 @@ int BPA_NETWORKINFO::ReadFile(char*tFileName)
 					cpGetErrorInfo()->PrintWarning(1, 1);
 					break;
 				}
-				GetItemFromLine(Line, &Bk1, LPLUS_Para[7], LPLUS_Loca[7]);
-				GetItemFromLine(Line, &Bk2, LPLUS_Para[8], LPLUS_Loca[8]);
-				if (cpGetBranch(BranchIndex)->c_BranchType == 'B')
-				{
-					BPABRANCH* tBranch;
-					tBranch = (BPABRANCH*)cpGetBranch(BranchIndex);
-					tBranch->Bk1 = -fabs(Bk1) / GetBMVA();
-					tBranch->Bk2 = -fabs(Bk2) / GetBMVA();
-					flag = 1;
-				}
+				flag = cpGetBranch(BranchIndex)->ReadLine(LineST[i]);
 			}
 			break;
 		case 'P':

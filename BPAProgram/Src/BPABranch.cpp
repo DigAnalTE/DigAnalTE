@@ -2,26 +2,34 @@
 #include "BPABranch.h"
 #include "BPAReadWrite.h"
 #include "../../DigAnalTE/DigAnalTE/CommonFunction/ErrorInfo.h"
+#include "../../DigAnalTE/DigAnalTE/NetWorkInfo/NetWorkInfo.h"
 
 int BPABRANCH::ReadLine(char*line)
 {//读入BPA文件
 	int flag;
+	if (line[1] == '+')
+	{
+		GetItemFromLine(line, &Bk1, LPLUS_Para[7], LPLUS_Loca[7]);
+		GetItemFromLine(line, &Bk2, LPLUS_Para[8], LPLUS_Loca[8]);
+		return 1;
+	}
 	flag = subReadBPALine(line);
+	GenerateBPABranchName(Name, BusName1, BaseKv1, BusName2, BaseKv2, ID);
 	ResetBPAName(BusName1, BaseKv1);
 	ResetBPAName(BusName2, BaseKv2);
-	GenerateBPABranchName(Name, BusName1, BaseKv1, BusName2, BaseKv2, ID);
 	return flag;
 }
 
-void BPABRANCH::subJacElement()
+void BPABRANCH::subJacElement(NETWORKINFO*pNet)
 {
-	real Z;
+	real Z, sbase;
 	Z = R*R + X*X;
+	sbase = pNet->GetBMVA();
 	Y12r = -R / (Z*Ratio1*Ratio2); Y12i = X / (Z*Ratio1*Ratio2); Y21r = Y12r; Y21i = Y12i;
-	Y11r = R / (Z*Ratio1*Ratio1) + G1 / (Ratio1*Ratio2) + Gk1 / (Ratio1*Ratio2);//problem G1 Gk1的转换可能是错误的
-	Y11i = -X / (Z*Ratio1*Ratio1) + B1 / (Ratio1*Ratio2) + Bk1 / (Ratio1*Ratio2);
-	Y22r = R / (Z*Ratio2*Ratio2) + G2 / (Ratio1*Ratio2) + Gk2 / (Ratio1*Ratio2);
-	Y22i = -X / (Z*Ratio2*Ratio2) + B2 / (Ratio1*Ratio2) + Bk2 / (Ratio1*Ratio2);
+	Y11r = R / (Z*Ratio1*Ratio1) + G1 / (Ratio1*Ratio2);
+	Y11i = -X / (Z*Ratio1*Ratio1) + B1 / (Ratio1*Ratio2) - Bk1 / sbase / (Ratio1*Ratio2);
+	Y22r = R / (Z*Ratio2*Ratio2) + G2 / (Ratio1*Ratio2);
+	Y22i = -X / (Z*Ratio2*Ratio2) + B2 / (Ratio1*Ratio2) - Bk2 / sbase / (Ratio1*Ratio2);
 }
 
 int LBRANCH::subReadBPALine(char*Line)
@@ -79,7 +87,6 @@ int LBRANCH::subReadBPALine(char*Line)
 		X = 0.0001f;
 	}
 	Smax = (float)(Imax*sqrtf(3)*BaseKv1 / 1000); if (Smax < 0.00001){ Smax = 999999.0; }
-	Gk1 = 0; Bk1 = 0; Gk2 = 0; Bk2 = 0;
 	Ratio1 = 1; Ratio2 = 1;
 	return 1;
 }
@@ -131,7 +138,6 @@ int EBRANCH::subReadBPALine(char*Line)
 		X = 0.0001f;
 	}
 	Smax = (float)(Imax*sqrtf(3)*BaseKv1 / 1000); if (Smax < 0.00001){ Smax = 999999.0; }
-	Gk1 = 0; Bk1 = 0; Gk2 = 0; Bk2 = 0;
 	Ratio1 = 1; Ratio2 = 1;
 	return 1;
 }
@@ -188,7 +194,6 @@ int TBRANCH::subReadBPALine(char*Line)
 	}
 	Smax = Imax; if (Smax < 0.00001){ Smax = 999999.0; }
 	//	Smax=999999.0;
-	Gk1 = 0; Bk1 = 0; Gk2 = 0; Bk2 = 0;
 	return 1;
 }
 
