@@ -27,7 +27,7 @@ void SPAREMATRIXBASE::SpareMatrixReorder()
 		IsNewNo = 0;
 		FreeArray(NewNo); FreeArray(OldNo); FreeArray(NIA); FreeArray(NNA); FreeArray(NJA); FreeArray(VALink);
 	}
-	int i;
+	int i, k;
 	MallocNew(NewNo, int, RowTotal);
 	MallocNew(OldNo, int, RowTotal);
 	for (i = 0; i < RowTotal; i++)
@@ -38,6 +38,42 @@ void SPAREMATRIXBASE::SpareMatrixReorder()
 	JacSpaceMax = ElementTotal * 5;
 
 	//第二步：给出新的节点号
+	for (i = 0; i < RowTotal; i++)
+	{
+		NewNo[i] = -1;
+		OldNo[i] = -1;
+	}
+	int KT = 0, tNewNo = 0;
+	for (KT = 0; KT < 10; KT++)
+	{
+		for (i = 0; i < RowTotal; i++)
+		{
+			if (NewNo[i] >= 0)
+				continue;
+			if (NA[i] == KT)
+			{
+				NewNo[i] = tNewNo;
+				tNewNo++;
+			}
+		}
+	}
+	for (i = 0; i < RowTotal; i++)
+	{
+		if (NewNo[i] >= 0)
+			continue;
+		NewNo[i] = tNewNo;
+		tNewNo++;
+	}
+	for (i = 0; i < RowTotal; i++)
+	{
+		k = NewNo[i];
+		if (OldNo[k] >= 0)
+		{
+			sprintf(ErrorMessage[0], "ERROR: 母线排序部分发生错误");
+			cpGetErrorInfo()->PrintError(1);
+		}
+		OldNo[k] = i;
+	}
 	MallocNew(NIA, int, RowTotal);
 	MallocNew(NNA, int, RowTotal);
 	MallocNew(NJA, int, ElementTotal);
