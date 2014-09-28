@@ -185,6 +185,19 @@ int BPA_NETWORKINFO::ReadFile(char*tFileName)
 		flag = 0;
 		switch (LineST[i][0])
 		{
+		case '+':
+			GetItemFromLine(LineST[i], Name1, PLUS_Para[1], PLUS_Loca[1]); ReplaceName(Name1, _MaxNameLen);
+			GetItemFromLine(LineST[i], (void*)(&BaseKv1), PLUS_Para[2], PLUS_Loca[2]);
+			ResetBPAName(Name1, BaseKv1);
+			BusIndex = BusSearch(Name1);
+			if (BusIndex < 0)
+			{
+				sprintf(ErrorMessage[0], "ÕÒ²»µ½Ä¸Ïß£º%s", LineST[i]);
+				cpGetErrorInfo()->PrintWarning(1, 1);
+				break;
+			}
+			flag = cpGetBus(BusIndex)->ReadLine(LineST[i]);
+			break;
 		case 'L':
 			if (LineST[i][1] == '+')
 			{

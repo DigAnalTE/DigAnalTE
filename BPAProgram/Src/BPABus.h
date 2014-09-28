@@ -16,6 +16,9 @@ public:
 		m_fBusPPLoad = 0; m_fBusQPLoad = 0; m_fBusPLoadPer = 1.f; m_fBusQLoadPer = 1.f;
 		m_fBusPalPLoad = 0; m_fBusPalQLoad = 0;
 		m_fGenPper = 0; m_fGenQper = 0; IsLNCard = 0;
+		m_fPP = 0, m_fPQ = 0;
+		m_fIP = 0, m_fIQ = 0;
+		m_fZP = 0, m_fZQ = 0;
 	}
 public://BPA派生的类型//子类型
 	char c_BPAType;
@@ -42,6 +45,10 @@ public://母线上连接的设备。完全是为了兼容BPA而设计，将来需要对所有的设备进行单独
 	float m_fBusPLoadPer, m_fBusQLoadPer;
 	//电容电抗部分
 	float m_fBusPalPLoad, m_fBusPalQLoad;
+	//+卡中的数据
+	float m_fPP, m_fPQ;
+	float m_fIP, m_fIQ;
+	float m_fZP, m_fZQ;
 	//详细建模之后母线上等效剩余部分//在详细建模之后，此部分应该全部为0
 	float m_fGenPper, m_fGenQper; int IsLNCard;//IsLNCard=1时剩余发电机等效为负荷
 	void SetLNCard(){ IsLNCard = 1; }

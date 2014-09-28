@@ -26,6 +26,11 @@ const int  BUS_PARA = 14;
 const char BUS_Para[BUS_PARA][10] = { "A3", "A8", "F4.0", "A2", "F5.0", "F5.0", "F4.0", "F4.0", "F4.0", "F5.0", "F5.0", "F5.0", "F4.3", "F4.3" };
 const int  BUS_Loca[BUS_PARA] = { 3, 6, 14, 18, 20, 25, 30, 34, 38, 42, 47, 52, 57, 61 };
 
+const int  PLUS_PARA = 10;
+//                                    0    1    2      3    4      5      6      7      8      9
+const char PLUS_Para[PLUS_PARA][10] = { "A3", "A8", "F4.0", "A2", "F5.0", "F5.0", "F4.0", "F4.0", "F5.0", "F5.0" };
+const int  PLUS_Loca[PLUS_PARA] = { 3, 6, 14, 18, 20, 25, 30, 34, 42, 47 };
+
 const int  LBRANCH_PARA = 19;
 //                                          0    1    2      3    4    5      6    7      8    9      10     11     12     13     14     15   16   17   18
 const char LBRANCH_Para[LBRANCH_PARA][10] = { "A3", "A8", "F4.0", "I1", "A8", "F4.0", "A1", "F4.0", "I1", "F6.5", "F6.5", "F6.5", "F6.5", "F4.1", "A8", "A1", "I2", "A1", "I2" };

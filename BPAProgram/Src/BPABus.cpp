@@ -30,6 +30,7 @@ void BPABUS::JacElement(NETWORKINFO*Topo)
 	Topo->NodeGenModify(BusNo, m_fGenP, m_fGenQ, m_fGenPmax, 0, m_fGenQmax, m_fGenQmin);
 	//	Topo->NodeGenModify(BusNo,m_fGenP*(1-m_fGenPper),m_fGenQ*(1-m_fGenQper),m_fGenPmax*(1-m_fGenPper),0,m_fGenQmax*(1-m_fGenQper),m_fGenQmin*(1-m_fGenQper));
 	Topo->NodeLoadModify(BusNo, -m_fBusPPLoad*m_fBusPLoadPer, -m_fBusQPLoad*m_fBusQLoadPer, 0, 0, m_fBusPalPLoad, m_fBusPalQLoad);
+	Topo->NodeLoadModify(BusNo, m_fPP, m_fPQ, m_fIP, m_fIQ, m_fZP, m_fZQ);
 }
 
 void BPABUS::UpdateValue(NETWORKINFO*pNet)
@@ -61,6 +62,52 @@ void BPABUS::UpdateValue(NETWORKINFO*pNet)
 
 int BPABUS::ReadLine(char* PFLine)
 {
+	if (PFLine[0] == '+')
+	{
+		char tempChar[3];
+		GetItemFromLine(PFLine, tempChar, PLUS_Para[3], PLUS_Loca[3]);
+		float tempPP, tempPQ, tempIP, tempIQ, tempZP, tempZQ;
+		GetItemFromLine(PFLine, (void*)(&tempIP), PLUS_Para[4], PLUS_Loca[4]);
+		GetItemFromLine(PFLine, (void*)(&tempIQ), PLUS_Para[5], PLUS_Loca[5]);
+		GetItemFromLine(PFLine, (void*)(&tempZP), PLUS_Para[6], PLUS_Loca[6]);
+		GetItemFromLine(PFLine, (void*)(&tempZQ), PLUS_Para[7], PLUS_Loca[7]);
+		GetItemFromLine(PFLine, (void*)(&tempPP), PLUS_Para[8], PLUS_Loca[8]);
+		GetItemFromLine(PFLine, (void*)(&tempPQ), PLUS_Para[9], PLUS_Loca[9]);
+		if (fabs(tempZP)>0.001 || fabs(tempZQ)>0.001 || fabs(tempPP)>0.001 || fabs(tempPQ)>0.001)
+		{
+			//m_fZP += tempZP;
+			//m_fZQ += tempZQ;
+			//m_fPP += tempPP;
+			//m_fPQ += tempPQ;
+		}
+		if (tempChar[0] == '*')
+		{
+			if (tempChar[1] == 'I')
+			{
+				m_fIP -= tempIP;
+				m_fIQ -= tempIQ;
+			}
+			else if (tempChar[1] == 'P')
+			{
+				m_fPP -= tempIP;
+				m_fPQ -= tempIQ;
+			}
+		}
+		else if (tempChar[0] == '0')
+		{
+			if (tempChar[1] == '1')
+			{
+				m_fIP -= tempIP;
+				m_fIQ -= tempIQ;
+			}
+			else if (tempChar[1] == '2')
+			{
+				m_fPP -= tempIP;
+				m_fPQ -= tempIQ;
+			}
+		}
+		return 1;
+	}
 	float V1, V2;
 	c_BPAType = PFLine[1];
 	GetItemFromLine(PFLine, Owner, BUS_Para[0], BUS_Loca[0]); ReplaceName(Owner, _MaxNameLen);
