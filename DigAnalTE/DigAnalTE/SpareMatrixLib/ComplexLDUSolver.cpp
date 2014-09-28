@@ -274,43 +274,45 @@ int LDUSOLVER::Calculate()
 	{
 		LDUFactorization();
 	}
-	int i, j, k;
+	int i, j, k, old;
 	//前代
 	for (i = 0; i < RowTotal; i++)
 	{
-		if (X[OldNo[i]] == 0 && Y[OldNo[i]] == 0)
+		old = OldNo[i];
+		if (X[old] == 0 && Y[old] == 0)
 			continue;
 		k = LDUIA[i];
-		Y[OldNo[i]] -= L_VA[k].RowJ*X[OldNo[i]];
+		Y[old] -= L_VA[k].RowJ*X[old];
 		k = LDULINK[k];
 		while (k >= 0)
 		{
 			j = LDUJA[k];
-			X[OldNo[j]] -= L_VA[k].RowH*X[OldNo[i]] + L_VA[k].RowN*Y[OldNo[i]];
-			Y[OldNo[j]] -= L_VA[k].RowJ*X[OldNo[i]] + L_VA[k].RowL*Y[OldNo[i]];
+			X[OldNo[j]] -= L_VA[k].RowH*X[old] + L_VA[k].RowN*Y[old];
+			Y[OldNo[j]] -= L_VA[k].RowJ*X[old] + L_VA[k].RowL*Y[old];
 			k = LDULINK[k];
 		}
 	}
 	//除法
 	for (i = 0; i < RowTotal; i++)
 	{
-		X[OldNo[i]] /= L_VA[LDUIA[i]].RowH;
-		Y[OldNo[i]] /= L_VA[LDUIA[i]].RowL;
+		old = OldNo[i];
+		X[old] /= L_VA[LDUIA[i]].RowH;
+		Y[old] /= L_VA[LDUIA[i]].RowL;
 	}
 	//回代
 	for (i = RowTotal - 1; i >= 0; i--)
 	{
+		old = OldNo[i];
 		k = LDUIA[i];
+		X[old] -= U_VA[k].RowN*Y[old];
 		k = LDULINK[k];
 		while (k >= 0)
 		{
 			j = LDUJA[k];
-			X[OldNo[i]] -= U_VA[k].RowH*X[OldNo[j]] + U_VA[k].RowN*Y[OldNo[j]];
-			Y[OldNo[i]] -= U_VA[k].RowJ*X[OldNo[j]] + U_VA[k].RowL*Y[OldNo[j]];
+			X[old] -= U_VA[k].RowH*X[OldNo[j]] + U_VA[k].RowN*Y[OldNo[j]];
+			Y[old] -= U_VA[k].RowJ*X[OldNo[j]] + U_VA[k].RowL*Y[OldNo[j]];
 			k = LDULINK[k];
 		}
-		k = LDUIA[i];
-		X[OldNo[i]] -= U_VA[k].RowN*Y[OldNo[i]];
 	}
 	return 1;
 }

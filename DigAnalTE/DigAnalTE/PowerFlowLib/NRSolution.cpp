@@ -165,6 +165,10 @@ void NRSOLUTION::FormJacobi()
 			{
 				ElementN = 0; ElementL = 0;
 			}
+			if (pNet->JacType[iJ] == 3)
+			{
+				ElementH = 0; ElementJ = 0;
+			}
 			m_Solver->SetElement(j, ElementH, ElementJ, ElementN, ElementL);
 		}
 		GIJ = pNet->m_Matrix->VG[II] + pNet->PZnet[iI];

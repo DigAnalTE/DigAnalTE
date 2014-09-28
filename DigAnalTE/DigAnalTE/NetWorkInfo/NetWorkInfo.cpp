@@ -307,7 +307,7 @@ void NETWORKINFO::DampPQTable(FILE*fp)
 	int i;
 	for (i = 0; i < iGetBusTotal(); i++)
 	{
-		fprintf(fp, " %7d %-s%7.1f", i, cpGetBus(i)->Name, cpGetBus(i)->BaseKv);
+		fprintf(fp, " %7d %-s", i, cpGetBus(i)->Name);
 		fprintf(fp, "%12.5lf%12.5lf%12.5lf%12.5lf%12.5lf%12.5lf%12.5lf%12.5lf%12.5lf%12.5lf%12.5lf%12.5lf%12.5lf%12.5lf%12.5lf%12.5lf%12.5lf%12.5lf\n",
 			PPGen[i], QPGen[i],
 			PGmax[i], PGmin[i],

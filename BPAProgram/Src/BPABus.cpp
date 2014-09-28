@@ -132,7 +132,13 @@ int BPABUS::ReadLine(char* PFLine)
 	GetItemFromLine(PFLine, (void*)(&V1), BUS_Para[12], BUS_Loca[12]);
 	GetItemFromLine(PFLine, (void*)(&V2), BUS_Para[13], BUS_Loca[13]);
 	//m_fGenQ=m_fGenQmax;
-	if (fabs(m_fGenPmax) < 0 || m_fGenPmax < m_fGenP) m_fGenPmax = 999999.f;
+	if (fabs(m_fGenPmax) < 0 || m_fGenPmax < m_fGenP)
+	{
+		if (c_BPAType == 'S')
+			m_fGenPmax = 999999.f;
+		else
+			m_fGenPmax = m_fGenP;
+	}
 	m_fGenPmax = fabs(m_fGenPmax);
 
 	switch (c_BPAType)
@@ -159,6 +165,14 @@ int BPABUS::ReadLine(char* PFLine)
 		break;
 	}
 	return 1;
+}
+
+void BPABUS::PrintInfo(char*Line)
+{
+	char BusName[9];
+
+	strncpy(BusName, Name, 8); ReplaceName(BusName, 9);
+	sprintf(Line, "%s-%7.1fkv", BusName, BaseKv);
 }
 
 void BPABUS::OutputPFOFile(FILE*fp)

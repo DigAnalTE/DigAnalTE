@@ -60,6 +60,8 @@ int main(int argc, char **argv)
 	gNetWorkInfo.NetLink();
 	gNetWorkInfo.NetAnalysis();
 
+	//gNetWorkInfo.DampPQTable(mfOutputFile);
+
 	if (gNetWorkInfo.NetError != 1)
 	{
 		sprintf(ErrorMessage[0], "数据存在错误，不能进行潮流计算");

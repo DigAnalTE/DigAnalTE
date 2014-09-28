@@ -259,5 +259,5 @@ void ResetBPAName(char*Name, float baseKV)
 void GenerateBPABranchName(char*Name, char*Name1, float baseKV1, char*Name2, float baseKV2, char ID)
 {
 	int i;
-	sprintf(Name, "%8s%-7.2f%8s%-7.2f%c", Name1, baseKV1, Name2, baseKV2, ID);
+	sprintf(Name, "%-8s%-7.2f%-8s%-7.2f%c", Name1, baseKV1, Name2, baseKV2, ID);
 }

@@ -26,6 +26,7 @@ public://数据
 	char Owner[_MaxNameLen];
 public://读写部分
 	virtual int ReadLine(char*Line);
+	virtual void PrintInfo(char*Line);//用于警告等信息
 	virtual void OutputPFOFile(FILE*fp);//输出潮流信息
 public://潮流计算过程
 	//第一步：修改其中的网络方程部分
