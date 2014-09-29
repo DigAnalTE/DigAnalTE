@@ -53,6 +53,8 @@ public:
 	{
 		State = 1; EquipPortType = 1; c_EquipType = '1';
 		BusNo = -1; pBus = NULL;
+		PPNET = QPNET = PINET = QINET = PZNET = QZNET = 0;
+		PGNET = 0; QGNET = 0; PGMAX = 0; PGMIN = 0; QGMAX = 0; QGMIN = 0;
 	}
 	~ONEEQUIPMENTBASE(){}
 public:
@@ -82,6 +84,10 @@ public:
 		State = 1; EquipPortType = 2; c_EquipType = '2';
 		BusNo1 = -1; BusNo2 = -1;
 		pBus1 = NULL; pBus2 = NULL;
+		PGNET1 = 0; QGNET1 = 0; PGMAX1 = 0; PGMIN1 = 0; QGMAX1 = 0; QGMIN1 = 0;
+		PPNET1 = QPNET1 = PINET1 = QINET1 = PZNET1 = QZNET1 = 0;
+		PGNET2 = 0; QGNET2 = 0; PGMAX2 = 0; PGMIN2 = 0; QGMAX2 = 0; QGMIN2 = 0;
+		PPNET2 = QPNET2 = PINET2 = QINET2 = PZNET2 = QZNET2 = 0;
 	}
 	~TWOEQUIPMENTBASE(){}
 public:

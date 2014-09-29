@@ -78,6 +78,9 @@
     <ClCompile Include="SpareMatrixLib\ComplexLDUSolver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="NetWorkInfo\DCLineBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommonFunction\constdef.h">
@@ -144,6 +147,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SpareMatrixLib\ComplexLDUSolver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NetWorkInfo\DCLineBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

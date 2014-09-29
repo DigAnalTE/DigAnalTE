@@ -3,7 +3,6 @@
 
 void NETLOAD::subJacElement(NETWORKINFO*pNet)
 {
-	PPNET = QPNET = PINET = QINET = PZNET = QZNET = 0;
 	if (m_LoadType == 0)
 	{
 		PPNET -= m_fLoadP*m_fLoadPPer;

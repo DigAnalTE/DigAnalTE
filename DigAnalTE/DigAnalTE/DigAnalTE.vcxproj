@@ -21,6 +21,7 @@
     <ClCompile Include="NetWorkInfo\BusBase.cpp" />
     <ClCompile Include="NetWorkInfo\BusInfo.cpp" />
     <ClCompile Include="NetWorkInfo\Compensation.cpp" />
+    <ClCompile Include="NetWorkInfo\DCLineBase.cpp" />
     <ClCompile Include="NetWorkInfo\EquipmentBase.cpp" />
     <ClCompile Include="NetWorkInfo\EquipmentInfo.cpp" />
     <ClCompile Include="NetWorkInfo\Generator.cpp" />
@@ -44,6 +45,7 @@
     <ClInclude Include="NetWorkInfo\BusBase.h" />
     <ClInclude Include="NetWorkInfo\BusInfo.h" />
     <ClInclude Include="NetWorkInfo\Compensation.h" />
+    <ClInclude Include="NetWorkInfo\DCLineBase.h" />
     <ClInclude Include="NetWorkInfo\EquipmentBase.h" />
     <ClInclude Include="NetWorkInfo\EquipmentInfo.h" />
     <ClInclude Include="NetWorkInfo\Generator.h" />

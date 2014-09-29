@@ -107,4 +107,5 @@ void BRANCHBASE::UpdateValue(NETWORKINFO*pNet)
 	JQ = (float)(-Vj*Vj*Y22i - Vi*Vj*sin(dSita)*Y21r - Vi*Vj*cos(dSita)*Y21i)*pNet->GetBMVA();
 	Ploss = IP + JP;// if(Ploss<0)Ploss=-Ploss;
 	Qloss = IQ + JQ;// if(Qloss<0)Qloss=-Qloss;
+	subUpdateValue(pNet);
 }
