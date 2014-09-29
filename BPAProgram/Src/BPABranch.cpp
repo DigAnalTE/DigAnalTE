@@ -14,9 +14,9 @@ int BPABRANCH::ReadLine(char*line)
 		return 1;
 	}
 	flag = subReadBPALine(line);
-	GenerateBPABranchName(Name, BusName1, BaseKv1, BusName2, BaseKv2, ID);
 	ResetBPAName(BusName1, BaseKv1);
 	ResetBPAName(BusName2, BaseKv2);
+	GenerateBPABranchName(Name, BusName1, BaseKv1, BusName2, BaseKv2, ID);
 	return flag;
 }
 
@@ -216,7 +216,7 @@ void BPABRANCH::OutputPFOFile(FILE*fp, int nDirtn)
 	if (fabs(Qloss) < 0.001)Qloss = 0.;
 
 	char OutLine[_MaxLineLen];
-	char BusName[9], OwnerName[4];
+	char BusName[9];
 	float baseKV;
 	if (nDirtn == 1)
 	{

@@ -75,10 +75,10 @@ int BPABUS::ReadLine(char* PFLine)
 		GetItemFromLine(PFLine, (void*)(&tempPQ), PLUS_Para[9], PLUS_Loca[9]);
 		if (fabs(tempZP)>0.001 || fabs(tempZQ)>0.001 || fabs(tempPP)>0.001 || fabs(tempPQ)>0.001)
 		{
-			//m_fZP += tempZP;
-			//m_fZQ += tempZQ;
-			//m_fPP += tempPP;
-			//m_fPQ += tempPQ;
+			m_fZP += tempZP;
+			m_fZQ += tempZQ;
+			m_fPP += tempPP;
+			m_fPQ += tempPQ;
 		}
 		if (tempChar[0] == '*')
 		{
@@ -110,10 +110,10 @@ int BPABUS::ReadLine(char* PFLine)
 	}
 	float V1, V2;
 	c_BPAType = PFLine[1];
-	GetItemFromLine(PFLine, Owner, BUS_Para[0], BUS_Loca[0]); ReplaceName(Owner, _MaxNameLen);
-	GetItemFromLine(PFLine, Name, BUS_Para[1], BUS_Loca[1]); ReplaceName(Name, _MaxNameLen);
+	GetItemFromLine(PFLine, Owner, BUS_Para[0], BUS_Loca[0]); ReplaceName(Owner, 4);
+	GetItemFromLine(PFLine, BPAName, BUS_Para[1], BUS_Loca[1]); ReplaceName(BPAName, 9);
 	GetItemFromLine(PFLine, (void*)(&BaseKv), BUS_Para[2], BUS_Loca[2]);
-	ResetBPAName(Name, BaseKv);
+	strcpy(Name, BPAName); ReplaceName(Name, _MaxNameLen); ResetBPAName(Name, BaseKv);
 	GetItemFromLine(PFLine, Zone, BUS_Para[3], BUS_Loca[3]); ReplaceName(Zone, _MaxNameLen);
 	if (BaseKv<0 || BaseKv>99999.)
 	{
@@ -178,23 +178,21 @@ void BPABUS::PrintInfo(char*Line)
 void BPABUS::OutputPFOFile(FILE*fp)
 {
 	char OutLine[_MaxLineLen];
-	char BusName[9], ZoneName[3], OwnerName[4];
+	char ZoneName[3];
 
-	strncpy(BusName, Name, 8); ReplaceName(BusName, 9);
-	strncpy(ZoneName, Zone, 2); ReplaceName(ZoneName, 3);
-	strncpy(OwnerName, Owner, 3); ReplaceName(OwnerName, 4);
+	strncpy(ZoneName,Zone,2);ReplaceName(ZoneName,3);
 
 	float pLoad, qLoad;
 	pLoad = m_fBusPPLoad*m_fBusPLoadPer;
 	qLoad = m_fBusQPLoad*m_fBusQLoadPer;
 
 	sprintf(OutLine, "%s%6.1f %7.2fkV/%5.1f度  %s%8.1f有功出力%8.1f无功出力%7.1f有功负荷%8.1f无功负荷 %s  %7.3f电压pu  B%c\n",
-		BusName, BaseKv,
+		BPAName, BaseKv,
 		m_fBusV*BaseKv, m_fBusSita,
 		ZoneName,
 		m_fGenP, m_fGenQ,
 		pLoad, qLoad,
-		OwnerName,
+		Owner,
 		m_fBusV,
 		c_BPAType);
 	if (OutLine[121] == ' '){ OutLine[121] = '\n'; OutLine[122] = '\0'; }

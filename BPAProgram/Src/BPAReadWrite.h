@@ -13,7 +13,6 @@ bool inline IsZero(real v)
 	return (fabs(v) < 0.00001);
 }
 void ResetBPAName(char*Name, float baseKV);//由于BPA中是使用名称和电压等级同时决定一个名称，所以这里需要转化成独特的名称
-void GetBPAName(char*Name, char*BPAName, float baseKV);//反向操作
 void GenerateBPABranchName(char*Name, char*Name1, float baseKV1, char*Name2, float baseKV2, char ID);
 
 const int  AREA_PARA = 14;

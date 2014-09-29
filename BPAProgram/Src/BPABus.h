@@ -23,7 +23,8 @@ public:
 public://BPA派生的类型//子类型
 	char c_BPAType;
 public://数据
-	char Owner[_MaxNameLen];
+	char BPAName[9];
+	char Owner[4];
 public://读写部分
 	virtual int ReadLine(char*Line);
 	virtual void PrintInfo(char*Line);//用于警告等信息
