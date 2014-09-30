@@ -14,9 +14,9 @@ int BPABRANCH::ReadLine(char*line)
 		return 1;
 	}
 	flag = subReadBPALine(line);
+	GenerateBPABranchName(Name, BusName1, BaseKv1, BusName2, BaseKv2, ID);
 	ResetBPAName(BusName1, BaseKv1);
 	ResetBPAName(BusName2, BaseKv2);
-	GenerateBPABranchName(Name, BusName1, BaseKv1, BusName2, BaseKv2, ID);
 	return flag;
 }
 
