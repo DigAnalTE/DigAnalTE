@@ -24,8 +24,8 @@ private://LDU分解后的矩阵
 	int LDUnVANumb;//使用的空间数
 	//稀疏矩阵存储//必须是结构对称的//可以数值不对称
 	int *LDUIA;
-	Composite *L_VA;
-	Composite *U_VA;
+	Composite *L_VA;//下半矩阵
+	Composite *U_VA;//上半矩阵//D矩阵放在U矩阵中
 	int *LDUJA;
 	int *LDULINK;
 	void ReMallocSpace(int tAddSpace);//当空间不够的时候重新申请大空间

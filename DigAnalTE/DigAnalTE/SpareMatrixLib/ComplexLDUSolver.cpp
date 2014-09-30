@@ -6,7 +6,7 @@ COMPLEXSPAREMATRIXSOLVER* makeLDUSolver(){ return new LDUSOLVER; }
 
 void LDUSOLVER::ReMallocSpace(int tAddSpace)
 {//当空间不够的时候重新申请大空间
-	if (LDUnVASpace + tAddSpace < pMatrix->JacSpaceMax)tAddSpace = pMatrix->JacSpaceMax - LDUnVASpace;
+	//if (LDUnVASpace + tAddSpace < pMatrix->JacSpaceMax)tAddSpace = pMatrix->JacSpaceMax - LDUnVASpace;
 	if (tAddSpace < 1)return;
 	Composite *O_LVA, *O_UVA;
 	int *OldJA, *OldLINK;
@@ -29,6 +29,7 @@ void LDUSOLVER::ReMallocSpace(int tAddSpace)
 int LDUSOLVER::LDUFactorization()
 {
 	int i, j, k, iVA, l;
+	//第一步，生成L矩阵和U矩阵的初始部分
 	for (i = 0, iVA = 0; i < RowTotal; i++)
 	{
 		LDUIA[i] = iVA;
@@ -84,21 +85,17 @@ int LDUSOLVER::LDUFactorization()
 			return 0;
 		}
 		//处理该元素
-		U_VA[LDUIA[i]].RowH = 1;
-		U_VA[LDUIA[i]].RowN /= IIRowH;
-		U_VA[LDUIA[i]].RowL -= L_VA[LDUIA[i]].RowJ*U_VA[LDUIA[i]].RowN;
-		L_VA[LDUIA[i]].RowL -= L_VA[LDUIA[i]].RowJ*U_VA[LDUIA[i]].RowN;
-		//处理这一行的元素
+		L_VA[LDUIA[i]].RowH = 1;
+		L_VA[LDUIA[i]].RowJ /= IIRowH;
+		L_VA[LDUIA[i]].RowL -= U_VA[LDUIA[i]].RowN*L_VA[LDUIA[i]].RowJ;
+		U_VA[LDUIA[i]].RowL -= U_VA[LDUIA[i]].RowN*L_VA[LDUIA[i]].RowJ;//=L_VA[LDUIA[i]].RowL
 		j = LDUIA[i];
 		j = LDULINK[j];
 		while (j >= 0)
-		{//U_VA[j]=U_VA[j]/U_VA[LDUIA[i]];//规格化运算
-			U_VA[j].RowH /= IIRowH;
-			U_VA[j].RowN /= IIRowH;
-			U_VA[j].RowJ -= L_VA[LDUIA[i]].RowJ*U_VA[j].RowH;
-			U_VA[j].RowL -= L_VA[LDUIA[i]].RowJ*U_VA[j].RowN;
-			L_VA[j].RowN -= L_VA[j].RowH*U_VA[LDUIA[i]].RowN;
-			L_VA[j].RowL -= L_VA[j].RowJ*U_VA[LDUIA[i]].RowN;
+		{
+			//处理这一行的元素//L_VA[j]=L_VA[j]/IIRowH;//规格化运算
+			L_VA[j].RowH /= IIRowH;
+			L_VA[j].RowJ /= IIRowH;
 			j = LDULINK[j];
 		}
 		//开始处理各行数据
@@ -106,15 +103,19 @@ int LDUSOLVER::LDUFactorization()
 		j = LDULINK[j];
 		while (j >= 0)
 		{
+			L_VA[j].RowN -= U_VA[LDUIA[i]].RowN*L_VA[j].RowH;
+			L_VA[j].RowL -= U_VA[LDUIA[i]].RowN*L_VA[j].RowJ;
+			U_VA[j].RowJ -= U_VA[j].RowH*L_VA[LDUIA[i]].RowJ;
+			U_VA[j].RowL -= U_VA[j].RowN*L_VA[LDUIA[i]].RowJ;
 			//下面开始消去运算
 			m = LDUIA[LDUJA[j]];//第一个点
 			//U_VA[m]-=L_VA[j]*U_VA[j];//LDUJA[j]行LDUJA[k]列进行消去，第一个消去点(j==k)有点不同
-			U_VA[m].RowH -= L_VA[j].RowH*U_VA[j].RowH;
-			U_VA[m].RowN -= L_VA[j].RowH*U_VA[j].RowN;
-			U_VA[m].RowL -= L_VA[j].RowJ*U_VA[j].RowN;
-			L_VA[m].RowH -= L_VA[j].RowH*U_VA[j].RowH;
-			L_VA[m].RowJ -= L_VA[j].RowJ*U_VA[j].RowH;
-			L_VA[m].RowL -= L_VA[j].RowJ*U_VA[j].RowN;
+			L_VA[m].RowH -= U_VA[j].RowH*L_VA[j].RowH;
+			L_VA[m].RowJ -= U_VA[j].RowH*L_VA[j].RowJ;
+			L_VA[m].RowL -= U_VA[j].RowN*L_VA[j].RowJ;
+			U_VA[m].RowH -= U_VA[j].RowH*L_VA[j].RowH;
+			U_VA[m].RowN -= U_VA[j].RowN*L_VA[j].RowH;
+			U_VA[m].RowL -= U_VA[j].RowN*L_VA[j].RowJ;
 			k = LDULINK[j];
 			while (k >= 0)
 			{//LDUJA[j]行LDUJA[k]列进行消去
@@ -126,32 +127,25 @@ int LDUSOLVER::LDUFactorization()
 					if (m<0 || LDUJA[m]>LDUJA[k])
 					{//找不到
 						if (LDUnVANumb >= LDUnVASpace)ReMallocSpace(LDUnVASpace / 2);
-						//U_VA[LDUnVANumb]=-L_VA[j]*U_VA[k];
-						U_VA[LDUnVANumb].RowH = -L_VA[j].RowH*U_VA[k].RowH;
-						U_VA[LDUnVANumb].RowN = -L_VA[j].RowH*U_VA[k].RowN;
-						U_VA[LDUnVANumb].RowJ = -L_VA[j].RowJ*U_VA[k].RowH;
-						U_VA[LDUnVANumb].RowL = -L_VA[j].RowJ*U_VA[k].RowN;
-						L_VA[LDUnVANumb].RowH = -L_VA[k].RowH*U_VA[j].RowH;
-						L_VA[LDUnVANumb].RowN = -L_VA[k].RowH*U_VA[j].RowN;
-						L_VA[LDUnVANumb].RowJ = -L_VA[k].RowJ*U_VA[j].RowH;
-						L_VA[LDUnVANumb].RowL = -L_VA[k].RowJ*U_VA[j].RowN;
 						LDUJA[LDUnVANumb] = LDUJA[k];
 						LDULINK[LDUnVANumb] = m;
 						LDULINK[tLastLink] = LDUnVANumb;
+						m = LDUnVANumb;
+						L_VA[m] = { 0, 0, 0, 0 };
+						U_VA[m] = { 0, 0, 0, 0 };
 						LDUnVANumb++;
-						break;
 					}
-					else if (LDUJA[m] == LDUJA[k])
+					if (LDUJA[m] == LDUJA[k])
 					{//找到了
 						//U_VA[m]-=L_VA[j]*U_VA[k];
-						U_VA[m].RowH -= L_VA[j].RowH*U_VA[k].RowH;
-						U_VA[m].RowN -= L_VA[j].RowH*U_VA[k].RowN;
-						U_VA[m].RowJ -= L_VA[j].RowJ*U_VA[k].RowH;
-						U_VA[m].RowL -= L_VA[j].RowJ*U_VA[k].RowN;
-						L_VA[m].RowH -= L_VA[k].RowH*U_VA[j].RowH;
-						L_VA[m].RowN -= L_VA[k].RowH*U_VA[j].RowN;
-						L_VA[m].RowJ -= L_VA[k].RowJ*U_VA[j].RowH;
-						L_VA[m].RowL -= L_VA[k].RowJ*U_VA[j].RowN;
+						L_VA[m].RowH -= U_VA[j].RowH*L_VA[k].RowH;
+						L_VA[m].RowJ -= U_VA[j].RowH*L_VA[k].RowJ;
+						L_VA[m].RowN -= U_VA[j].RowN*L_VA[k].RowH;
+						L_VA[m].RowL -= U_VA[j].RowN*L_VA[k].RowJ;
+						U_VA[m].RowH -= U_VA[k].RowH*L_VA[j].RowH;
+						U_VA[m].RowJ -= U_VA[k].RowH*L_VA[j].RowJ;
+						U_VA[m].RowN -= U_VA[k].RowN*L_VA[j].RowH;
+						U_VA[m].RowL -= U_VA[k].RowN*L_VA[j].RowJ;
 						break;
 					}
 					tLastLink = m;
@@ -164,7 +158,7 @@ int LDUSOLVER::LDUFactorization()
 		//处理第二遍//根据RowL进行处理
 		//处理该元素
 		IIRowL = U_VA[LDUIA[i]].RowL;
-		U_VA[LDUIA[i]].RowL = 1;
+		L_VA[LDUIA[i]].RowL = 1;
 		if (fabs(IIRowL) < 0.000001)
 		{
 			sprintf(ErrorMessage[0], "规格化运算发生错误");
@@ -176,8 +170,8 @@ int LDUSOLVER::LDUFactorization()
 		j = LDULINK[j];
 		while (j >= 0)
 		{//U_VA[j]=U_VA[j]/U_VA[LDUIA[i]];//规格化运算
-			U_VA[j].RowJ /= IIRowL;
-			U_VA[j].RowL /= IIRowL;
+			L_VA[j].RowN /= IIRowL;
+			L_VA[j].RowL /= IIRowL;
 			j = LDULINK[j];
 		}
 		j = LDUIA[i];
@@ -187,12 +181,12 @@ int LDUSOLVER::LDUFactorization()
 			//下面开始消去运算
 			m = LDUIA[LDUJA[j]];//第一个点
 			//U_VA[m]-=L_VA[j]*U_VA[j];//LDUJA[j]行LDUJA[k]列进行消去，第一个消去点(j==k)有点不同
-			U_VA[m].RowH -= L_VA[j].RowN*U_VA[j].RowJ;
-			U_VA[m].RowN -= L_VA[j].RowN*U_VA[j].RowL;
-			U_VA[m].RowL -= L_VA[j].RowL*U_VA[j].RowL;
-			L_VA[m].RowH -= L_VA[j].RowN*U_VA[j].RowJ;
-			L_VA[m].RowJ -= L_VA[j].RowN*U_VA[j].RowL;
-			L_VA[m].RowL -= L_VA[j].RowL*U_VA[j].RowL;
+			L_VA[m].RowH -= U_VA[j].RowJ*L_VA[j].RowN;
+			L_VA[m].RowJ -= U_VA[j].RowJ*L_VA[j].RowL;
+			L_VA[m].RowL -= U_VA[j].RowL*L_VA[j].RowL;
+			U_VA[m].RowH -= U_VA[j].RowJ*L_VA[j].RowN;
+			U_VA[m].RowN -= U_VA[j].RowL*L_VA[j].RowN;
+			U_VA[m].RowL -= U_VA[j].RowL*L_VA[j].RowL;
 			k = LDULINK[j];
 			while (k >= 0)
 			{//LDUJA[j]行LDUJA[k]列进行消去
@@ -203,33 +197,21 @@ int LDUSOLVER::LDUFactorization()
 				{
 					if (m<0 || LDUJA[m]>LDUJA[k])
 					{//找不到
-						if (LDUnVANumb >= LDUnVASpace)ReMallocSpace(LDUnVASpace / 2);
-						//U_VA[LDUnVANumb]=-L_VA[j]*U_VA[k];
-						U_VA[LDUnVANumb].RowH = -L_VA[j].RowN*U_VA[k].RowJ;
-						U_VA[LDUnVANumb].RowN = -L_VA[j].RowN*U_VA[k].RowL;
-						U_VA[LDUnVANumb].RowJ = -L_VA[j].RowL*U_VA[k].RowJ;
-						U_VA[LDUnVANumb].RowL = -L_VA[j].RowL*U_VA[k].RowL;
-						L_VA[LDUnVANumb].RowH = -L_VA[k].RowN*U_VA[j].RowJ;
-						L_VA[LDUnVANumb].RowN = -L_VA[k].RowN*U_VA[j].RowL;
-						L_VA[LDUnVANumb].RowJ = -L_VA[k].RowL*U_VA[j].RowJ;
-						L_VA[LDUnVANumb].RowL = -L_VA[k].RowL*U_VA[j].RowL;
-						LDUJA[LDUnVANumb] = LDUJA[k];
-						LDULINK[LDUnVANumb] = m;
-						LDULINK[tLastLink] = LDUnVANumb;
-						LDUnVANumb++;
-						break;
+						sprintf(ErrorMessage[0], "严重错误");
+						cpGetErrorInfo()->PrintError(1);
+						return 0;
 					}
-					else if (LDUJA[m] == LDUJA[k])
+					if (LDUJA[m] == LDUJA[k])
 					{//找到了
 						//U_VA[m]-=L_VA[j]*U_VA[k];
-						U_VA[m].RowH -= L_VA[j].RowN*U_VA[k].RowJ;
-						U_VA[m].RowN -= L_VA[j].RowN*U_VA[k].RowL;
-						U_VA[m].RowJ -= L_VA[j].RowL*U_VA[k].RowJ;
-						U_VA[m].RowL -= L_VA[j].RowL*U_VA[k].RowL;
-						L_VA[m].RowH -= L_VA[k].RowN*U_VA[j].RowJ;
-						L_VA[m].RowN -= L_VA[k].RowN*U_VA[j].RowL;
-						L_VA[m].RowJ -= L_VA[k].RowL*U_VA[j].RowJ;
-						L_VA[m].RowL -= L_VA[k].RowL*U_VA[j].RowL;
+						L_VA[m].RowH -= U_VA[j].RowJ*L_VA[k].RowN;
+						L_VA[m].RowJ -= U_VA[j].RowJ*L_VA[k].RowL;
+						L_VA[m].RowN -= U_VA[j].RowL*L_VA[k].RowN;
+						L_VA[m].RowL -= U_VA[j].RowL*L_VA[k].RowL;
+						U_VA[m].RowH -= U_VA[k].RowJ*L_VA[j].RowN;
+						U_VA[m].RowJ -= U_VA[k].RowJ*L_VA[j].RowL;
+						U_VA[m].RowN -= U_VA[k].RowL*L_VA[j].RowN;
+						U_VA[m].RowL -= U_VA[k].RowL*L_VA[j].RowL;
 						break;
 					}
 					tLastLink = m;
@@ -242,25 +224,25 @@ int LDUSOLVER::LDUFactorization()
 	}
 	for (i = 0; i < RowTotal; i++)
 	{
-		IIRowH = L_VA[LDUIA[i]].RowH;
-		L_VA[LDUIA[i]].RowJ /= IIRowH;
+		IIRowH = U_VA[LDUIA[i]].RowH;
+		U_VA[LDUIA[i]].RowN /= IIRowH;
 		//处理这一行的元素
 		j = LDUIA[i];
 		j = LDULINK[j];
 		while (j >= 0)
 		{//U_VA[j]=U_VA[j]/U_VA[LDUIA[i]];//规格化运算
-			L_VA[j].RowH /= IIRowH;
-			L_VA[j].RowJ /= IIRowH;
+			U_VA[j].RowH /= IIRowH;
+			U_VA[j].RowN /= IIRowH;
 			j = LDULINK[j];
 		}
-		IIRowL = L_VA[LDUIA[i]].RowL;
+		IIRowL = U_VA[LDUIA[i]].RowL;
 		//处理这一行的元素
 		j = LDUIA[i];
 		j = LDULINK[j];
 		while (j >= 0)
 		{
-			L_VA[j].RowN /= IIRowL;
-			L_VA[j].RowL /= IIRowL;
+			U_VA[j].RowJ /= IIRowL;
+			U_VA[j].RowL /= IIRowL;
 			j = LDULINK[j];
 		}
 	}
@@ -296,23 +278,26 @@ int LDUSOLVER::Calculate()
 	for (i = 0; i < RowTotal; i++)
 	{
 		old = OldNo[i];
-		X[old] /= L_VA[LDUIA[i]].RowH;
-		Y[old] /= L_VA[LDUIA[i]].RowL;
+		X[old] /= U_VA[LDUIA[i]].RowH;
+		Y[old] /= U_VA[LDUIA[i]].RowL;
 	}
 	//回代
 	for (i = RowTotal - 1; i >= 0; i--)
 	{
 		old = OldNo[i];
 		k = LDUIA[i];
-		X[old] -= U_VA[k].RowN*Y[old];
 		k = LDULINK[k];
 		while (k >= 0)
 		{
 			j = LDUJA[k];
-			X[old] -= U_VA[k].RowH*X[OldNo[j]] + U_VA[k].RowN*Y[OldNo[j]];
-			Y[old] -= U_VA[k].RowJ*X[OldNo[j]] + U_VA[k].RowL*Y[OldNo[j]];
+			Y[old] -= U_VA[k].RowL*Y[OldNo[j]];
+			Y[old] -= U_VA[k].RowJ*X[OldNo[j]];
+			X[old] -= U_VA[k].RowN*Y[OldNo[j]];
+			X[old] -= U_VA[k].RowH*X[OldNo[j]];
 			k = LDULINK[k];
 		}
+		k = LDUIA[i];
+		X[old] -= U_VA[k].RowN*Y[old];
 	}
 	return 1;
 }
