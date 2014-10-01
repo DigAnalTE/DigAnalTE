@@ -40,7 +40,6 @@ int BUSINFO::AddNewBus(BUSBASE*tBus)
 		return -1;
 	}
 	Bus[BusTotal] = tBus;
-	tBus->BusNo = BusTotal;
 	BusTotal++;
 	return BusTotal - 1;
 }
@@ -48,4 +47,21 @@ int BUSINFO::AddNewBus(BUSBASE*tBus)
 int BUSINFO::BusSearch(char *lpszString)
 {
 	return m_BusHash.ElementSearch(lpszString);
+}
+
+void BUSINFO::ResetHashTable()
+{
+	m_BusHash.InitHashTable(_MaxBusNo);
+	int i, flag;
+	for (i = 0; i < BusTotal; i++)
+	{
+		flag = m_BusHash.InsertElementToHashTable(i, Bus[i]->Name);
+		if (flag >= 0)
+		{
+			sprintf(ErrorMessage[0], " 重复的节点数据，忽略: ");
+			Bus[i]->PrintInfo(ErrorMessage[1]);
+			cpGetErrorInfo()->PrintError(2);
+			return;
+		}
+	}
 }

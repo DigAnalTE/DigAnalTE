@@ -197,7 +197,7 @@ void NETWORKINFO::GenerateNetInfo()
 		BusSita[i] = 0.0174532925f*cpGetBus(i)->m_fBusSita;
 		if (cpGetBus(i)->Removed == 1)
 		{
-			NodeTypeModify(cpGetBus(i)->BusNo, 3);
+			NodeTypeModify(i, 3);
 			continue;
 		}
 		cpGetBus(i)->JacElement(this);

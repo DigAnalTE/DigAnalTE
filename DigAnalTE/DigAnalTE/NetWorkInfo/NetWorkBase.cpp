@@ -32,6 +32,10 @@ void NETWORK_BASE::NetLink()
 	int i, BusTotal, BranchTotal, EquipTotal;
 
 	BusTotal = iGetBusTotal();
+	for (i = 0; i < BusTotal; i++)
+	{
+		cpGetBus(i)->BusNo = i;
+	}
 
 	BranchTotal = iGetBranchTotal();
 	for (i = 0; i < BranchTotal; i++)

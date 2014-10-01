@@ -36,6 +36,7 @@ protected:
 	}
 private:
 	void FormJacobi();//Éú³Éjacobi¾ØÕó
+	void UpdatePQ();
 };
 
 #endif

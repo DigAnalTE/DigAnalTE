@@ -22,11 +22,13 @@ protected://数据部分
 public:
 	int iGetBusTotal(){ return BusTotal; }
 	BUSBASE* cpGetBus(int i){ return Bus[i]; }
+	void SetBus(int i, BUSBASE*tBus){ Bus[i] = tBus; }//非常规用法
 	int AddNewBus(BUSBASE*tBus);
 	//--------------------索引信息--------------------
 protected://索引//不需要Build索引，在添加的过程中自动添加
 	HASHTABLE m_BusHash;//使用Hash表法管理Bus
 public:
+	void ResetHashTable();
 	int BusSearch(char *lpszString);
 };
 

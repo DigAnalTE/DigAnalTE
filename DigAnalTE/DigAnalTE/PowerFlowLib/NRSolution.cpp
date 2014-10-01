@@ -108,8 +108,9 @@ int NRSOLUTION::subCalculate(PFCalPara para)
 			Sita[i] += RightP[i];
 		}
 		//判断是否收敛
-		if (tIter>2 && tNConverge == 0)//首先根据各母线分析是否收敛
+		if (tIter>5 && tNConverge == 0)//首先根据各母线分析是否收敛
 		{
+			UpdatePQ();
 			sprintf(ErrorMessage[0], "    =================潮流收敛=================");//打印信息
 			cpGetErrorInfo()->PrintWarning(-1, 1);
 			return 1;
@@ -196,5 +197,51 @@ void NRSOLUTION::FormJacobi()
 			pNet->QPGen[iI] = (real)(deltaQ - pNet->QPnet[iI] - pNet->QInst[iI] - pNet->QLcut[iI]);
 		}
 		m_Solver->SetElement(II, ElementH, ElementJ, ElementN, ElementL);
+	}
+}
+
+void NRSOLUTION::UpdatePQ()
+{
+	double dSita, deltaP, deltaQ, GIJ, BIJ;
+	int iI, iJ, II, tJacType, iStart, iSize;
+
+	for (iI = 0; iI < NRSBusTotal; iI++)
+	{
+		tJacType = pNet->JacType[iI];
+		if (tJacType == 1)
+			continue;
+		iStart = pNet->m_Matrix->IA[iI];
+		iSize = pNet->m_Matrix->NA[iI];
+		II = 0;
+		deltaP = 0;
+		deltaQ = 0;
+		int j;
+		for (j = iStart; j < iStart + iSize; j++)
+		{
+			iJ = pNet->m_Matrix->JA[j];
+			if (iJ == iI)//给对角元留出位置
+			{
+				II = j;
+				continue;
+			}
+			GIJ = pNet->m_Matrix->VG[j];
+			BIJ = pNet->m_Matrix->VB[j];
+			dSita = Sita[iI] - Sita[iJ];
+			deltaP += Volt[iI] * Volt[iJ] * (GIJ*cos(dSita) + BIJ*sin(dSita));
+			deltaQ += Volt[iI] * Volt[iJ] * (GIJ*sin(dSita) - BIJ*cos(dSita));
+		}
+		GIJ = pNet->m_Matrix->VG[II] + pNet->PZnet[iI];
+		BIJ = pNet->m_Matrix->VB[II] + pNet->QZnet[iI];
+		deltaP += Volt[iI] * Volt[iI] * GIJ - pNet->PInet[iI] * Volt[iI];
+		deltaQ += -Volt[iI] * Volt[iI] * BIJ - pNet->QInet[iI] * Volt[iI];
+		if (tJacType == 2)//控制节点
+		{
+			pNet->QPGen[iI] = (real)(deltaQ - pNet->QPnet[iI] - pNet->QInst[iI] - pNet->QLcut[iI]);
+		}
+		if (tJacType == 3 || tJacType < 0)//控制节点
+		{
+			pNet->PPGen[iI] = (real)(deltaP - pNet->PPnet[iI] - pNet->PInst[iI] - pNet->PLcut[iI]);
+			pNet->QPGen[iI] = (real)(deltaQ - pNet->QPnet[iI] - pNet->QInst[iI] - pNet->QLcut[iI]);
+		}
 	}
 }

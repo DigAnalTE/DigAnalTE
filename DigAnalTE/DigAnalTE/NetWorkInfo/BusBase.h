@@ -26,7 +26,7 @@ public:
 public:
 	char Name[_MaxNameLen];
 	float BaseKv;
-	int BusNo;
+	int BusNo;//用于Jacbo矩阵元素操作//在NetLink中建立//禁止其他使用
 	char Zone[_MaxNameLen];
 	int ZoneNo, AreaNo;
 	float m_fBusVmax, m_fBusVmin;//母线电压上下限，只用于报警
