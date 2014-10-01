@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 	{
 		*ex = '\0';
 	}
-	strcat(OutputFileName, ".pfo");
+	strcat(OutputFileName, "-DigAnalTE.pfo");
 	OpenFile(mfOutputFile, OutputFileName, "w+");
 
 	cpGetErrorInfo()->SetMessageFile(mfOutputFile);//设置FILE后，所有错误信息就可以记录在这个文件中了

@@ -4,8 +4,36 @@
 #include "BPABus.h"
 #include "BPABranch.h"
 #include "BPAReadWrite.h"
+#include "../../DigAnalTE/DigAnalTE/CommonFunction/QikSort.h"
 
 #define _MaxBPALineLen_ 120
+
+class SortBusByName : public QikSortInterface
+{
+public:
+	SortBusByName(NETWORKINFO*tNet)
+	{
+		pNet = tNet;
+	}
+private:
+	NETWORKINFO*pNet;
+	BUSBASE*tBus;
+protected:
+	virtual int kompar(int m, int n);
+	virtual void swap(int m, int n);
+};
+
+int SortBusByName::kompar(int m, int n)
+{
+	return strncmp(pNet->cpGetBus(m)->GetBusName(), pNet->cpGetBus(n)->GetBusName(), _MaxNameLen);
+}
+
+void SortBusByName::swap(int m, int n)
+{
+	tBus = pNet->cpGetBus(m);
+	pNet->cpGetBusInfo()->SetBus(m, pNet->cpGetBus(n));
+	pNet->cpGetBusInfo()->SetBus(n, tBus);
+}
 
 int BPA_NETWORKINFO::ReadFile(char*tFileName)
 {
@@ -77,6 +105,7 @@ int BPA_NETWORKINFO::ReadFile(char*tFileName)
 	BUSBASE *tempBus;
 	BRANCHBASE *tempBranchBase;
 	for (i = 0; i < LineTotal; i++)
+	//for (i = LineTotal-1; i >=0; i--)
 	{
 		if (IsRead[i] != 0)continue;
 		if (IsChange[i] != 0)continue;//这里输入的是常规数据，不包含修改卡
@@ -170,6 +199,10 @@ int BPA_NETWORKINFO::ReadFile(char*tFileName)
 		}
 		if (flag == 1)IsRead[i] = 1;
 	}
+
+	SortBusByName tSort(this);
+	tSort.QikSort(iGetBusTotal());
+	cpGetBusInfo()->ResetHashTable();
 
 	NetLink();
 

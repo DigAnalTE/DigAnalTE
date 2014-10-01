@@ -34,30 +34,11 @@ void BPABUS::JacElement(NETWORKINFO*Topo)
 }
 
 void BPABUS::UpdateValue(NETWORKINFO*pNet)
-{//problem 此处有问题
-	//	float pgen,qgen,bmva;
-	//	float plcut,qlcut;
-	//	bmva=pNet->GetBMVA();
-	//// 	pmax=pNet->PGmax[BusNo]*bmva;
-	//// 	pmin=pNet->PGmin[BusNo]*bmva;
-	//	pgen=pNet->PPGen[BusNo]*bmva;
-	//// 	qmax=pNet->QGmax[BusNo]*bmva;
-	//// 	qmin=pNet->QGmin[BusNo]*bmva;
-	//	qgen=pNet->QPGen[BusNo]*bmva;
-	//	plcut=pNet->PLcut[BusNo]*bmva;
-	//	qlcut=pNet->QLcut[BusNo]*bmva;
-	//	if ((1-m_fGenPper)>0)
-	//	{
-	//		m_fGenP=pgen;///(1-m_fGenPper);
-	//	}
-	//	if ((1-m_fGenQper)>0)
-	//	{
-	//		m_fGenQ=qgen;///(1-m_fGenQper);
-	//	}
-	//	m_fPLoadCut=plcut;
-	//	m_fQLoadCut=qlcut;
-	//
-	//	SubUpdateValue(pNet);
+{
+	float bmva;
+	bmva = pNet->GetBMVA();
+	m_fGenP = pNet->PPGen[BusNo] * bmva;
+	m_fGenQ = pNet->QPGen[BusNo] * bmva;
 }
 
 int BPABUS::ReadLine(char* PFLine)
@@ -73,7 +54,7 @@ int BPABUS::ReadLine(char* PFLine)
 		GetItemFromLine(PFLine, (void*)(&tempZQ), PLUS_Para[7], PLUS_Loca[7]);
 		GetItemFromLine(PFLine, (void*)(&tempPP), PLUS_Para[8], PLUS_Loca[8]);
 		GetItemFromLine(PFLine, (void*)(&tempPQ), PLUS_Para[9], PLUS_Loca[9]);
-		if (fabs(tempZP)>0.001 || fabs(tempZQ)>0.001 || fabs(tempPP)>0.001 || fabs(tempPQ)>0.001)
+		if (fabs(tempZP) > 0.001 || fabs(tempZQ) > 0.001 || fabs(tempPP) > 0.001 || fabs(tempPQ) > 0.001)
 		{
 			m_fZP += tempZP;
 			m_fZQ += tempZQ;
@@ -180,13 +161,13 @@ void BPABUS::OutputPFOFile(FILE*fp)
 	char OutLine[_MaxLineLen];
 	char ZoneName[3];
 
-	strncpy(ZoneName,Zone,2);ReplaceName(ZoneName,3);
+	strncpy(ZoneName, Zone, 2); ReplaceName(ZoneName, 3);
 
 	float pLoad, qLoad;
 	pLoad = m_fBusPPLoad*m_fBusPLoadPer;
 	qLoad = m_fBusQPLoad*m_fBusQLoadPer;
 
-	sprintf(OutLine, "%s%6.1f %7.2fkV/%5.1f度  %s%8.1f有功出力%8.1f无功出力%7.1f有功负荷%8.1f无功负荷 %s  %7.3f电压pu  B%c\n",
+	sprintf(OutLine, "%-8s%6.1f %7.2fkV/%7.2f度  %2s%8.1f有功出力%8.1f无功出力%7.1f有功负荷%8.1f无功负荷 %s  %7.3f电压pu  B%c\n",
 		BPAName, BaseKv,
 		m_fBusV*BaseKv, m_fBusSita,
 		ZoneName,
@@ -200,13 +181,13 @@ void BPABUS::OutputPFOFile(FILE*fp)
 	int k;
 	if (fabs(m_fGenP) <= 0.04)
 	{
-		for (k = 36; k < 52; k++)
+		for (k = 38; k < 54; k++)
 		{
 			OutLine[k] = ' ';
 		}
 		if (fabs(m_fGenQ) <= 0.04)
 		{
-			for (k = 52; k < 68; k++)
+			for (k = 54; k < 70; k++)
 			{
 				OutLine[k] = ' ';
 			}
@@ -214,7 +195,7 @@ void BPABUS::OutputPFOFile(FILE*fp)
 	}
 	if (fabs(pLoad) + fabs(qLoad) <= 0.001)
 	{
-		for (k = 68; k < 100; k++)
+		for (k = 70; k < 102; k++)
 		{
 			OutLine[k] = ' ';
 		}

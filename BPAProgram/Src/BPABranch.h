@@ -25,7 +25,10 @@ public://BPA派生的类型//子类型
 	float Ratio1, Ratio2;//该值为计算结果
 	float Bk1, Bk2; //高抗//有名值//注意正负号
 	int m_nMeter;	//功率测点
+	float Qci, Qcj;
+public:
 	virtual void subJacElement(class NETWORKINFO*pNet);
+	virtual void subUpdateValue(class NETWORKINFO*pNet);
 public://读写部分
 	virtual int ReadLine(char*Line);
 	virtual int subReadBPALine(char*) = 0;
@@ -81,6 +84,7 @@ protected:
 	int  m_jYear;		//停运年份
 public:
 	virtual int subReadBPALine(char*);
+	virtual void OutputPFOFile(FILE*fp, int nDirtn);//输出潮流信息
 };
 
 

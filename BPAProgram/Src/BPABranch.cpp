@@ -32,6 +32,15 @@ void BPABRANCH::subJacElement(NETWORKINFO*pNet)
 	Y22i = -X / (Z*Ratio2*Ratio2) + B2 / (Ratio1*Ratio2) - Bk2 / sbase / (Ratio1*Ratio2);
 }
 
+void BPABRANCH::subUpdateValue(NETWORKINFO*pNet)
+{
+	float Vi, Vj;
+	Vi = *m_pFBusV;
+	Vj = *m_pTBusV;
+	Qci = Vi*Vi*B1 / (Ratio1*Ratio2)*pNet->GetBMVA();
+	Qcj = Vj*Vj*B2 / (Ratio1*Ratio2)*pNet->GetBMVA();
+}
+
 int LBRANCH::subReadBPALine(char*Line)
 {
 	char CID[2];
@@ -199,6 +208,39 @@ int TBRANCH::subReadBPALine(char*Line)
 
 void BPABRANCH::OutputPFOFile(FILE*fp, int nDirtn)
 {
+	float Pin, Qin, Ploss, Qloss, tQc;
+	char OutLine[_MaxLineLen];
+	char BusName[9];
+	float baseKV;
+	if (nDirtn == 1)
+	{
+		strncpy(BusName, BusName2, 8); ReplaceName(BusName, 9);
+		baseKV = BaseKv2;
+		Pin = IP;
+		Qin = IQ;
+		tQc = Qci;
+	}
+	else{
+		strncpy(BusName, BusName1, 8); ReplaceName(BusName, 9);
+		baseKV = BaseKv1;
+		Pin = JP; Qin = JQ;
+		tQc = Qcj;
+	}
+	Ploss = IP + JP;
+	Qloss = IQ + JQ;
+	if (fabs(Pin) < 0.001)Pin = 0.;
+	if (fabs(Qin) < 0.001)Qin = 0.;
+	if (fabs(Ploss) < 0.001)Ploss = 0.;
+	if (fabs(Qloss) < 0.001)Qloss = 0.;
+	sprintf(OutLine, "       %-8s%6.1f   %c           %8.1f线路有功%8.1f线路无功%8.3f有功损耗%8.3f无功损耗%13.3f充电功率\n",
+		BusName, baseKV,
+		ID,
+		Pin, Qin, Ploss, Qloss, tQc);
+	fprintf(fp, OutLine);
+}
+
+void TBRANCH::OutputPFOFile(FILE*fp, int nDirtn)
+{
 	float Pin, Qin, Pout, Qout, Ploss, Qloss;
 	Pin = IP;
 	Qin = IQ;
@@ -218,19 +260,25 @@ void BPABRANCH::OutputPFOFile(FILE*fp, int nDirtn)
 	char OutLine[_MaxLineLen];
 	char BusName[9];
 	float baseKV;
+	float tTK1, tTK2;
 	if (nDirtn == 1)
 	{
 		strncpy(BusName, BusName2, 8); ReplaceName(BusName, 9);
 		baseKV = BaseKv2;
+		tTK1 = TK1;
+		tTK2 = TK2;
 	}
 	else{
 		strncpy(BusName, BusName1, 8); ReplaceName(BusName, 9);
 		baseKV = BaseKv1;
+		tTK1 = TK2;
+		tTK2 = TK1;
 	}
-	sprintf(OutLine, "       %s%6.1f   %c           %8.1f线路有功%8.1f线路无功%7.3f有功损耗%8.2f无功损耗 %s\n",// %8.3f充电功率\n",
+	sprintf(OutLine, "       %-8s%6.1f   %c           %8.1f线路有功%8.1f线路无功%8.3f有功损耗%8.3f无功损耗%9.1f/%5.1f %s\n",// %8.3f充电功率\n",
 		BusName, baseKV,
 		ID,
 		Pin, Qin, Ploss, Qloss,
+		tTK1, tTK2,
 		Owner);
 	fprintf(fp, OutLine);
 }
