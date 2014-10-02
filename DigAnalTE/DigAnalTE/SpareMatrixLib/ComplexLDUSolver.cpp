@@ -15,8 +15,8 @@ void LDUSOLVER::ReMallocSpace(int tAddSpace)
 	O_UVA = U_VA;
 	OldJA = LDUJA;
 	OldLINK = LDULINK;
-	L_VA = NULL;		MallocNew(L_VA, Composite, NewSpace);	memset((char*)L_VA, 0, NewSpace*sizeof(Composite));	memcpy(L_VA, O_LVA, LDUnVASpace*sizeof(real));
-	U_VA = NULL;		MallocNew(U_VA, Composite, NewSpace);	memset((char*)U_VA, 0, NewSpace*sizeof(Composite));	memcpy(U_VA, O_UVA, LDUnVASpace*sizeof(real));
+	L_VA = NULL;		MallocNew(L_VA, Composite, NewSpace);	memset((char*)L_VA, 0, NewSpace*sizeof(Composite));	memcpy(L_VA, O_LVA, LDUnVASpace*sizeof(Composite));
+	U_VA = NULL;		MallocNew(U_VA, Composite, NewSpace);	memset((char*)U_VA, 0, NewSpace*sizeof(Composite));	memcpy(U_VA, O_UVA, LDUnVASpace*sizeof(Composite));
 	LDUJA = NULL;		MallocNew(LDUJA, int, NewSpace);		memset((char*)LDUJA, 0, NewSpace*sizeof(int));		memcpy(LDUJA, OldJA, LDUnVASpace*sizeof(int));
 	LDULINK = NULL;	MallocNew(LDULINK, int, NewSpace);	memset((char*)LDULINK, 0, NewSpace*sizeof(int));		memcpy(LDULINK, OldLINK, LDUnVASpace*sizeof(int));
 	FreeArray(O_LVA);
@@ -131,8 +131,14 @@ int LDUSOLVER::LDUFactorization()
 						LDULINK[LDUnVANumb] = m;
 						LDULINK[tLastLink] = LDUnVANumb;
 						m = LDUnVANumb;
-						L_VA[m] = { 0, 0, 0, 0 };
-						U_VA[m] = { 0, 0, 0, 0 };
+						L_VA[m].RowH = 0;
+						L_VA[m].RowJ = 0;
+						L_VA[m].RowN = 0;
+						L_VA[m].RowL = 0;
+						U_VA[m].RowH = 0;
+						U_VA[m].RowJ = 0;
+						U_VA[m].RowN = 0;
+						U_VA[m].RowL = 0;
 						LDUnVANumb++;
 					}
 					if (LDUJA[m] == LDUJA[k])
