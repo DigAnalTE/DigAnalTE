@@ -20,6 +20,21 @@ int BPABRANCH::ReadLine(char*line)
 	return flag;
 }
 
+void TPBRANCH::subJacElement(NETWORKINFO*pNet)
+{
+	real Z, sbase,sina,cosa;
+	Z = R*R + X*X;
+	sbase = pNet->GetBMVA();
+	sina = sin(Angle);
+	cosa = cos(Angle);
+	Y12r = -R *cosa / Z - X *sina / Z; Y12i = X *cosa / Z + R *sina / Z;
+	Y21r = -R *cosa / Z + X *sina / Z; Y21i = X *cosa / Z - R *sina / Z;
+	Y11r = R / Z + G1;
+	Y11i = -X / Z + B1 - Bk1 / sbase;
+	Y22r = R / Z + G2;
+	Y22i = -X / Z + B2 - Bk2 / sbase;
+}
+
 void BPABRANCH::subJacElement(NETWORKINFO*pNet)
 {
 	real Z, sbase;
@@ -206,6 +221,58 @@ int TBRANCH::subReadBPALine(char*Line)
 	return 1;
 }
 
+int TPBRANCH::subReadBPALine(char*Line)
+{
+	char CID[2];
+	GetItemFromLine(Line, (void*)(Owner), TBRANCH_Para[0], TBRANCH_Loca[0]);
+	GetItemFromLine(Line, (void*)(BusName1), TBRANCH_Para[1], TBRANCH_Loca[1]);
+	GetItemFromLine(Line, (void*)(&BaseKv1), TBRANCH_Para[2], TBRANCH_Loca[2]);
+	GetItemFromLine(Line, (void*)(&m_nMeter), TBRANCH_Para[3], TBRANCH_Loca[3]);
+	GetItemFromLine(Line, (void*)(BusName2), TBRANCH_Para[4], TBRANCH_Loca[4]);
+	GetItemFromLine(Line, (void*)(&BaseKv2), TBRANCH_Para[5], TBRANCH_Loca[5]);
+	GetItemFromLine(Line, (void*)(&CID), TBRANCH_Para[6], TBRANCH_Loca[6]);
+	ReplaceName(BusName1, _MaxNameLen);
+	ReplaceName(BusName2, _MaxNameLen);
+	if (m_nMeter != 2)m_nMeter = 1;
+	ID = CID[0];
+	GetItemFromLine(Line, (void*)(&Imax), TBRANCH_Para[7], TBRANCH_Loca[7]);
+	GetItemFromLine(Line, (void*)(&Ncnt), TBRANCH_Para[8], TBRANCH_Loca[8]);
+	GetItemFromLine(Line, (void*)(&R), TBRANCH_Para[9], TBRANCH_Loca[9]);
+	GetItemFromLine(Line, (void*)(&X), TBRANCH_Para[10], TBRANCH_Loca[10]);
+	GetItemFromLine(Line, (void*)(&G1), TBRANCH_Para[11], TBRANCH_Loca[11]);
+	GetItemFromLine(Line, (void*)(&B1), TBRANCH_Para[12], TBRANCH_Loca[12]);
+	GetItemFromLine(Line, (void*)(&Degree), TBRANCH_Para[13], TBRANCH_Loca[13]);
+	GetItemFromLine(Line, (void*)(&m_iMonth), TBRANCH_Para[15], TBRANCH_Loca[15]);
+	GetItemFromLine(Line, (void*)(&m_iYear), TBRANCH_Para[16], TBRANCH_Loca[16]);
+	GetItemFromLine(Line, (void*)(&m_jMonth), TBRANCH_Para[17], TBRANCH_Loca[17]);
+	GetItemFromLine(Line, (void*)(&m_jYear), TBRANCH_Para[18], TBRANCH_Loca[18]);
+	if (fabs(X) < 0.000099)
+	{
+		strcpy(ErrorMessage[0], Line);
+		sprintf(ErrorMessage[1], "该支路的电抗太小。X = %8.5f", X);
+		cpGetErrorInfo()->PrintWarning(0, 2);
+	}
+	if (fabs(Degree) > 120)
+	{
+		strcpy(ErrorMessage[0], Line);
+		sprintf(ErrorMessage[1], "该卡中变压器移向角过大。");
+		cpGetErrorInfo()->PrintWarning(0, 2);
+	}
+	Angle = pi / 180 * Degree;
+	G1 = G1 / 2; B1 = B1 / 2;
+	G2 = G1; B2 = B1;
+	if (fabs(R*R + X*X) < 0.0000000099)
+	{
+		strcpy(ErrorMessage[0], Line);
+		sprintf(ErrorMessage[1], "线路阻抗过小，修改阻抗X=0.0001。", Line);
+		cpGetErrorInfo()->PrintWarning(0, 2);
+		X = 0.0001f;
+	}
+	Smax = Imax; if (Smax < 0.00001){ Smax = 999999.0; }
+	//	Smax=999999.0;
+	return 1;
+}
+
 void BPABRANCH::OutputPFOFile(FILE*fp, int nDirtn)
 {
 	float Pin, Qin, Ploss, Qloss, tQc;
@@ -223,7 +290,8 @@ void BPABRANCH::OutputPFOFile(FILE*fp, int nDirtn)
 	else{
 		strncpy(BusName, BusName1, 8); ReplaceName(BusName, 9);
 		baseKV = BaseKv1;
-		Pin = JP; Qin = JQ;
+		Pin = JP;
+		Qin = JQ;
 		tQc = Qcj;
 	}
 	Ploss = IP + JP;
@@ -241,22 +309,7 @@ void BPABRANCH::OutputPFOFile(FILE*fp, int nDirtn)
 
 void TBRANCH::OutputPFOFile(FILE*fp, int nDirtn)
 {
-	float Pin, Qin, Pout, Qout, Ploss, Qloss;
-	Pin = IP;
-	Qin = IQ;
-	Pout = JP;
-	Qout = JQ;
-	Ploss = Pin + Pout;
-	Qloss = Qin + Qout;
-	if (nDirtn == 2)
-	{
-		Pin = Pout; Qin = Qout;
-	}
-	if (fabs(Pin) < 0.001)Pin = 0.;
-	if (fabs(Qin) < 0.001)Qin = 0.;
-	if (fabs(Ploss) < 0.001)Ploss = 0.;
-	if (fabs(Qloss) < 0.001)Qloss = 0.;
-
+	float Pin, Qin, Ploss, Qloss;
 	char OutLine[_MaxLineLen];
 	char BusName[9];
 	float baseKV;
@@ -265,20 +318,66 @@ void TBRANCH::OutputPFOFile(FILE*fp, int nDirtn)
 	{
 		strncpy(BusName, BusName2, 8); ReplaceName(BusName, 9);
 		baseKV = BaseKv2;
+		Pin = IP;
+		Qin = IQ;
 		tTK1 = TK1;
 		tTK2 = TK2;
 	}
 	else{
 		strncpy(BusName, BusName1, 8); ReplaceName(BusName, 9);
 		baseKV = BaseKv1;
+		Pin = JP;
+		Qin = JQ;
 		tTK1 = TK2;
 		tTK2 = TK1;
 	}
+	Ploss = IP + JP;
+	Qloss = IQ + JQ;
+	if (fabs(Pin) < 0.001)Pin = 0.;
+	if (fabs(Qin) < 0.001)Qin = 0.;
+	if (fabs(Ploss) < 0.001)Ploss = 0.;
+	if (fabs(Qloss) < 0.001)Qloss = 0.;
 	sprintf(OutLine, "       %-8s%6.1f   %c           %8.1f线路有功%8.1f线路无功%8.3f有功损耗%8.3f无功损耗%9.1f/%5.1f %s\n",// %8.3f充电功率\n",
 		BusName, baseKV,
 		ID,
 		Pin, Qin, Ploss, Qloss,
 		tTK1, tTK2,
 		Owner);
+	fprintf(fp, OutLine);
+}
+
+void TPBRANCH::OutputPFOFile(FILE*fp, int nDirtn)
+{
+	float Pin, Qin, Ploss, Qloss;
+	char OutLine[_MaxLineLen];
+	char BusName[9];
+	float baseKV;
+	float tDegree;
+	if (nDirtn == 1)
+	{
+		strncpy(BusName, BusName2, 8); ReplaceName(BusName, 9);
+		baseKV = BaseKv2;
+		Pin = IP;
+		Qin = IQ;
+		tDegree = Degree;
+	}
+	else{
+		strncpy(BusName, BusName1, 8); ReplaceName(BusName, 9);
+		baseKV = BaseKv1;
+		Pin = JP;
+		Qin = JQ;
+		tDegree = -Degree;
+	}
+	Ploss = IP + JP;
+	Qloss = IQ + JQ;
+	if (fabs(Pin) < 0.001)Pin = 0.;
+	if (fabs(Qin) < 0.001)Qin = 0.;
+	if (fabs(Ploss) < 0.001)Ploss = 0.;
+	if (fabs(Qloss) < 0.001)Qloss = 0.;
+	sprintf(OutLine, "       %-8s%6.1f   %c           %8.1f线路有功%8.1f线路无功%8.3f有功损耗%8.3f无功损耗%12.1f    DEGPH\n",
+		BusName, baseKV,
+		ID,
+		Pin, Qin, Ploss, Qloss,
+		tDegree);
 	fprintf(fp, OutLine);
 }
