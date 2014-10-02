@@ -178,7 +178,10 @@ int BPA_NETWORKINFO::ReadFile(char*tFileName)
 			}
 			break;
 		case 'T':
-			tempBranchBase = new TBRANCH();
+			if (LineST[i][1] == 'P')
+				tempBranchBase = new TPBRANCH();
+			else
+				tempBranchBase = new TBRANCH();
 			flag = tempBranchBase->ReadLine(LineST[i]);
 			if (flag != 1)
 			{

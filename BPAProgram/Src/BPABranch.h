@@ -87,6 +87,25 @@ public:
 	virtual void OutputPFOFile(FILE*fp, int nDirtn);//输出潮流信息
 };
 
+class TPBRANCH :public BPABRANCH
+{
+	friend class BRANCHINFO;
+public:
+	TPBRANCH(){ c_BPAType = 'P'; }
+	~TPBRANCH(){}
+protected:
+	float Imax;//容量
+	int Ncnt;//并联线路数目，仅作信息用
+	float Degree, Angle;//计算得到的角度值
+	char m_iMonth[2];	//投运月份
+	int  m_iYear;		//投运年份
+	char m_jMonth[2];	//停运月份
+	int  m_jYear;		//停运年份
+public:
+	virtual void subJacElement(class NETWORKINFO*pNet);
+	virtual int subReadBPALine(char*);
+	virtual void OutputPFOFile(FILE*fp, int nDirtn);//输出潮流信息
+};
 
 #endif
 
