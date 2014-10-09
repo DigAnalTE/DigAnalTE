@@ -48,11 +48,11 @@ void GENERATOR::UpdateValue(NETWORKINFO*pNet)
 	pgen = pNet->PPGen[BusNo] * bmva;
 	qmax = pNet->QGmax[BusNo] * bmva;
 	qgen = pNet->QPGen[BusNo] * bmva;
-	if (pmax > 0.0001)
+	if (fabs(pmax) > 0.0001)
 		m_fGenP = pgen*m_fGenPmax / pmax;
 	else
 		m_fGenP = 0;
-	if (qmax > 0.0001)
+	if (fabs(qmax) > 0.0001)
 		m_fGenQ = qgen*m_fGenQmax / qmax;
 	else
 		m_fGenQ = 0;
