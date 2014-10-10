@@ -12,12 +12,14 @@ public:
 		c_EquipType = 'D';
 	}
 public://数据部分
-	float PlanPower;
+	float Pref;//安排直流功率MW
+	float Alpha;//整流侧正常触发角
+	float Beta;//逆变侧正常关断角
 public:
 	virtual void subJacElement(class NETWORKINFO*pNet);
 	//virtual void UpdateValue(class NETWORKINFO*pNet);
 public://读写部分
-	//virtual int ReadLine(char*Line);
+	virtual int ReadLine(char*Line);
 	virtual void WriteLine(char*Line){}
 	//virtual void OutputPFOFile(FILE*fp, int nDirtn);
 };

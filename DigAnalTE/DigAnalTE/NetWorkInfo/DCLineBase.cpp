@@ -7,6 +7,8 @@ void DCLINEBASE::subJacElement(NETWORKINFO*pNet)
 {
 	JacType1 = 0;
 	JacType2 = 0;
-	PPNET1 = -PlanPower;
-	PPNET2 = PlanPower;
+	PInst1 = -Pref;
+	QInst1 = -Pref*tan(Alpha);
+	PInst2 = Pref;
+	QInst1 = -Pref*tan(Beta);
 }
