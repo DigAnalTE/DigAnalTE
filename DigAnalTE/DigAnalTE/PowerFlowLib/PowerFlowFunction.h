@@ -11,6 +11,7 @@ struct PFCalPara
 	float BusPMaxErr;//判断收敛节点的误差限制
 	float BusQMaxErr;
 	//MaxIter=100;BusPMaxErr=0.005f;BusQMaxErr=0.005f;
+	int MinIter;//最少迭代次数
 };
 
 class PFSOLUTION_BASE
@@ -21,6 +22,7 @@ public:
 		mPara.MaxIter = 50;
 		mPara.BusPMaxErr = 0.005f;
 		mPara.BusQMaxErr = 0.005f;
+		mPara.MinIter = 3;
 		pNet = temp;
 		autoUpdate = 1;
 	}

@@ -108,7 +108,7 @@ int NRSOLUTION::subCalculate(PFCalPara para)
 			Sita[i] += RightP[i];
 		}
 		//判断是否收敛
-		if (tIter>5 && tNConverge == 0)//首先根据各母线分析是否收敛
+		if (tIter >= para.MinIter && tNConverge == 0)//首先根据各母线分析是否收敛
 		{
 			UpdatePQ();
 			sprintf(ErrorMessage[0], "    =================潮流收敛=================");//打印信息
