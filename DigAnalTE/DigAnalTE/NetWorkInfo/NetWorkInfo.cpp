@@ -35,16 +35,11 @@ void NETWORKINFO::FreeSpace()
 	m_Matrix->FreeSpace();
 }
 
-void NETWORKINFO::NetLink()
-{//该函数若不调用，可能发生未分配空间的问题
-	NETWORK_BASE::NetLink();
-	cpGetErrorInfo()->CheckMessageType(7);//检查重复错误
-}
-
 int NETWORKINFO::NetAnalysis()
 {//该函数中的内容必须依次调用
-	if (bIsLink == 0)NetLink();
-	NETWORK_BASE::NetAnalysis();
+	int flag;
+	flag = NETWORK_BASE::NetAnalysis();
+	if (flag != 1)return flag;
 	GenerateNetInfo();
 	SumInfo();
 	return 1;

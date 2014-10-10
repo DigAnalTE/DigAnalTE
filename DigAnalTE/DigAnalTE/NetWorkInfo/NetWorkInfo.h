@@ -23,7 +23,7 @@ public:
 
 	/*-------------------------函数部分-------------------------*/
 public://两个关键函数
-	virtual void NetLink();
+	//virtual void NetLink();
 	virtual int NetAnalysis();
 
 	/*-------------------------基本分析-------------------------*/
