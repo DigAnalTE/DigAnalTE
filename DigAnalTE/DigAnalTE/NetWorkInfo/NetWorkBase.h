@@ -82,6 +82,7 @@ public:
 	int iGetEquipTotal(){ return m_EquipmentInfo.iGetEquipTotal(); }
 	EQUIPMENTINFO* cpGetEquipInfo(){ return &m_EquipmentInfo; }
 	EQUIPMENTBASE* cpGetEquip(int i){ return m_EquipmentInfo.GetEquipment()[i]; }
+	int EquipSearch(char *lpszString){ return m_EquipmentInfo.EquipSearch(lpszString); }
 	ONEEQUIPMENTBASE* cpGetOneEquip(int i)
 	{
 		if (!m_EquipmentInfo.GetEquipment()[i]->IsOneEquipment())

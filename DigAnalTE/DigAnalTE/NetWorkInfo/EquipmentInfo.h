@@ -5,6 +5,7 @@
 //设备信息类的管理
 
 #include "EquipmentBase.h"
+#include "../CommonFunction/HashTable.h"
 
 class EQUIPMENTINFO
 {
@@ -37,6 +38,11 @@ public://索引
 	int *EQINDX, *EQCONT;
 public:
 	void BuildLink(int BusTotal);
+
+protected://索引
+	HASHTABLE m_EquipHash;//使用Hash表法管理设备
+public:
+	int EquipSearch(char *lpszString);
 };
 
 #endif

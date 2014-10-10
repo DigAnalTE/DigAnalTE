@@ -13,6 +13,7 @@ EQUIPMENTINFO::EQUIPMENTINFO()
 	memset(Equipment, 0, _MaxEquipNo*sizeof(EQUIPMENTBASE*));
 	EquipLinkNo = 0;
 	EquipLink = NULL; EQINDX = NULL; EQCONT = NULL;
+	m_EquipHash.InitHashTable(_MaxEquipNo);
 }
 
 void EQUIPMENTINFO::FreeSpace()
@@ -24,6 +25,7 @@ void EQUIPMENTINFO::FreeSpace()
 	}
 	EquipmentTotal = 0;
 	FreeArray(EquipLink); FreeArray(EQINDX); FreeArray(EQCONT);
+	m_EquipHash.InitHashTable(_MaxEquipNo);
 }
 
 int EQUIPMENTINFO::AddNewEquip(EQUIPMENTBASE *tEquipment)
@@ -32,6 +34,15 @@ int EQUIPMENTINFO::AddNewEquip(EQUIPMENTBASE *tEquipment)
 	{
 		sprintf(ErrorMessage[0], "设备数目超过设定值%d，忽略该数据：", _MaxEquipNo);
 		cpGetErrorInfo()->PrintWarning(6, 1);
+		return -1;
+	}
+	int flag;
+	flag = m_EquipHash.InsertElementToHashTable(EquipmentTotal, tEquipment->Name);
+	if (flag >= 0)
+	{
+		sprintf(ErrorMessage[0], " 重复的线路数据数据，忽略: ");
+		tEquipment->PrintInfo(ErrorMessage[1]);
+		cpGetErrorInfo()->PrintWarning(7, 2);
 		return -1;
 	}
 	Equipment[EquipmentTotal] = tEquipment;
@@ -185,4 +196,9 @@ void EQUIPMENTINFO::BuildLink(int tBusTotal)
 		EQINDX[i] = tBn;
 		EQCONT[i] = 0;
 	}
+}
+
+int EQUIPMENTINFO::EquipSearch(char *lpszString)
+{
+	return m_EquipHash.ElementSearch(lpszString);
 }
