@@ -76,7 +76,7 @@ int GENERATOR::ReadLine(char*Line)
 
 void GENERATOR::WriteLine(char*Line)
 {
-	sprintf(Line, "2,%10s,%5d,%10s,%5d,%10g,%10g,%10g,%10g,%10g,%10g\n",
+	sprintf(Line, "G,%10s,%5d,%10s,%5d,%10g,%10g,%10g,%10g,%10g,%10g\n",
 		Name, State, BusName, GenType,
 		m_fGenP, m_fGenQ,
 		m_fGenPmax, m_fGenPmin,

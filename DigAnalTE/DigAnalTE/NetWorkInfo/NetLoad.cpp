@@ -44,7 +44,7 @@ int NETLOAD::ReadLine(char*Line)
 
 void NETLOAD::WriteLine(char*Line)
 {
-	sprintf(Line, "3,%10s,%5d,%10s,%5d,%10g,%10g,%10g,%10g\n",
+	sprintf(Line, "N,%10s,%5d,%10s,%5d,%10g,%10g,%10g,%10g\n",
 		Name, State, BusName, m_LoadType,
 		m_fLoadP, m_fLoadQ,
 		m_fLoadPPer, m_fLoadQPer);

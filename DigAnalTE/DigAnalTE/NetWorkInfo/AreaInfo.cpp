@@ -129,7 +129,7 @@ int AREAINFO::ReadLine(char*Line)
 
 void AREAINFO::WriteLine(int i, char*Line)
 {
-	sprintf(Line, "7,%s,	%d",
+	sprintf(Line, "A,%s,	%d",
 		Area[i]->AreaName, Area[i]->ZoneTotal);
 	char tempLine[_MaxLineLen];
 	int iA;

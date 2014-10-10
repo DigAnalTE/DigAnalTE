@@ -24,12 +24,12 @@ int BRANCHBASE::ReadLine(char*Line)
 void BRANCHBASE::WriteLine(char*Line)
 {
 	if (fabs(TK - 1.0) < 0.001)
-		sprintf(Line, "5,%10s,%5d,%10s,%10s,%10g,%10g,%10g,%10g,%10g,%10g\n",
+		sprintf(Line, "L,%10s,%5d,%10s,%10s,%10g,%10g,%10g,%10g,%10g,%10g\n",
 		Name, State,
 		BusName1, BusName2,
 		R, X, G, B, Smax, TK);
 	else
-		sprintf(Line, "6,%10s,%5d,%10s,%10s,%10g,%10g,%10g,%10g,%10g,%10g\n",
+		sprintf(Line, "T,%10s,%5d,%10s,%10s,%10g,%10g,%10g,%10g,%10g,%10g\n",
 		Name, State,
 		BusName1, BusName2,
 		R, X, G, B, Smax, TK);

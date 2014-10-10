@@ -95,7 +95,7 @@ void NETWORK_BASE::WriteFile(FILE*fpPFfile)
 		else
 			lineNo++;
 	}
-	sprintf(Line, "0,%10s,%5d,%5d,%5d,%5d,%5d,%5d,%10g\n",
+	sprintf(Line, "C,%10s,%5d,%5d,%5d,%5d,%5d,%5d,%10g\n",
 		Description, iGetBusTotal(), genNo, loadNo, comNo, lineNo, tranNo, BMVA);
 	fprintf(fpPFfile, Line);
 	for (i = 0; i < iGetBusTotal(); i++)
@@ -126,40 +126,50 @@ int NETWORK_BASE::ReadFile(char*file)
 	OpenFile(fpPFfile, file, "rb");
 	if (fpPFfile == NULL)
 		return 0;
-	int flag, type;
-	int tBusNo, tBranchNo, tTransNo, tGenNo, tLoadNo, tComNo, tAreaNo;
-	int iBusNo, iBranchNo, iTransNo, iGenNo, iLoadNo, iComNo, iAreaNo;
-	char Line[_MaxLineLen];
-	tBusNo = 0;
+	int flag;
+	char Line[_MaxLineLen], type[10];
 	while (fgets(Line, _MaxLineLen, fpPFfile))
-	{//0, Description, Bus, Gen, Load, Shunt, ACLine, Trans, Area,	SB
-		flag = sscanf(Line, "%d", &type);
-		if (flag < 1 || type != 0)
+	{//C, Description, SB
+		flag = sscanf(Line, "%s", &type);
+		if (flag < 1 || type[0] != 'C')
 			continue;
-		flag = sscanf(Line, "%*d,%[^,],%d,%d,%d,%d,%d,%d,%d,%f",
-			Description,
-			&tBusNo, &tGenNo, &tLoadNo, &tComNo, &tBranchNo, &tTransNo, &tAreaNo,
-			&BMVA);
-		if (flag < 9)
+		if (type[0] == '-')
+			break;
+		flag = sscanf(Line, "%*[^,],%[^,],%f",
+			Description, &BMVA);
+		if (flag < 2)
 		{
 			fclose(fpPFfile);
+			sprintf(ErrorMessage[0], "系统信息读取失败");
+			cpGetErrorInfo()->PrintError(1);
 			return 0;
 		}
 		break;
 	}
-	if (tBusNo <= 0)
+	rewind(fpPFfile);
+	while (fgets(Line, _MaxLineLen, fpPFfile))
 	{
-		fclose(fpPFfile);
-		return 0;
+		flag = sscanf(Line, "%s", &type);
+		if (flag < 1 || type[0] != 'A')
+			continue;
+		if (type[0] == '-')
+			break;
+		flag = m_AreaInfo.ReadLine(Line);
+		if (flag != 1)
+		{
+			fclose(fpPFfile);
+			return 0;
+		}
 	}
 	rewind(fpPFfile);
 	BUSBASE* tBus;
-	iBusNo = 0;
 	while (fgets(Line, _MaxLineLen, fpPFfile))
 	{
-		flag = sscanf(Line, "%d", &type);
-		if (flag < 1 || type != 1)
+		flag = sscanf(Line, "%s", &type);
+		if (flag < 1 || type[0] != 'B')
 			continue;
+		if (type[0] == '-')
+			break;
 		tBus = new BUSBASE;
 		flag = tBus->ReadLine(Line);
 		if (flag != 1)
@@ -175,112 +185,16 @@ int NETWORK_BASE::ReadFile(char*file)
 			fclose(fpPFfile);
 			return 0;
 		}
-		iBusNo++;
-	}
-	if (iBusNo != tBusNo)
-	{
-		fclose(fpPFfile);
-		return 0;
-	}
-	rewind(fpPFfile);
-	GENERATOR* tGen;
-	iGenNo = 0;
-	while (fgets(Line, _MaxLineLen, fpPFfile))
-	{
-		flag = sscanf(Line, "%d", &type);
-		if (flag < 1 || type != 2)
-			continue;
-		tGen = new GENERATOR;
-		flag = tGen->ReadLine(Line);
-		if (flag != 1)
-		{
-			delete tGen;
-			fclose(fpPFfile);
-			return 0;
-		}
-		flag = m_EquipmentInfo.AddNewEquip(tGen);
-		if (flag < 0)
-		{
-			delete tGen;
-			fclose(fpPFfile);
-			return 0;
-		}
-		iGenNo++;
-	}
-	if (iGenNo != tGenNo)
-	{
-		fclose(fpPFfile);
-		return 0;
-	}
-	rewind(fpPFfile);
-	NETLOAD* tLoad;
-	iLoadNo = 0;
-	while (fgets(Line, _MaxLineLen, fpPFfile))
-	{
-		flag = sscanf(Line, "%d", &type);
-		if (flag < 1 || type != 3)
-			continue;
-		tLoad = new NETLOAD;
-		flag = tLoad->ReadLine(Line);
-		if (flag != 1)
-		{
-			delete tLoad;
-			fclose(fpPFfile);
-			return 0;
-		}
-		flag = m_EquipmentInfo.AddNewEquip(tLoad);
-		if (flag < 0)
-		{
-			delete tLoad;
-			fclose(fpPFfile);
-			return 0;
-		}
-		iLoadNo++;
-	}
-	if (iLoadNo != tLoadNo)
-	{
-		fclose(fpPFfile);
-		return 0;
-	}
-	rewind(fpPFfile);
-	COMPENSATION* tCom;
-	iComNo = 0;
-	while (fgets(Line, _MaxLineLen, fpPFfile))
-	{
-		flag = sscanf(Line, "%d", &type);
-		if (flag < 1 || type != 4)
-			continue;
-		tCom = new COMPENSATION;
-		flag = tCom->ReadLine(Line);
-		if (flag != 1)
-		{
-			delete tCom;
-			fclose(fpPFfile);
-			return 0;
-		}
-		flag = m_EquipmentInfo.AddNewEquip(tCom);
-		if (flag < 0)
-		{
-			delete tCom;
-			fclose(fpPFfile);
-			return 0;
-		}
-		iComNo++;
-	}
-	if (iComNo != tComNo)
-	{
-		fclose(fpPFfile);
-		return 0;
 	}
 	rewind(fpPFfile);
 	BRANCHBASE* tBranch;
-	iBranchNo = 0;
-	iTransNo = 0;
 	while (fgets(Line, _MaxLineLen, fpPFfile))
 	{
-		flag = sscanf(Line, "%d", &type);
-		if (flag < 1 || (type != 5 && type != 6))
+		flag = sscanf(Line, "%s", &type);
+		if (flag < 1 || (type[0] != 'L' && type[0] != 'T'))
 			continue;
+		if (type[0] == '-')
+			break;
 		tBranch = new BRANCHBASE;
 		flag = tBranch->ReadLine(Line);
 		if (flag != 1)
@@ -296,40 +210,81 @@ int NETWORK_BASE::ReadFile(char*file)
 			fclose(fpPFfile);
 			return 0;
 		}
-		if (type == 5)
-			iBranchNo++;
-		if (type == 6)
-			iTransNo++;
-	}
-	if (iBranchNo != tBranchNo)
-	{
-		fclose(fpPFfile);
-		return 0;
-	}
-	if (iTransNo != tTransNo)
-	{
-		fclose(fpPFfile);
-		return 0;
 	}
 	rewind(fpPFfile);
-	iAreaNo = 0;
+	GENERATOR* tGen;
 	while (fgets(Line, _MaxLineLen, fpPFfile))
 	{
-		flag = sscanf(Line, "%d", &type);
-		if (flag < 1 || type != 7)
+		flag = sscanf(Line, "%s", &type);
+		if (flag < 1 || type[0] != 'G')
 			continue;
-		flag = m_AreaInfo.ReadLine(Line);
+		if (type[0] == '-')
+			break;
+		tGen = new GENERATOR;
+		flag = tGen->ReadLine(Line);
 		if (flag != 1)
 		{
+			delete tGen;
 			fclose(fpPFfile);
 			return 0;
 		}
-		iAreaNo++;
+		flag = m_EquipmentInfo.AddNewEquip(tGen);
+		if (flag < 0)
+		{
+			delete tGen;
+			fclose(fpPFfile);
+			return 0;
+		}
 	}
-	if (iAreaNo != tAreaNo)
+	rewind(fpPFfile);
+	NETLOAD* tLoad;
+	while (fgets(Line, _MaxLineLen, fpPFfile))
 	{
-		fclose(fpPFfile);
-		return 0;
+		flag = sscanf(Line, "%s", &type);
+		if (flag < 1 || type[0] != 'N')
+			continue;
+		if (type[0] == '-')
+			break;
+		tLoad = new NETLOAD;
+		flag = tLoad->ReadLine(Line);
+		if (flag != 1)
+		{
+			delete tLoad;
+			fclose(fpPFfile);
+			return 0;
+		}
+		flag = m_EquipmentInfo.AddNewEquip(tLoad);
+		if (flag < 0)
+		{
+			delete tLoad;
+			fclose(fpPFfile);
+			return 0;
+		}
+	}
+	rewind(fpPFfile);
+	COMPENSATION* tCom;
+	while (fgets(Line, _MaxLineLen, fpPFfile))
+	{
+		flag = sscanf(Line, "%s", &type);
+		if (flag < 1 || type[0] != 'S')
+			continue;
+		if (type[0] == '-')
+			break;
+		tCom = new COMPENSATION;
+		flag = tCom->ReadLine(Line);
+		if (flag != 1)
+		{
+			delete tCom;
+			fclose(fpPFfile);
+			return 0;
+		}
+		flag = m_EquipmentInfo.AddNewEquip(tCom);
+		if (flag < 0)
+		{
+			delete tCom;
+			fclose(fpPFfile);
+			return 0;
+		}
 	}
 	CloseFile(fpPFfile);
 	return 1;

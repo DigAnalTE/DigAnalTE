@@ -30,7 +30,7 @@ int COMPENSATION::ReadLine(char*Line)
 
 void COMPENSATION::WriteLine(char*Line)
 {
-	sprintf(Line, "4,%10s,%5d,%10s,%10g,%10g,%10g,%10g\n",
+	sprintf(Line, "S,%10s,%5d,%10s,%10g,%10g,%10g,%10g\n",
 		Name, State, BusName,
 		m_fPP, m_fQP,
 		m_fPZ, m_fQZ);

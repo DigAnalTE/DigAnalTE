@@ -20,7 +20,7 @@ int BUSBASE::ReadLine(char*Line)
 
 void BUSBASE::WriteLine(char*Line)
 {
-	sprintf(Line, "1,%10s,%8g,%5s,%10g,%10g,%10g,%10g\n",
+	sprintf(Line, "B,%10s,%8g,%5s,%10g,%10g,%10g,%10g\n",
 		Name, BaseKv, Zone, m_fBusV, m_fBusSita, m_fBusVmax, m_fBusVmin);
 }
 
