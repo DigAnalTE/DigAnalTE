@@ -56,7 +56,7 @@ private://数据
 	PSASPAREA *PSASPArea[_MaxAreaNo];
 public:
 	char m_DataDir[_MAX_PATH];//数据文件目录路径
-	int ReadFile(char*file);
+	virtual int ReadFile(char*file);
 	void OutputPSASPPFOFile();
 private:
 	int ReadL0File(char*file); //读LF.L0文件

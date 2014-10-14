@@ -48,6 +48,7 @@ public:
 		X = tX; Y = tY;
 		return Calculate();
 	}
+	int MatrixVectorMultiply(real *tX, real *tY);
 	void FreeSpace()
 	{
 		FreeArray(VA);

@@ -7,7 +7,7 @@
 class BPA_NETWORKINFO : public NETWORKINFO
 {
 public:
-	int ReadFile(char*file);
+	virtual int ReadFile(char*file);
 private:
 	int Area_ReadBPALine(char* PFLine);
 };
