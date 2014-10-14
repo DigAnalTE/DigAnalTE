@@ -131,12 +131,15 @@ int NETWORK_BASE::ReadFile(char*file)
 	while (fgets(Line, _MaxLineLen, fpPFfile))
 	{//C, Description, SB
 		flag = sscanf(Line, "%s", &type);
-		if (flag < 1 || type[0] != 'C')
+		if (flag < 1)
 			continue;
 		if (type[0] == '-')
 			break;
+		if (type[0] != 'C')
+			continue;
 		flag = sscanf(Line, "%*[^,],%[^,],%f",
 			Description, &BMVA);
+		ReplaceName(Description, _MaxNameLen);
 		if (flag < 2)
 		{
 			fclose(fpPFfile);
@@ -150,10 +153,12 @@ int NETWORK_BASE::ReadFile(char*file)
 	while (fgets(Line, _MaxLineLen, fpPFfile))
 	{
 		flag = sscanf(Line, "%s", &type);
-		if (flag < 1 || type[0] != 'A')
+		if (flag < 1)
 			continue;
 		if (type[0] == '-')
 			break;
+		if (type[0] != 'A')
+			continue;
 		flag = m_AreaInfo.ReadLine(Line);
 		if (flag != 1)
 		{
@@ -166,10 +171,12 @@ int NETWORK_BASE::ReadFile(char*file)
 	while (fgets(Line, _MaxLineLen, fpPFfile))
 	{
 		flag = sscanf(Line, "%s", &type);
-		if (flag < 1 || type[0] != 'B')
+		if (flag < 1)
 			continue;
 		if (type[0] == '-')
 			break;
+		if (type[0] != 'B')
+			continue;
 		tBus = new BUSBASE;
 		flag = tBus->ReadLine(Line);
 		if (flag != 1)
@@ -191,10 +198,12 @@ int NETWORK_BASE::ReadFile(char*file)
 	while (fgets(Line, _MaxLineLen, fpPFfile))
 	{
 		flag = sscanf(Line, "%s", &type);
-		if (flag < 1 || (type[0] != 'L' && type[0] != 'T'))
+		if (flag < 1)
 			continue;
 		if (type[0] == '-')
 			break;
+		if (type[0] != 'L' && type[0] != 'T')
+			continue;
 		tBranch = new BRANCHBASE;
 		flag = tBranch->ReadLine(Line);
 		if (flag != 1)
@@ -216,10 +225,12 @@ int NETWORK_BASE::ReadFile(char*file)
 	while (fgets(Line, _MaxLineLen, fpPFfile))
 	{
 		flag = sscanf(Line, "%s", &type);
-		if (flag < 1 || type[0] != 'G')
+		if (flag < 1)
 			continue;
 		if (type[0] == '-')
 			break;
+		if (type[0] != 'G')
+			continue;
 		tGen = new GENERATOR;
 		flag = tGen->ReadLine(Line);
 		if (flag != 1)
@@ -241,10 +252,12 @@ int NETWORK_BASE::ReadFile(char*file)
 	while (fgets(Line, _MaxLineLen, fpPFfile))
 	{
 		flag = sscanf(Line, "%s", &type);
-		if (flag < 1 || type[0] != 'N')
+		if (flag < 1)
 			continue;
 		if (type[0] == '-')
 			break;
+		if (type[0] != 'N')
+			continue;
 		tLoad = new NETLOAD;
 		flag = tLoad->ReadLine(Line);
 		if (flag != 1)
@@ -266,10 +279,12 @@ int NETWORK_BASE::ReadFile(char*file)
 	while (fgets(Line, _MaxLineLen, fpPFfile))
 	{
 		flag = sscanf(Line, "%s", &type);
-		if (flag < 1 || type[0] != 'S')
+		if (flag < 1)
 			continue;
 		if (type[0] == '-')
 			break;
+		if (type[0] != 'S')
+			continue;
 		tCom = new COMPENSATION;
 		flag = tCom->ReadLine(Line);
 		if (flag != 1)
