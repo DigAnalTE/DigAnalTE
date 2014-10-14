@@ -1,5 +1,6 @@
 
 #include "NetLoad.h"
+#include "../DynamicModel/DynamicModelInfo.h"
 
 void NETLOAD::subJacElement(NETWORKINFO*pNet)
 {
@@ -55,4 +56,27 @@ void NETLOAD::OutputPFOFile(FILE*fp, int nDirtn)
 	fprintf(fp, "  --负荷'%s' at '%s'  %8.1f有功负荷%8.1f无功负荷\n",
 		Name, BusName,
 		m_fLoadP*m_fLoadPPer, m_fLoadQ*m_fLoadQPer);
+}
+
+void NETLOAD::FormDynMatrix(DYNAMICMODELINFO*pDyn)
+{
+	real V;
+	V = pBus->m_fBusV;
+	real P, Q;
+	if (m_LoadType == 0)
+	{
+		P = m_fLoadP*m_fLoadPPer / V / V;
+		Q = -m_fLoadQ*m_fLoadQPer / V / V;
+	}
+	else if (m_LoadType == 1)
+	{
+		P = m_fLoadP*m_fLoadPPer / V;
+		Q = -m_fLoadQ*m_fLoadQPer / V;
+	}
+	else if (m_LoadType == 2)
+	{
+		P = m_fLoadP*m_fLoadPPer;
+		Q = -m_fLoadQ*m_fLoadQPer;
+	}
+	pDyn->ModifyNetMatrix(BusNo, BusNo, P / pDyn->GetBMVA(), Q / pDyn->GetBMVA());
 }

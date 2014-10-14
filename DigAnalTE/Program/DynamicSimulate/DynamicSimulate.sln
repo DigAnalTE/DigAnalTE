@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DynamicSimulate", "DynamicSimulate.vcxproj", "{7D3D34C0-EF4F-4F9E-BCD9-D36697900100}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EFA7C0D0-F1B8-4AB4-BB61-8497464BDB13} = {EFA7C0D0-F1B8-4AB4-BB61-8497464BDB13}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DigAnalTE", "..\..\DigAnalTE\DigAnalTE.vcxproj", "{EFA7C0D0-F1B8-4AB4-BB61-8497464BDB13}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7D3D34C0-EF4F-4F9E-BCD9-D36697900100}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7D3D34C0-EF4F-4F9E-BCD9-D36697900100}.Debug|Win32.Build.0 = Debug|Win32
+		{7D3D34C0-EF4F-4F9E-BCD9-D36697900100}.Release|Win32.ActiveCfg = Release|Win32
+		{7D3D34C0-EF4F-4F9E-BCD9-D36697900100}.Release|Win32.Build.0 = Release|Win32
+		{EFA7C0D0-F1B8-4AB4-BB61-8497464BDB13}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EFA7C0D0-F1B8-4AB4-BB61-8497464BDB13}.Debug|Win32.Build.0 = Debug|Win32
+		{EFA7C0D0-F1B8-4AB4-BB61-8497464BDB13}.Release|Win32.ActiveCfg = Release|Win32
+		{EFA7C0D0-F1B8-4AB4-BB61-8497464BDB13}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

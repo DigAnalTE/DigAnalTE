@@ -14,12 +14,13 @@
 class EQUIPMENTBASE
 {
 public:
-	EQUIPMENTBASE(){ c_EquipType = ' '; }
+	EQUIPMENTBASE(){ c_EquipType = ' '; pModel = NULL; }
 protected:
 	int EquipPortType;//类型：端口数量。这个是禁止外部函数修改的//建议用户不要使用
 	//1 ONEEQUIPMENTBASE
 	//2 TWOEQUIPMENTBASE
 	//3 MLTEQUIPMENTBASE
+	class EQUIPMENT_DYN_MODEL *pModel;//只链接有注入电流的模型
 public:
 	bool IsOneEquipment(){ return EquipPortType == 1; }
 	bool IsTwoEquipment(){ return EquipPortType == 2; }
@@ -31,7 +32,10 @@ public:
 	int State;//是否投入运行. =1:投入 =0:停运
 	int iGetState(){ return State; }
 	void iSetState(int tState){ State = tState; }
+	virtual int GetBusNo(int port) = 0;
 public://读写部分
+	void SetEquipModel(EQUIPMENT_DYN_MODEL*tModel){ pModel = tModel; }
+	EQUIPMENT_DYN_MODEL*GetEquipModel(){ return pModel; }
 	virtual int ReadLine(char*Line) = 0;
 	virtual void WriteLine(char*Line) = 0;
 	virtual void PrintInfo(char*Line) = 0;
@@ -44,6 +48,11 @@ public://潮流计算部分
 	virtual int BeforeIterCal(int iter){ return 1; }//在每一次迭代前调用
 	virtual int AfterIterCal(){ return 0; }//在每一次迭代完成后调用，用来更改计算状态的//返回值非零表示状态修改
 	virtual void UpdateValue(class NETWORKINFO*pNet){}
+
+public://暂态计算部分
+	virtual void GetInsertPQ(real&P, real&Q, int port){}
+	virtual void FormDynMatrix(class DYNAMICMODELINFO*){}
+	virtual void DeFormDynMatrix(class DYNAMICMODELINFO*){}
 };
 
 class ONEEQUIPMENTBASE : public EQUIPMENTBASE
@@ -63,6 +72,7 @@ public:
 	char Owner[_MaxNameLen];
 	class BUSBASE* pBus;
 	virtual void VarientLink(class NETWORK_BASE*);
+	virtual int GetBusNo(int port = -1){ return BusNo; }
 public:
 	int JacType;
 	real PGNET, QGNET, PGMAX, PGMIN, QGMAX, QGMIN;
@@ -97,6 +107,7 @@ public:
 	int BusNo2;
 	BUSBASE* pBus1;
 	BUSBASE* pBus2;
+	virtual int GetBusNo(int port){ if (port == 1)return BusNo2; return BusNo1; }
 public:
 	int JacType1;
 	real PGNET1, QGNET1, PGMAX1, PGMIN1, QGMAX1, QGMIN1;
@@ -127,6 +138,7 @@ public:
 	int PortNumber;//端口数
 	char(*BusName)[_MaxNameLen];
 	int *BusNo;
+	virtual int GetBusNo(int port){ if (port >= PortNumber || port < 0)return BusNo[0]; return BusNo[port]; }
 public:
 	virtual void VarientLink(class NETWORK_BASE*);
 	void Malloc()

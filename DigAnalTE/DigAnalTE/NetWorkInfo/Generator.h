@@ -20,6 +20,7 @@ public://数据部分
 	float m_fGenQmax, m_fGenQmin;
 	float m_fBaseMVA;
 	float m_fGenVCtrl;//设定电压，该电压是控制电压，不是实际电压//当PQ节点或无功越界时无效
+	virtual void GetInsertPQ(real&P, real&Q, int port){ P = m_fGenP; Q = m_fGenQ; }
 public:
 	virtual void subJacElement(class NETWORKINFO*pNet);
 	virtual void UpdateValue(class NETWORKINFO*pNet);
@@ -27,6 +28,8 @@ public://读写部分
 	virtual int ReadLine(char*Line);
 	virtual void WriteLine(char*Line);
 	virtual void OutputPFOFile(FILE*fp, int nDirtn);
+public://暂态计算部分
+	virtual void FormDynMatrix(class DYNAMICMODELINFO*);
 };
 
 #endif

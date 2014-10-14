@@ -65,6 +65,10 @@ public://潮流计算过程
 	//第三步：计算结束后的计算
 	virtual void UpdateValue(class NETWORKINFO*pNet);
 	virtual void subUpdateValue(class NETWORKINFO*pNet){}//派生之后可以对其他的量赋值
+
+public://暂态计算部分
+	virtual void FormDynMatrix(class DYNAMICMODELINFO*);
+	virtual void DeFormDynMatrix(class DYNAMICMODELINFO*);
 };
 
 #endif

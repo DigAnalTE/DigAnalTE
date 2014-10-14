@@ -56,6 +56,9 @@ public://潮流计算过程
 	virtual int AfterIterCal(){ return 0; }//在每一次迭代完成后调用，用来更改计算状态的//返回值非零表示状态修改
 	//第三步：计算结束后的计算
 	virtual void UpdateValue(class NETWORKINFO*pNet){}
+
+public://暂态计算部分
+	virtual void FormDynMatrix(class DYNAMICMODELINFO*);
 };
 
 #endif

@@ -20,6 +20,8 @@ public://读写部分
 	virtual int ReadLine(char*Line);
 	virtual void WriteLine(char*Line);
 	virtual void OutputPFOFile(FILE*fp, int nDirtn);
+public://暂态计算部分
+	virtual void FormDynMatrix(class DYNAMICMODELINFO*);
 };
 
 #endif

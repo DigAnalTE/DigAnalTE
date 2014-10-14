@@ -15,6 +15,8 @@
     <ClCompile Include="CommonFunction\ErrorInfo.cpp" />
     <ClCompile Include="CommonFunction\HashTable.cpp" />
     <ClCompile Include="CommonFunction\QikSort.cpp" />
+    <ClCompile Include="DynamicModel\DynamicModelInfo.cpp" />
+    <ClCompile Include="DynamicModel\GenEq1Constant.cpp" />
     <ClCompile Include="NetWorkInfo\AreaInfo.cpp" />
     <ClCompile Include="NetWorkInfo\BranchBase.cpp" />
     <ClCompile Include="NetWorkInfo\BranchInfo.cpp" />
@@ -33,12 +35,17 @@
     <ClCompile Include="SpareMatrixLib\SpareMatrix.cpp" />
     <ClCompile Include="SpareMatrixLib\ComplexSpareMatrix.cpp" />
     <ClCompile Include="SpareMatrixLib\ComplexSpareMatrixSolver.cpp" />
+    <ClCompile Include="StabilityAnalysis\DyFaultInfo.cpp" />
+    <ClCompile Include="StabilityAnalysis\TimeDomainSimulation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommonFunction\constdef.h" />
     <ClInclude Include="CommonFunction\ErrorInfo.h" />
     <ClInclude Include="CommonFunction\HashTable.h" />
     <ClInclude Include="CommonFunction\QikSort.h" />
+    <ClInclude Include="DynamicModel\DynamicModelBase.h" />
+    <ClInclude Include="DynamicModel\DynamicModelInfo.h" />
+    <ClInclude Include="DynamicModel\GenEq1Constant.h" />
     <ClInclude Include="NetWorkInfo\AreaInfo.h" />
     <ClInclude Include="NetWorkInfo\BranchBase.h" />
     <ClInclude Include="NetWorkInfo\BranchInfo.h" />
@@ -58,6 +65,8 @@
     <ClInclude Include="sparematrixlib\complexsparematrix.h" />
     <ClInclude Include="SpareMatrixLib\ComplexSpareMatrixSolver.h" />
     <ClInclude Include="sparematrixlib\sparematrix.h" />
+    <ClInclude Include="StabilityAnalysis\DyFaultInfo.h" />
+    <ClInclude Include="StabilityAnalysis\TimeDomainSimulation.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{EFA7C0D0-F1B8-4AB4-BB61-8497464BDB13}</ProjectGuid>

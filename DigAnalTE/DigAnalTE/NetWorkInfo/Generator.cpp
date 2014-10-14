@@ -2,6 +2,7 @@
 #include "Generator.h"
 #include "BusInfo.h"
 #include "NetWorkInfo.h"
+#include "../DynamicModel/DynamicModelInfo.h"
 
 void GENERATOR::subJacElement(NETWORKINFO*pNet)
 {
@@ -88,4 +89,11 @@ void GENERATOR::OutputPFOFile(FILE*fp, int nDirtn)
 	fprintf(fp, "  --发电'%s' at '%s'  %8.1f有功出力%8.1f无功出力\n",
 		Name, BusName,
 		m_fGenP, m_fGenQ);
+}
+
+void GENERATOR::FormDynMatrix(DYNAMICMODELINFO*pDyn)
+{
+	real V;
+	V = pBus->m_fBusV;
+	pDyn->ModifyNetMatrix(BusNo, BusNo, -m_fGenP / V / V / pDyn->GetBMVA(), m_fGenQ / V / V / pDyn->GetBMVA());
 }

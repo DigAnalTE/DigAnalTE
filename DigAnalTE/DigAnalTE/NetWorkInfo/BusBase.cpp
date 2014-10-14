@@ -2,6 +2,7 @@
 #include "BusBase.h"
 #include "../CommonFunction/ErrorInfo.h"
 #include "NetWorkInfo.h"
+#include "../DynamicModel/DynamicModelInfo.h"
 
 int BUSBASE::ReadLine(char*Line)
 {//1,Name,Base,Zone,VM,VA,Vmax,Vmin
@@ -35,4 +36,9 @@ void BUSBASE::OutputPFOFile(FILE*fp)
 		Name,
 		m_fBusV*BaseKv, m_fBusV, m_fBusSita,
 		m_fPerr, m_fQerr);
+}
+
+void BUSBASE::FormDynMatrix(DYNAMICMODELINFO*tDyn)
+{
+	tDyn->ModifyNetMatrix(BusNo, m_fPerr / m_fBusV / m_fBusV, m_fQerr / m_fBusV / m_fBusV );
 }

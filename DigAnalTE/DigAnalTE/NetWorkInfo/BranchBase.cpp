@@ -2,6 +2,7 @@
 #include "BranchBase.h"
 #include "NetWorkInfo.h"
 #include "../CommonFunction/ErrorInfo.h"
+#include "../DynamicModel/DynamicModelInfo.h"
 
 int BRANCHBASE::ReadLine(char*Line)
 {//5,Name,Status,IBus,JBus,ID,R,X,G,B,Smax,Rate
@@ -108,4 +109,22 @@ void BRANCHBASE::UpdateValue(NETWORKINFO*pNet)
 	Ploss = IP + JP;// if(Ploss<0)Ploss=-Ploss;
 	Qloss = IQ + JQ;// if(Qloss<0)Qloss=-Qloss;
 	subUpdateValue(pNet);
+}
+
+void BRANCHBASE::FormDynMatrix(DYNAMICMODELINFO*pDyn)
+{
+	subJacElement(pDyn);
+	pDyn->ModifyNetMatrix(FromBusNo, FromBusNo, Y11r, Y11i);
+	pDyn->ModifyNetMatrix(FromBusNo, ToBusNo, Y12r, Y12i);
+	pDyn->ModifyNetMatrix(ToBusNo, FromBusNo, Y21r, Y21i);
+	pDyn->ModifyNetMatrix(ToBusNo, ToBusNo, Y22r, Y22i);
+}
+
+void BRANCHBASE::DeFormDynMatrix(DYNAMICMODELINFO*pDyn)
+{
+	subJacElement(pDyn);
+	pDyn->ModifyNetMatrix(FromBusNo, FromBusNo, -Y11r, -Y11i);
+	pDyn->ModifyNetMatrix(FromBusNo, ToBusNo, -Y12r, -Y12i);
+	pDyn->ModifyNetMatrix(ToBusNo, FromBusNo, -Y21r, -Y21i);
+	pDyn->ModifyNetMatrix(ToBusNo, ToBusNo, -Y22r, -Y22i);
 }

@@ -1,5 +1,6 @@
 
 #include "Compensation.h"
+#include "../DynamicModel/DynamicModelInfo.h"
 
 void COMPENSATION::subJacElement(NETWORKINFO*pNet)
 {
@@ -41,4 +42,14 @@ void COMPENSATION::OutputPFOFile(FILE*fp, int nDirtn)
 	fprintf(fp, "  --补偿'%s' at '%s'  %8.1f有功补偿%8.1f无功补偿\n",
 		Name, BusName,
 		m_fPP + m_fPZ, m_fQP + m_fQZ);
+}
+
+void COMPENSATION::FormDynMatrix(DYNAMICMODELINFO*pDyn)
+{
+	real V;
+	V = pBus->m_fBusV;
+	real P, Q;
+	P = m_fPP / V / V + m_fPZ;
+	Q = m_fQP / V / V + m_fQZ;
+	pDyn->ModifyNetMatrix(BusNo, BusNo, -P / pDyn->GetBMVA(), Q / pDyn->GetBMVA());
 }
