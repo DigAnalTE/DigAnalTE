@@ -92,7 +92,7 @@ public:
 
 	/*-------------------------PART-2--数据接口-------------------------*/
 public://普通接口
-	int ReadFile(char*file);
+	virtual int ReadFile(char*file);
 	void WriteFile(char*file);
 	void WriteFile(FILE*fp);
 	void OutputPFOFile(FILE*fp);//输出潮流信息

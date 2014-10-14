@@ -33,6 +33,26 @@ void COMPLEXSPAREMATRIXSOLVER::ReSetMatrixElement()
 	}
 }
 
+int COMPLEXSPAREMATRIXSOLVER::MatrixVectorMultiply(real *tX, real *tY)
+{
+	real *tempX = NULL, *tempY = NULL;
+	MallocNew(tempX, real, RowTotal); memcpy(tempX, tX, RowTotal*sizeof(real));
+	MallocNew(tempY, real, RowTotal); memcpy(tempY, tY, RowTotal*sizeof(real));
+	memset(tX, 0, RowTotal*sizeof(real));
+	memset(tY, 0, RowTotal*sizeof(real));
+	int i, j, k, jCol;
+	for (i = 0; i<RowTotal; i++)
+	{
+		for (j = 0, k = pMatrix->IA[i]; j<pMatrix->NA[i]; j++, k++)
+		{
+			jCol = pMatrix->JA[k];
+			tX[i] += VA[k].RowH*tempX[jCol] + VA[k].RowN*tempY[jCol];
+			tY[i] += VA[k].RowJ*tempX[jCol] + VA[k].RowL*tempY[jCol];
+		}
+	}
+	return 1;
+}
+
 #include "../NetWorkInfo/NetWorkInfo.h"
 void COMPLEXSPAREMATRIXSOLVER::PrintMatrix(NETWORKINFO*pNet, FILE*fp)
 {
