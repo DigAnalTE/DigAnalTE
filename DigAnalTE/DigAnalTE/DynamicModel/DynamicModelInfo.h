@@ -47,7 +47,7 @@ public:
 public://¶ÁÐ´ÎÄ¼þ
 	virtual int ReadFile(char*file);
 	int ReadCalculateInfo(char*line);
-	DYNAMIC_MODEL_BASE *SearchModel(char*tEquipName,char*tModelName);
+	DYNAMIC_MODEL_BASE *DynModelSearch(char*tEquipName, char*tModelName);
 };
 
 #endif

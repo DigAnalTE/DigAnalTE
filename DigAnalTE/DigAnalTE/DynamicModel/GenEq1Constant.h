@@ -28,6 +28,7 @@ public:
 	virtual void PrintInfo(char*Line);
 	virtual int CheckInputData();//初值检查
 public://输出变量
+	int flagW, flagSita, flagPE, flagPM;
 	virtual int GetOutputCount();
 	virtual void GetOutputName(int i, char* name);
 	virtual real GetOutputValue(int i);

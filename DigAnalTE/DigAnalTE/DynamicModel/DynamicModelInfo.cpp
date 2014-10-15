@@ -229,12 +229,25 @@ int DYNAMICMODELINFO::ReadFile(char*file)
 	cpGetErrorInfo()->CheckMessageType(11);
 	cpGetErrorInfo()->CheckMessageType(12);
 
+	int i, equipno;
+	for (i = 0; i < DynamicModelTotal; i++)
+	{
+		equipno = EquipSearch(DynamicModel[i]->EquipmentName);
+		if (equipno < 0)
+		{
+			sprintf(ErrorMessage[0], "ERROR: 没有找到模型对应的设备");
+			DynamicModel[i]->PrintInfo(ErrorMessage[1]);
+			cpGetErrorInfo()->PrintWarning(13, 2);
+			continue;
+		}
+		DynamicModel[i]->EquipIndex = equipno;
+	}
+	cpGetErrorInfo()->CheckMessageType(13);
 	char tEquipName[_MaxNameLen];
 	char tModelName[_MaxNameLen];
-	DYNAMIC_MODEL_BASE* tModel;
 	while (fgets(Line, _MaxLineLen, fpfile))
 	{
-		flag = sscanf(Line, "%s", type);
+		flag = sscanf(Line, "%9s", type);
 		if (flag < 1)
 			continue;
 		if (type[0] == '/')
@@ -243,18 +256,17 @@ int DYNAMICMODELINFO::ReadFile(char*file)
 			break;
 		if (type[0] == 'O')
 		{
-			flag = sscanf(Line, "%*[^,],%[^,]", tEquipName);
-			if (flag != 1)
+			flag = sscanf(Line, "%[^,],%[^,]", tModelName, tEquipName);
+			if (flag != 2)
 			{
 				sprintf(ErrorMessage[0], "输出数据读取失败：%s", Line);
 				cpGetErrorInfo()->PrintWarning(-1, 1);
 				continue;
 			}
 			ReplaceName(tEquipName,_MaxNameLen);
-			strcpy(tModelName, type);
 			tModelName[0] = ' ';
 			ReplaceName(tModelName, _MaxNameLen);
-			tModel = SearchModel(tEquipName, tModelName);
+			tModel = DynModelSearch(tEquipName, tModelName);
 			if (tModel == NULL)
 			{
 				sprintf(ErrorMessage[0], "输出数据没有对应的模型：%s", Line);
@@ -290,6 +302,22 @@ int DYNAMICMODELINFO::ReadCalculateInfo(char*line)
 	if (flag != 2)
 		return 0;
 	return 1;
+}
+
+DYNAMIC_MODEL_BASE *DYNAMICMODELINFO::DynModelSearch(char*tEquipName, char*tModelName)
+{
+	int equipno;
+	equipno = EquipSearch(tEquipName);
+	if (equipno < 0)return NULL;
+	int i;
+	for (i = 0; i < DynamicModelTotal; i++)
+	{
+		if (DynamicModel[i]->EquipIndex != equipno)
+			continue;
+		if (strcmp(DynamicModel[i]->GetModelName(),tModelName) == 0)
+			return DynamicModel[i];
+	}
+	return NULL;
 }
 
 int DYNAMICMODELINFO::DynInitial()

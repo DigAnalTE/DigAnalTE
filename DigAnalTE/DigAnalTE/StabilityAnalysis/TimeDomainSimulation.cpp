@@ -33,7 +33,7 @@ void TDSIMULATION::SetDynModel(DYNAMICMODELINFO*tDyn)
 	{
 		OutputTotal += pDyn->DynamicModel[i]->GetOutputCount();
 	}
-	MallocOutputSpace((pDyn->TotalTime / pDyn->Step + 20)*OutputTotal);
+	MallocOutputSpace((pDyn->TotalTime / pDyn->Step + 20)*(OutputTotal+2));
 }
 
 int TDSIMULATION::CheckInitalCalcul()
@@ -232,21 +232,6 @@ int TDSIMULATION::Calculate(DYFAULTINFO*pFault)
 		{
 			break;
 		}
-		if (_kbhit())
-		{
-			char c;
-			c = _getch();
-			if (c != 13)
-			{
-				printf("按一次空格键暂停计算；按两次空格键退出计算；按其它键继续计算。\n");
-				printf("T=%8.4f H=%10.7f\n", pDyn->Tnow, pDyn->Step);
-				if (c == 32)
-				{
-					c = _getch();
-					if (c == 32){ printf("未到仿真总时间,停止计算\n"); break; }
-				}
-			}
-		}
 		if (pDyn->FlagExit == 'Y')  break;
 	}
 	return 1;
@@ -254,6 +239,7 @@ int TDSIMULATION::Calculate(DYFAULTINFO*pFault)
 
 int TDSIMULATION::MallocOutputSpace(int space)
 {
+	if (space <= 0)return 0;
 	if (OutputSpace > 0)
 	{
 		real *OldValue;
@@ -268,6 +254,7 @@ int TDSIMULATION::MallocOutputSpace(int space)
 		MallocNew(OutputValue, real, space);
 		OutputSpace = space;
 	}
+	return 1;
 }
 
 void TDSIMULATION::SaveOutputValue(real time)
@@ -277,6 +264,7 @@ void TDSIMULATION::SaveOutputValue(real time)
 		MallocOutputSpace(((pDyn->TotalTime - time) / pDyn->Step + 20)* OutputTotal);
 	}
 	OutputValue[OutputCount++] = time;
+	if (OutputTotal <= 0)return;
 	int i, j, count;
 	for (i = 0; i < pDyn->DynamicModelTotal; i++)
 	{
@@ -302,7 +290,7 @@ void TDSIMULATION::WriteCurve(char*file)
 		for (j = 0; j < count; j++)
 		{
 			pDyn->DynamicModel[i]->GetOutputName(j, Name);
-			fprintf(fp, ",%s", Name);
+			fprintf(fp, ",%s-%s", pDyn->DynamicModel[i]->GetEquipmentName(), Name);
 		}
 	}
 	for (i = 0; i < OutputCount; i++)
