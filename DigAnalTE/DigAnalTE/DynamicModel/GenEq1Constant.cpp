@@ -2,6 +2,11 @@
 #include "GenEq1Constant.h"
 #include "DynamicModelInfo.h"
 
+GenEq1Constant::GenEq1Constant()
+{
+	strcpy(ModelName, "GC");
+}
+
 int GenEq1Constant::ReadLine(char*line)
 {
 	int flag;

@@ -202,7 +202,7 @@ int DYNAMICMODELINFO::ReadFile(char*file)
 			continue;
 		if (type[0] == '/')
 			continue;
-		if (type[0] == '-')
+		if (strncmp(type, "-999", 4) == 0)
 			break;
 		if (strncmp(type, "GC", 2) == 0)
 		{
@@ -211,23 +211,84 @@ int DYNAMICMODELINFO::ReadFile(char*file)
 			if (flag != 1)
 			{
 				delete tModel;
-				sprintf(ErrorMessage[0], "动态模型卡读取失败：%s", Line);
+				sprintf(ErrorMessage[0], "动态模型数据读取失败：%s", Line);
 				cpGetErrorInfo()->PrintWarning(11, 1);
 			}
 			flag = InsertNewDynamicModel(tModel);
 			if (flag < 0)
 			{
 				delete tModel;
-				sprintf(ErrorMessage[0], "添加动态模型卡：%s", Line);
+				sprintf(ErrorMessage[0], "添加动态模型失败：%s", Line);
 				cpGetErrorInfo()->PrintWarning(11, 1);
 			}
 			continue;
 		}
-		sprintf(ErrorMessage[0], "没有对应的卡片：%s", Line);
+		sprintf(ErrorMessage[0], "没有对应的数据：%s", Line);
 		cpGetErrorInfo()->PrintWarning(12, 1);
 	}
 	cpGetErrorInfo()->CheckMessageType(11);
 	cpGetErrorInfo()->CheckMessageType(12);
+
+	char tEquipName[_MaxNameLen];
+	char tModelName[_MaxNameLen];
+	DYNAMIC_MODEL_BASE* tModel;
+	while (fgets(Line, _MaxLineLen, fpfile))
+	{
+		flag = sscanf(Line, "%s", type);
+		if (flag < 1)
+			continue;
+		if (type[0] == '/')
+			continue;
+		if (strncmp(type, "-999", 4) == 0)
+			break;
+		if (type[0] == 'O')
+		{
+			flag = sscanf(Line, "%*[^,],%[^,]", tEquipName);
+			if (flag != 1)
+			{
+				sprintf(ErrorMessage[0], "输出数据读取失败：%s", Line);
+				cpGetErrorInfo()->PrintWarning(-1, 1);
+				continue;
+			}
+			ReplaceName(tEquipName,_MaxNameLen);
+			strcpy(tModelName, type);
+			tModelName[0] = ' ';
+			ReplaceName(tModelName, _MaxNameLen);
+			tModel = SearchModel(tEquipName, tModelName);
+			if (tModel == NULL)
+			{
+				sprintf(ErrorMessage[0], "输出数据没有对应的模型：%s", Line);
+				cpGetErrorInfo()->PrintWarning(-1, 1);
+				continue;
+			}
+			flag = tModel->ReadOutLine(Line);
+			if (flag != 1)
+			{
+				sprintf(ErrorMessage[0], "输出数据读取失败：%s", Line);
+				cpGetErrorInfo()->PrintWarning(11, 1);
+			}
+			continue;
+		}
+		if (strncmp(type, "CAL", 3) == 0)
+		{
+			flag = ReadCalculateInfo(Line);
+			if (flag != 1)
+			{
+				sprintf(ErrorMessage[0], "仿真控制数据读取失败：%s", Line);
+				cpGetErrorInfo()->PrintWarning(11, 1);
+			}
+			continue;
+		}
+	}
+	return 1;
+}
+
+int DYNAMICMODELINFO::ReadCalculateInfo(char*line)
+{
+	int flag;
+	flag = sscanf(line, "%*[^,],%f,%f", &TotalTime, &Step);
+	if (flag != 2)
+		return 0;
 	return 1;
 }
 

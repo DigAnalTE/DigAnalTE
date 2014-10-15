@@ -7,6 +7,8 @@
 class GenEq1Constant : public EQUIPMENT_DYN_MODEL
 {
 public:
+	GenEq1Constant();
+public:
 	int m_BusNo;
 	float EMWS, Tj;
 	float MVABase;
@@ -22,6 +24,7 @@ public:
 	real OldW, OldIx, OldIy;//用于判断是否收敛
 public:
 	virtual int ReadLine(char*Line);
+	virtual int ReadOutLine(char*Line);
 	virtual void PrintInfo(char*Line);
 	virtual int CheckInputData();//初值检查
 public://输出变量

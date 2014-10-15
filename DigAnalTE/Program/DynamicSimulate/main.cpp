@@ -95,8 +95,6 @@ int main(int argc, char **argv)
 	}
 
 	TDSIMULATION tSimulator;
-	gDynWorkInfo.TotalTime = 6.;
-	gDynWorkInfo.Step = 0.01;
 	tSimulator.SetDynModel(&gDynWorkInfo);
 	flag = tSimulator.CheckInitalCalcul();
 	if (flag != 1)

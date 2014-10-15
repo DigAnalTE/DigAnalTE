@@ -43,7 +43,7 @@ public://输出变量
 	virtual real GetOutputValue(int i){ return 0; }
 public://读写部分
 	virtual int ReadLine(char*Line) = 0;
-	virtual void ReadOutLine(char*Line){}
+	virtual int ReadOutLine(char*Line){ return 1; }
 	virtual void PrintInfo(char*Line) = 0;
 	virtual int CheckInputData(){ return 1; }//初值检查
 public://计算部分//使用pSolInfo进行控制
