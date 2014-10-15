@@ -36,6 +36,7 @@
     <ClCompile Include="SpareMatrixLib\ComplexSpareMatrix.cpp" />
     <ClCompile Include="SpareMatrixLib\ComplexSpareMatrixSolver.cpp" />
     <ClCompile Include="StabilityAnalysis\DyFaultInfo.cpp" />
+    <ClCompile Include="StabilityAnalysis\DyFaultLine.cpp" />
     <ClCompile Include="StabilityAnalysis\TimeDomainSimulation.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +67,7 @@
     <ClInclude Include="SpareMatrixLib\ComplexSpareMatrixSolver.h" />
     <ClInclude Include="sparematrixlib\sparematrix.h" />
     <ClInclude Include="StabilityAnalysis\DyFaultInfo.h" />
+    <ClInclude Include="StabilityAnalysis\DyFaultLine.h" />
     <ClInclude Include="StabilityAnalysis\TimeDomainSimulation.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

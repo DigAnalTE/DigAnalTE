@@ -78,6 +78,14 @@ int main(int argc, char **argv)
 		return 0;
 	}
 
+	flag = gFault.ReadFile(InputFileName);
+	if (flag != 1)
+	{
+		sprintf(ErrorMessage[0], "故障数据读取失败，请检查数据文件");
+		cpGetErrorInfo()->PrintError(1);
+		return 0;
+	}
+
 	//潮流计算
 	if (PowerFlowCal(&gDynWorkInfo) != 1)
 	{

@@ -41,4 +41,6 @@ GC, Gen02,     301.,  100.,     0.,   .1813
 //CAL  Time    Step
 CAL,   6,      0.01
 OGC,   Gen00,  PM,    PE,       W
+//FL,  Name,   Side,  T1,       T2,       R,    X
+FL,    Line00, 1,     0.1,      0.12,     0,    0
 -999

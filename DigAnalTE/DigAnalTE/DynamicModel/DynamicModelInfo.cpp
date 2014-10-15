@@ -188,7 +188,7 @@ int DYNAMICMODELINFO::ReadFile(char*file)
 	char Line[_MaxLineLen], type[10];
 	while (fgets(Line, _MaxLineLen, fpfile))
 	{
-		flag = sscanf(Line, "%s", type);
+		flag = sscanf(Line, "%9s", type);
 		if (flag < 1)
 			continue;
 		if (strncmp(type, "-999", 4) == 0)
@@ -197,7 +197,7 @@ int DYNAMICMODELINFO::ReadFile(char*file)
 	DYNAMIC_MODEL_BASE*tModel;
 	while (fgets(Line, _MaxLineLen, fpfile))
 	{
-		flag = sscanf(Line, "%s", type);
+		flag = sscanf(Line, "%9s", type);
 		if (flag < 1)
 			continue;
 		if (type[0] == '/')
@@ -213,6 +213,7 @@ int DYNAMICMODELINFO::ReadFile(char*file)
 				delete tModel;
 				sprintf(ErrorMessage[0], "动态模型数据读取失败：%s", Line);
 				cpGetErrorInfo()->PrintWarning(11, 1);
+				continue;
 			}
 			flag = InsertNewDynamicModel(tModel);
 			if (flag < 0)
@@ -220,6 +221,7 @@ int DYNAMICMODELINFO::ReadFile(char*file)
 				delete tModel;
 				sprintf(ErrorMessage[0], "添加动态模型失败：%s", Line);
 				cpGetErrorInfo()->PrintWarning(11, 1);
+				continue;
 			}
 			continue;
 		}

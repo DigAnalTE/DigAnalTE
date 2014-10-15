@@ -33,7 +33,7 @@ void TDSIMULATION::SetDynModel(DYNAMICMODELINFO*tDyn)
 	{
 		OutputTotal += pDyn->DynamicModel[i]->GetOutputCount();
 	}
-	MallocOutputSpace((pDyn->TotalTime / pDyn->Step + 20)*(OutputTotal+2));
+	MallocOutputSpace((pDyn->TotalTime / pDyn->Step + 20)*(OutputTotal + 2));
 }
 
 int TDSIMULATION::CheckInitalCalcul()
@@ -70,7 +70,7 @@ int TDSIMULATION::CheckInitalCalcul()
 		FILE *fp = NULL;
 		OpenFile(fp, "DynInitInputCurrent.dbg", "w");
 		int i;
-		for (i = 0; i<BusTotal; i++)
+		for (i = 0; i < BusTotal; i++)
 		{
 			fprintf(fp, "%7d: %22.16f%22.16f%22.16f%22.16f   %s\n",
 				i + 1, pIx[i], pIy[i], tIx0[i], tIy0[i],
@@ -97,21 +97,28 @@ int TDSIMULATION::CheckInitalCalcul()
 
 int TDSIMULATION::Calculate(DYFAULTINFO*pFault)
 {
-	int i;
+	int i, flag;
 	for (i = 0; i < pFault->iFaultListNo; i++)
 	{
-		pFault->pFaultList[i]->SetDynInfo(pDyn);
+		flag = pFault->pFaultList[i]->SetDynInfo(pDyn);
+		if (flag != 1)
+		{
+			sprintf(ErrorMessage[0], "故障数据初始化失败:");
+			pFault->pFaultList[i]->PrintInfo(ErrorMessage[1]);
+			cpGetErrorInfo()->PrintWarning(11, 1);
+		}
 	}
+	cpGetErrorInfo()->CheckMessageType(11);
+
 	int flag_conv_diff = 0, flag_conv_alg = 0, iter;
-	int flag;
 	flag = CheckInitalCalcul();
 	if (flag < 0)
 	{
 		return 0;
 	}
 
-	if(pDyn->Step<0.0001)
-		pDyn->Step= 0.01f;
+	if (pDyn->Step < 0.0001)
+		pDyn->Step = 0.01f;
 	pDyn->Tnow = 0;
 	pDyn->NextEvent = 999.;
 	SaveOutputValue(pDyn->Tnow);
@@ -148,7 +155,7 @@ int TDSIMULATION::Calculate(DYFAULTINFO*pFault)
 			for (i = 0; i < pDyn->DynamicModelTotal; i++)
 			{
 				err = pDyn->DynamicModel[i]->DynProcessStep();
-				if (err>0.01)
+				if (err > 0.01)
 				{
 					flag_conv_diff++;
 				}
@@ -161,7 +168,7 @@ int TDSIMULATION::Calculate(DYFAULTINFO*pFault)
 				if (pDyn->cpGetEquip(i)->GetEquipModel() != NULL)
 				{
 					err = pDyn->cpGetEquip(i)->GetEquipModel()->DynCalculateCurrent();
-					if (err>0.01)
+					if (err > 0.01)
 					{
 						flag_conv_alg++;
 					}
@@ -174,7 +181,7 @@ int TDSIMULATION::Calculate(DYFAULTINFO*pFault)
 				FILE *fp = NULL;
 				OpenFile(fp, "DynInputCurrent.dbg", "w");
 				int i;
-				for (i = 0; i<BusTotal; i++)
+				for (i = 0; i < BusTotal; i++)
 				{
 					fprintf(fp, "%7d: %22.16f%22.16f   %s\n",
 						i + 1, pIx[i], pIy[i],
@@ -193,7 +200,7 @@ int TDSIMULATION::Calculate(DYFAULTINFO*pFault)
 				FILE *fp = NULL;
 				OpenFile(fp, "DynVoltage.dbg", "w");
 				int i;
-				for (i = 0; i<BusTotal; i++)
+				for (i = 0; i < BusTotal; i++)
 				{
 					fprintf(fp, "%7d: %22.16f%22.16f   %s\n",
 						i + 1, pVx[i], pVy[i],
@@ -203,7 +210,7 @@ int TDSIMULATION::Calculate(DYFAULTINFO*pFault)
 			}
 #endif
 			iter++;
-			if (flag_conv_diff==0 && flag_conv_alg==0 && iter > 2)
+			if (flag_conv_diff == 0 && flag_conv_alg == 0 && iter > 2)
 			{
 				break;
 			}
@@ -219,12 +226,12 @@ int TDSIMULATION::Calculate(DYFAULTINFO*pFault)
 		SaveOutputValue(pDyn->Tnow);
 		if (iter < pDyn->MaxIterNumber)
 		{
-			sprintf(ErrorMessage[0], " Iteration succeeded at t=%12.6f, h=%6.5f iter=%d\n",
+			sprintf(ErrorMessage[0], " Iteration succeeded at t=%12.3f, h=%6.3f iter=%d\n",
 				pDyn->Tnow, pDyn->Step, iter);
 		}
 		else
 		{
-			sprintf(ErrorMessage[0], " Iteration failed at t=%12.6f, h=%6.5f iter=%d\n",
+			sprintf(ErrorMessage[0], " Iteration failed at t=%12.3f, h=%6.3f iter=%d\n",
 				pDyn->Tnow, pDyn->Step, iter);
 		}
 		cpGetErrorInfo()->PrintWarning(-1, 1);
@@ -261,7 +268,10 @@ void TDSIMULATION::SaveOutputValue(real time)
 {
 	if (OutputCount + OutputTotal + 1 >= OutputSpace)
 	{
-		MallocOutputSpace(((pDyn->TotalTime - time) / pDyn->Step + 20)* OutputTotal);
+		if (pDyn->Step > 0.01)
+			MallocOutputSpace(((pDyn->TotalTime - time) / pDyn->Step + 20)* (OutputTotal + 1));
+		else
+			MallocOutputSpace(((pDyn->TotalTime - time) * 100 + 20)* (OutputTotal + 1));
 	}
 	OutputValue[OutputCount++] = time;
 	if (OutputTotal <= 0)return;

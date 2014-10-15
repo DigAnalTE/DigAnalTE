@@ -4,7 +4,7 @@
 
 #include "../DynamicModel/DynamicModelInfo.h"
 
-#define _MaxFaultNum 1000//考虑故障重数
+#define _MaxFaultNum 1000//考虑故障数
 
 class DYFAULTBASE
 {
@@ -16,16 +16,16 @@ public:
 		pDyn = NULL;
 	}
 public:
-	float GetNextTime(){ return 99999.; }
-	int GetIsProcess(){ return 1; }
-	void SetDynInfo(DYNAMICMODELINFO*tDyn)
+	virtual float GetNextTime(){ return 99999.; }
+	virtual int GetIsProcess(){ return 1; }
+	int SetDynInfo(DYNAMICMODELINFO*tDyn)
 	{
 		pDyn = tDyn;
-		Initial();
+		return Initial();
 	}
-	virtual void Initial(){}
+	virtual int Initial(){ return 1; }
 	virtual int ReadLine(char*) = 0;
-	virtual void WriteLine(char*) = 0;
+	virtual void PrintInfo(char*Line) = 0;
 	virtual void ProcessFault() = 0;
 };
 
@@ -43,6 +43,7 @@ public:
 public://添加故障的操作
 	void RemoveAllFault();
 public:
+	int ReadFile(char*file);
 	void PrintInfo(FILE *fp);
 	int AddNewFault(char*Line);
 	int AddNewFault(DYFAULTBASE*tFault);

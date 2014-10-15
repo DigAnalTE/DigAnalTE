@@ -93,6 +93,9 @@
     <ClCompile Include="StabilityAnalysis\DyFaultInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="StabilityAnalysis\DyFaultLine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommonFunction\constdef.h">
@@ -177,6 +180,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DynamicModel\GenEq1Constant.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StabilityAnalysis\DyFaultLine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
