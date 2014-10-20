@@ -37,13 +37,8 @@ public:
 	real BMVA;
 	class DYNAMICMODELINFO* pSolInfo;
 	void SetSolInfo(DYNAMICMODELINFO* tSol){ pSolInfo = tSol; }
-public://输出变量
-	virtual int GetOutputCount(){ return 0; }
-	virtual void GetOutputName(int i, char* name){}
-	virtual real GetOutputValue(int i){ return 0; }
 public://读写部分
 	virtual int ReadLine(char*Line) = 0;
-	virtual int ReadOutLine(char*Line){ return 1; }
 	virtual void PrintInfo(char*Line) = 0;
 	virtual int CheckInputData(){ return 1; }//初值检查
 public://计算部分//使用pSolInfo进行控制
@@ -55,6 +50,14 @@ public://计算部分//使用pSolInfo进行控制
 	virtual void DynEventProcess(){}//事件处理
 };
 
+struct DynVarient
+{
+	char IndexName[_MaxNameLen];//模型间索引名
+	char OutName[_MaxNameLen];//输出曲线名
+	real *pValu;
+	int outflag;//非零表示输出到文件
+};
+
 class EQUIPMENT_DYN_MODEL :public DYNAMIC_MODEL_BASE
 {//有注入电流的模型
 public:
@@ -63,13 +66,18 @@ public:
 		mPrio = 0;//最好
 		pIx = NULL;
 		pIy = NULL;
+		Varient = NULL;
 	}
 public:
 	virtual EQUIPMENT_DYN_MODEL* IsEquipModel(){ return this; }
 public://为其他模型做接口
-	virtual real* GetVarient(int no){ return NULL; }
-	virtual real* GetVarient(char *name){ return NULL; }
-	float Varient[10];//预留10个空间供控制模型进行交互
+	DynVarient *Varient;//必须指向派生类
+	virtual int GetVarientTotal() = 0;//获得输出总数
+	real* GetVarient(char *name);
+	DynVarient* GetDynVarient(char *name, int flag = 0);//flag==0不退出，flag==1退出
+	real nVarient[10];//预留10个空间供控制模型进行交互
+	real* GetnVarient(int no);//对预留空间进行访问
+	int ReadOutLine(char*Line);
 public://为设备做接口
 	real *pIx, *pIy;
 	virtual void ModifyMatrix(){}

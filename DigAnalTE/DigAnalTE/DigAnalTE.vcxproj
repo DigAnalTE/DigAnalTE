@@ -15,6 +15,7 @@
     <ClCompile Include="CommonFunction\ErrorInfo.cpp" />
     <ClCompile Include="CommonFunction\HashTable.cpp" />
     <ClCompile Include="CommonFunction\QikSort.cpp" />
+    <ClCompile Include="DynamicModel\DynamicModelBase.cpp" />
     <ClCompile Include="DynamicModel\DynamicModelInfo.cpp" />
     <ClCompile Include="DynamicModel\GenEq1Constant.cpp" />
     <ClCompile Include="NetWorkInfo\AreaInfo.cpp" />

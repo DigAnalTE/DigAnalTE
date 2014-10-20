@@ -96,6 +96,9 @@
     <ClCompile Include="StabilityAnalysis\DyFaultLine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DynamicModel\DynamicModelBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommonFunction\constdef.h">

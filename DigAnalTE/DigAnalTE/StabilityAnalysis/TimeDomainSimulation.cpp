@@ -28,10 +28,19 @@ void TDSIMULATION::SetDynModel(DYNAMICMODELINFO*tDyn)
 	pVy = pDyn->Vy;
 	pIx = pDyn->Ix;
 	pIy = pDyn->Iy;
-	int i;
-	for (i = 0; i < pDyn->DynamicModelTotal; i++)
+	int i,j;
+	EQUIPMENT_DYN_MODEL*tModel;
+	OutputTotal = 0;
+	for (i = 0; i < pDyn->iGetEquipTotal(); i++)
 	{
-		OutputTotal += pDyn->DynamicModel[i]->GetOutputCount();
+		tModel = pDyn->cpGetEquip(i)->GetEquipModel();
+		if (tModel == NULL)
+			continue;
+		for (j = 0; j < tModel->GetVarientTotal(); j++)
+		{
+			if (tModel->Varient[j].outflag != 0)
+				OutputTotal++;
+		}
 	}
 	MallocOutputSpace((pDyn->TotalTime / pDyn->Step + 20)*(OutputTotal + 2));
 }
@@ -276,12 +285,16 @@ void TDSIMULATION::SaveOutputValue(real time)
 	OutputValue[OutputCount++] = time;
 	if (OutputTotal <= 0)return;
 	int i, j, count;
-	for (i = 0; i < pDyn->DynamicModelTotal; i++)
+	EQUIPMENT_DYN_MODEL*tModel;
+	for (i = 0; i < pDyn->iGetEquipTotal(); i++)
 	{
-		count = pDyn->DynamicModel[i]->GetOutputCount();
-		for (j = 0; j < count; j++)
+		tModel = pDyn->cpGetEquip(i)->GetEquipModel();
+		if (tModel == NULL)
+			continue;
+		for (j = 0; j < tModel->GetVarientTotal(); j++)
 		{
-			OutputValue[OutputCount++] = pDyn->DynamicModel[i]->GetOutputValue(j);
+			if (tModel->Varient[j].outflag != 0)
+				OutputValue[OutputCount++] = *tModel->Varient[j].pValu;
 		}
 	}
 }
@@ -294,13 +307,18 @@ void TDSIMULATION::WriteCurve(char*file)
 	fprintf(fp, "Ê±¼ä");
 	char Name[_MaxNameLen];
 	int i, j, count;
-	for (i = 0; i < pDyn->DynamicModelTotal; i++)
+	EQUIPMENT_DYN_MODEL*tModel;
+	for (i = 0; i < pDyn->iGetEquipTotal(); i++)
 	{
-		count = pDyn->DynamicModel[i]->GetOutputCount();
-		for (j = 0; j < count; j++)
+		tModel = pDyn->cpGetEquip(i)->GetEquipModel();
+		if (tModel == NULL)
+			continue;
+		for (j = 0; j < tModel->GetVarientTotal(); j++)
 		{
-			pDyn->DynamicModel[i]->GetOutputName(j, Name);
-			fprintf(fp, ",%s-%s", pDyn->DynamicModel[i]->GetEquipmentName(), Name);
+			if (tModel->Varient[j].outflag != 0)
+			{
+				fprintf(fp, ",%s-%s", tModel->GetEquipmentName(), tModel->Varient[j].OutName);
+			}
 		}
 	}
 	for (i = 0; i < OutputCount; i++)

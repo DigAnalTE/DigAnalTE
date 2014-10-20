@@ -5,10 +5,23 @@
 GenEq1Constant::GenEq1Constant()
 {
 	strcpy(ModelName, "GC");
-	flagW = 0; 
-	flagSita = 0; 
-	flagPE = 0;
-	flagPM = 0;
+	strcpy(mVarient[0].IndexName, "W");
+	strcpy(mVarient[0].OutName, "角速度");
+	mVarient[0].pValu = &W;
+	mVarient[0].outflag = 0;
+	strcpy(mVarient[1].IndexName, "Sita");
+	strcpy(mVarient[1].OutName, "角度");
+	mVarient[1].pValu = &Sita;
+	mVarient[1].outflag = 0;
+	strcpy(mVarient[2].IndexName, "PE");
+	strcpy(mVarient[2].OutName, "电磁功率");
+	mVarient[2].pValu = &PE;
+	mVarient[2].outflag = 0;
+	strcpy(mVarient[3].IndexName, "PM");
+	strcpy(mVarient[3].OutName, "机械功率");
+	mVarient[3].pValu = &PM;
+	mVarient[3].outflag = 0;
+	Varient = mVarient;
 }
 
 int GenEq1Constant::ReadLine(char*line)
@@ -18,34 +31,6 @@ int GenEq1Constant::ReadLine(char*line)
 		EquipmentName, &EMWS, &MVABase, &R, &Xd1);
 	ReplaceName(EquipmentName, _MaxNameLen);
 	if (flag != 5)return 0;
-	return 1;
-}
-
-int GenEq1Constant::ReadOutLine(char*line)
-{
-	int i, flag;
-	char outname[4][10];
-	flag = sscanf(line, "%*[^,],%*[^,],%[^,],%[^,],%[^,],%[^,]",
-		outname[0], outname[1], outname[2], outname[3]);
-	for (i = 0; i < flag; i++)
-	{
-		ReplaceName(outname[i], 10);
-		if (strcmp(outname[i], "W") == 0)
-			flagW = 1;
-		if (strcmp(outname[i], "Sita") == 0)
-			flagSita = 1;
-		if (strcmp(outname[i], "PE") == 0)
-			flagPE = 1;
-		if (strcmp(outname[i], "PM") == 0)
-			flagPM = 1;
-		if (strcmp(outname[i], "ALL") == 0)
-		{
-			flagW = 1;
-			flagSita = 1;
-			flagPE = 1;
-			flagPM = 1;
-		}
-	}
 	return 1;
 }
 
@@ -73,56 +58,6 @@ int GenEq1Constant::CheckInputData()
 	Tj = EMWS*2.0 / BMVA;
 	return 1;
 }
-
-int GenEq1Constant::GetOutputCount()
-{
-	return flagW + flagSita + flagPE + flagPM;
-}
-
-void GenEq1Constant::GetOutputName(int i, char* name)
-{
-	if (flagW)i--;
-	if (i<0)
-	{
-		strcpy(name, "角速度");
-		return;
-	}
-	if (flagSita)i--;
-	if (i<0)
-	{
-		strcpy(name, "角度");
-		return;
-	}
-	if (flagPE)i--;
-	if (i<0)
-	{
-		strcpy(name, "电磁功率");
-		return;
-	}
-	strcpy(name, "机械功率");
-	return;
-}
-
-real GenEq1Constant::GetOutputValue(int i)
-{
-	if (flagW)i--;
-	if (i<0)
-	{
-		return W;
-	}
-	if (flagSita)i--;
-	if (i<0)
-	{
-		return Sita;
-	}
-	if (flagPE)i--;
-	if (i<0)
-	{
-		return PE;
-	}
-	return PM;
-}
-
 void GenEq1Constant::ModifyMatrix()
 {
 	real gii, bii;

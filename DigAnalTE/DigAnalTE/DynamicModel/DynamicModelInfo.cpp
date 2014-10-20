@@ -232,6 +232,7 @@ int DYNAMICMODELINFO::ReadFile(char*file)
 	cpGetErrorInfo()->CheckMessageType(12);
 
 	int i, equipno;
+	EQUIPMENT_DYN_MODEL*tEqipModel;
 	for (i = 0; i < DynamicModelTotal; i++)
 	{
 		equipno = EquipSearch(DynamicModel[i]->EquipmentName);
@@ -243,10 +244,15 @@ int DYNAMICMODELINFO::ReadFile(char*file)
 			continue;
 		}
 		DynamicModel[i]->EquipIndex = equipno;
+		DynamicModel[i]->pEquip = cpGetEquip(equipno);
+		tEqipModel = DynamicModel[i]->IsEquipModel();
+		if (tEqipModel != NULL)
+		{
+			cpGetEquip(equipno)->SetEquipModel(tEqipModel);
+		}
 	}
 	cpGetErrorInfo()->CheckMessageType(13);
 	char tEquipName[_MaxNameLen];
-	char tModelName[_MaxNameLen];
 	while (fgets(Line, _MaxLineLen, fpfile))
 	{
 		flag = sscanf(Line, "%9s", type);
@@ -258,24 +264,23 @@ int DYNAMICMODELINFO::ReadFile(char*file)
 			break;
 		if (type[0] == 'O')
 		{
-			flag = sscanf(Line, "%[^,],%[^,]", tModelName, tEquipName);
-			if (flag != 2)
+			flag = sscanf(Line, "%*[^,],%[^,]", tEquipName);
+			if (flag != 1)
 			{
 				sprintf(ErrorMessage[0], "输出数据读取失败：%s", Line);
 				cpGetErrorInfo()->PrintWarning(-1, 1);
 				continue;
 			}
-			ReplaceName(tEquipName,_MaxNameLen);
-			tModelName[0] = ' ';
-			ReplaceName(tModelName, _MaxNameLen);
-			tModel = DynModelSearch(tEquipName, tModelName);
-			if (tModel == NULL)
+			ReplaceName(tEquipName, _MaxNameLen);
+			equipno = EquipSearch(tEquipName);
+			tEqipModel = cpGetEquip(equipno)->GetEquipModel();
+			if (tEqipModel == NULL)
 			{
 				sprintf(ErrorMessage[0], "输出数据没有对应的模型：%s", Line);
 				cpGetErrorInfo()->PrintWarning(-1, 1);
 				continue;
 			}
-			flag = tModel->ReadOutLine(Line);
+			flag = tEqipModel->ReadOutLine(Line);
 			if (flag != 1)
 			{
 				sprintf(ErrorMessage[0], "输出数据读取失败：%s", Line);

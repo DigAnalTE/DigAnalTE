@@ -22,16 +22,13 @@ public:
 	real GenP, GenQ;
 	real Vx, Vy, Ix, Iy;
 	real OldW, OldIx, OldIy;//用于判断是否收敛
+public://输出变量
+	DynVarient mVarient[4];
+	virtual int GetVarientTotal(){ return 4; }
 public:
 	virtual int ReadLine(char*Line);
-	virtual int ReadOutLine(char*Line);
 	virtual void PrintInfo(char*Line);
 	virtual int CheckInputData();//初值检查
-public://输出变量
-	int flagW, flagSita, flagPE, flagPM;
-	virtual int GetOutputCount();
-	virtual void GetOutputName(int i, char* name);
-	virtual real GetOutputValue(int i);
 public:
 	virtual void ModifyMatrix();
 	virtual int DynInitial();//微分方程初值计算
