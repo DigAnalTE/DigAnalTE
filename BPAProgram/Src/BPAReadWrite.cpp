@@ -45,10 +45,16 @@ void GetItemFromLine(char* Line, void *value, const char f_para[10], int f_loca)
 	if (f_para[0] == 'A')
 	{
 		char* cvalue = (char*)value;
-		strncpy(cvalue, WORD, length);
-		for (i = strlen(cvalue); i < length; i++)
-			cvalue[i] = ' ';
-		cvalue[length] = '\0';
+		if (length == 1)
+		{
+			*cvalue = WORD[0];
+		}
+		else{
+			strncpy(cvalue, WORD, length);
+			for (i = strlen(cvalue); i < length; i++)
+				cvalue[i] = ' ';
+			cvalue[length] = '\0';
+		}
 	}
 	else if (f_para[0] == 'I')
 	{
