@@ -386,3 +386,31 @@ int BPA_NETWORKINFO::Area_ReadBPALine(char* PFLine)
 	}
 	return 1;
 }
+
+void BPA_NETWORKINFO::OutputPFOFile(FILE*fpfile)
+{
+	int i, j, BusTotal;
+	int BrnStart, BrnCount, BranchNo, Directtn;
+	BusTotal = iGetBusTotal();
+	for (i = 0; i < BusTotal; i++)
+	{
+		cpGetBus(i)->OutputPFOFile(fpfile);
+		BrnStart = cpGetBranchInfo()->BRINDX[i];
+		BrnCount = cpGetBranchInfo()->BRCONT[i];
+		for (j = 0; j < BrnCount; j++)
+		{
+			BranchNo = cpGetBranchInfo()->BranchLink[BrnStart + j].BrnhNo;
+			Directtn = cpGetBranchInfo()->BranchLink[BrnStart + j].nDirtn;
+			cpGetBranch(BranchNo)->OutputPFOFile(fpfile, Directtn);
+		}
+		//BPA的结果文件不输出设备参数
+		//BrnStart = cpGetEquipInfo()->EQINDX[i];
+		//BrnCount = cpGetEquipInfo()->EQCONT[i];
+		//for (j = 0; j < BrnCount; j++)
+		//{
+		//	BranchNo = cpGetEquipInfo()->EquipLink[BrnStart + j].EquipNo;
+		//	Directtn = cpGetEquipInfo()->EquipLink[BrnStart + j].nDirtn;
+		//	cpGetEquip(BranchNo)->OutputPFOFile(fpfile, Directtn);
+		//}
+	}
+}
