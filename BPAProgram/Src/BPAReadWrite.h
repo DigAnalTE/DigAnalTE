@@ -65,4 +65,25 @@ const int  SWI_LN_PARA = 18;
 const char SWI_LN_Para[SWI_LN_PARA][10]={"A8","F4.0","A8","F4.0","A8","F4.0","A8","F4.0","A8","F4.0"};
 const int  SWI_LN_Loca[SWI_LN_PARA]    ={ 3,   11,    18,  26,    33,  41,    48,  56,    63,  71};
 
+const int  SWI_FF_PARA = 2;
+//                                        0      1
+const char SWI_FF_Para[SWI_FF_PARA][10]={"F3.0","F5.0"};
+const int  SWI_FF_Loca[SWI_FF_PARA]    ={ 8,     12};
+
+///////////////////Êä³ö¿¨Æ¬//////////////////////////////
+const int  OUT_GEN_PARA = 6;
+//                                          0    1      2    3    4      5
+const char OUT_GEN_Para[OUT_GEN_PARA][10]={"A8","F4.0","A1","A8","F4.0","A1"};
+const int  OUT_GEN_Loca[OUT_GEN_PARA]    ={ 3,   11,    16,  62,  70,    74};
+
+const int  OUT_GH_PARA = 3;
+//                                        0    1      2
+const char OUT_GH_Para[OUT_GH_PARA][10]={"A8","F4.0","A1"};
+const int  OUT_GH_Loca[OUT_GH_PARA]    ={ 6,   14,    19};
+
+const int  SWI_LS_LINE_PARA = 10;
+//                                                  0    1      2    3      4    5    6      7      8      9
+const char SWI_LS_LINE_Para[SWI_LS_LINE_PARA][10]={"A8","F4.0","A8","F4.0","A1","I2","F6.0","F6.0","F6.0","F6.0"};
+const int  SWI_LS_LINE_Loca[SWI_LS_LINE_PARA]    ={ 4,   12,    18,  26,    31,  35,  39,    45,    51,    57};
+
 #endif

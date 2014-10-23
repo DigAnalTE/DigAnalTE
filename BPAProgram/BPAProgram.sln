@@ -1,12 +1,19 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pfnt", "pfnt.vcxproj", "{6AEA5FEE-2AC6-4AE8-84E5-F78167C7FBC7}"
 	ProjectSection(ProjectDependencies) = postProject
 		{EFA7C0D0-F1B8-4AB4-BB61-8497464BDB13} = {EFA7C0D0-F1B8-4AB4-BB61-8497464BDB13}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DigAnalTE", "..\DigAnalTE\DigAnalTE\DigAnalTE.vcxproj", "{EFA7C0D0-F1B8-4AB4-BB61-8497464BDB13}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "swnt", "swnt.vcxproj", "{67959252-9390-474A-89C0-9A124B51B56A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EFA7C0D0-F1B8-4AB4-BB61-8497464BDB13} = {EFA7C0D0-F1B8-4AB4-BB61-8497464BDB13}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,6 +29,10 @@ Global
 		{EFA7C0D0-F1B8-4AB4-BB61-8497464BDB13}.Debug|Win32.Build.0 = Debug|Win32
 		{EFA7C0D0-F1B8-4AB4-BB61-8497464BDB13}.Release|Win32.ActiveCfg = Release|Win32
 		{EFA7C0D0-F1B8-4AB4-BB61-8497464BDB13}.Release|Win32.Build.0 = Release|Win32
+		{67959252-9390-474A-89C0-9A124B51B56A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{67959252-9390-474A-89C0-9A124B51B56A}.Debug|Win32.Build.0 = Debug|Win32
+		{67959252-9390-474A-89C0-9A124B51B56A}.Release|Win32.ActiveCfg = Release|Win32
+		{67959252-9390-474A-89C0-9A124B51B56A}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

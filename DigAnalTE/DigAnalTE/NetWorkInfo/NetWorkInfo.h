@@ -61,7 +61,7 @@ public://矩阵部分——用于潮流计算
 public://函数部分
 	int bNetInfoCode;//是否建立了矩阵结构
 	void GenerateNetInfo();//生成矩阵的结构，可以反复进行
-	void Update();//相当于反方向的GenerateNetInfo()//在计算完潮流的电压和幅值后调用该函数可以更新所有信息
+	virtual void Update();//相当于反方向的GenerateNetInfo()//在计算完潮流的电压和幅值后调用该函数可以更新所有信息
 	void UpdateVxVy(real*Vx, real*Vy)
 	{
 		int i;
