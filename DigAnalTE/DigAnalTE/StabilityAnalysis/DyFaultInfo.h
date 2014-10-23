@@ -43,7 +43,7 @@ public:
 public://Ìí¼Ó¹ÊÕÏµÄ²Ù×÷
 	void RemoveAllFault();
 public:
-	int ReadFile(char*file);
+	virtual int ReadFile(char*file);
 	void PrintInfo(FILE *fp);
 	int AddNewFault(char*Line);
 	int AddNewFault(DYFAULTBASE*tFault);

@@ -44,13 +44,6 @@ int GenEq1Constant::CheckInputData()
 	if (pEquip == NULL)
 		return 0;
 	m_BusNo = pEquip->GetBusNo(0);
-	pEquip->GetInsertPQ(GenP, GenQ, 0);
-	GenP /= BMVA;
-	GenQ /= BMVA;
-	if (fabs(GenP) < 0.001 && fabs(GenQ) < 0.001)
-	{
-		m_State = 0;
-	}
 	if (MVABase < 0.01)
 		MVABase = BMVA;
 	R = R*BMVA / MVABase;
@@ -74,6 +67,9 @@ int GenEq1Constant::DynInitial()
 	real V2;
 	pSolInfo->GetVxVy(m_BusNo, Vx, Vy);
 	V2 = Vx*Vx + Vy*Vy;
+	pEquip->GetInsertPQ(GenP, GenQ, 0);
+	GenP /= BMVA;
+	GenQ /= BMVA;
 
 	Ix = (GenP*Vx + GenQ*Vy) / V2;
 	Iy = (GenP*Vy - GenQ*Vx) / V2;

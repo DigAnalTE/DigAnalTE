@@ -40,7 +40,7 @@ public:
 public://读写部分
 	virtual int ReadLine(char*Line) = 0;
 	virtual void PrintInfo(char*Line) = 0;
-	virtual int CheckInputData(){ return 1; }//初值检查
+	virtual int CheckInputData(){ return 1; }//数据检查//在潮流计算前调用
 public://计算部分//使用pSolInfo进行控制
 	virtual int DynInitial(){ return 1; }//微分方程初值计算
 	virtual void DynBeforeStep() = 0;//积分前处理//可以使用显式算法进行预测
@@ -77,7 +77,7 @@ public://为其他模型做接口
 	DynVarient* GetDynVarient(char *name, int flag = 0);//flag==0不退出，flag==1退出
 	real nVarient[10];//预留10个空间供控制模型进行交互
 	real* GetnVarient(int no);//对预留空间进行访问
-	int ReadOutLine(char*Line);
+	virtual int ReadOutLine(char*Line);
 public://为设备做接口
 	real *pIx, *pIy;
 	virtual void ModifyMatrix(){}
