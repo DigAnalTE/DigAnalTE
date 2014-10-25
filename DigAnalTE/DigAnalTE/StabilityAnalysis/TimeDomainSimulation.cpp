@@ -31,6 +31,17 @@ void TDSIMULATION::SetDynModel(DYNAMICMODELINFO*tDyn)
 	int i,j;
 	EQUIPMENT_DYN_MODEL*tModel;
 	OutputTotal = 0;
+	for (i = 0; i < pDyn->iGetBusTotal(); i++)
+	{
+		tModel = pDyn->m_BusDyn[i];
+		if (tModel == NULL)
+			continue;
+		for (j = 0; j < tModel->GetVarientTotal(); j++)
+		{
+			if (tModel->Varient[j].outflag != 0)
+				OutputTotal++;
+		}
+	}
 	for (i = 0; i < pDyn->iGetEquipTotal(); i++)
 	{
 		tModel = pDyn->cpGetEquip(i)->GetEquipModel();
@@ -153,6 +164,12 @@ int TDSIMULATION::Calculate(DYFAULTINFO*pFault)
 			}
 		}
 		pDyn->Tnow += pDyn->Step;
+		for (i = 0; i < pDyn->iGetBusTotal(); i++)
+		{
+			if (pDyn->m_BusDyn[i] == NULL)
+				continue;
+			pDyn->m_BusDyn[i]->DynBeforeStep();
+		}
 		for (i = 0; i < pDyn->DynamicModelTotal; i++)
 		{
 			pDyn->DynamicModel[i]->DynBeforeStep();
@@ -161,6 +178,16 @@ int TDSIMULATION::Calculate(DYFAULTINFO*pFault)
 		while (1)
 		{
 			flag_conv_diff = 0;
+			for (i = 0; i < pDyn->iGetBusTotal(); i++)
+			{
+				if (pDyn->m_BusDyn[i] == NULL)
+					continue;
+				err = pDyn->m_BusDyn[i]->DynProcessStep();
+				if (err > 0.01)
+				{
+					flag_conv_diff++;
+				}
+			}
 			for (i = 0; i < pDyn->DynamicModelTotal; i++)
 			{
 				err = pDyn->DynamicModel[i]->DynProcessStep();
@@ -228,6 +255,12 @@ int TDSIMULATION::Calculate(DYFAULTINFO*pFault)
 				break;
 			}
 		}
+		for (i = 0; i < pDyn->iGetBusTotal(); i++)
+		{
+			if (pDyn->m_BusDyn[i] == NULL)
+				continue;
+			pDyn->m_BusDyn[i]->DynAfterStep();
+		}
 		for (i = 0; i < pDyn->DynamicModelTotal; i++)
 		{
 			pDyn->DynamicModel[i]->DynAfterStep();
@@ -284,8 +317,19 @@ void TDSIMULATION::SaveOutputValue(real time)
 	}
 	OutputValue[OutputCount++] = time;
 	if (OutputTotal <= 0)return;
-	int i, j, count;
+	int i, j;
 	EQUIPMENT_DYN_MODEL*tModel;
+	for (i = 0; i < pDyn->iGetBusTotal(); i++)
+	{
+		tModel = pDyn->m_BusDyn[i];
+		if (tModel == NULL)
+			continue;
+		for (j = 0; j < tModel->GetVarientTotal(); j++)
+		{
+			if (tModel->Varient[j].outflag != 0)
+				OutputValue[OutputCount++] = *tModel->Varient[j].pValu;
+		}
+	}
 	for (i = 0; i < pDyn->iGetEquipTotal(); i++)
 	{
 		tModel = pDyn->cpGetEquip(i)->GetEquipModel();
@@ -305,9 +349,19 @@ void TDSIMULATION::WriteCurve(char*file)
 	fp = NULL;
 	OpenFile(fp, file, "w+");
 	fprintf(fp, "Ê±¼ä");
-	char Name[_MaxNameLen];
-	int i, j, count;
+	int i, j;
 	EQUIPMENT_DYN_MODEL*tModel;
+	for (i = 0; i < pDyn->iGetBusTotal(); i++)
+	{
+		tModel = pDyn->m_BusDyn[i];
+		if (tModel == NULL)
+			continue;
+		for (j = 0; j < tModel->GetVarientTotal(); j++)
+		{
+			if (tModel->Varient[j].outflag != 0)
+				OutputValue[OutputCount++] = *tModel->Varient[j].pValu;
+		}
+	}
 	for (i = 0; i < pDyn->iGetEquipTotal(); i++)
 	{
 		tModel = pDyn->cpGetEquip(i)->GetEquipModel();

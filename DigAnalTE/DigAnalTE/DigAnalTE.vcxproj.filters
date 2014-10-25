@@ -99,6 +99,9 @@
     <ClCompile Include="DynamicModel\DynamicModelBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DynamicModel\BusDynModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommonFunction\constdef.h">
@@ -186,6 +189,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StabilityAnalysis\DyFaultLine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicModel\BusDynModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

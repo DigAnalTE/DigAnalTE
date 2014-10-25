@@ -28,7 +28,7 @@ public://输出变量
 public:
 	virtual int ReadLine(char*Line);
 	virtual void PrintInfo(char*Line);
-	virtual int CheckInputData();//初值检查
+	virtual int CheckInputData();
 public:
 	virtual void ModifyMatrix();
 	virtual int DynInitial();//微分方程初值计算

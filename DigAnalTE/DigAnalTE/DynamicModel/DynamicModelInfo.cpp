@@ -7,6 +7,7 @@ DYNAMICMODELINFO::DYNAMICMODELINFO()
 {
 	DynamicModelTotal = 0;
 	memset(DynamicModel, 0, _MaxDynamicModelNo*sizeof(DYNAMIC_MODEL_BASE*));
+	memset(m_BusDyn, 0, _MaxBusNo*sizeof(BUSDYNMODEL*));
 	Vx = NULL; Vy = NULL; Ix = NULL; Iy = NULL;
 	bDynMatrixForm = 0; bDynInitial = 0;
 	TotalTime = 6.;
@@ -50,6 +51,14 @@ int DYNAMICMODELINFO::InsertNewDynamicModel(DYNAMIC_MODEL_BASE*tempObj)
 	DynamicModel[DynamicModelTotal] = tempObj;
 	DynamicModelTotal++;
 	return DynamicModelTotal - 1;
+}
+
+void DYNAMICMODELINFO::AddNewBusDyn(int busno)
+{
+	if (m_BusDyn[busno] != NULL)
+		return;
+	m_BusDyn[busno] = new BUSDYNMODEL;
+	m_BusDyn[busno]->BusNo = busno;
 }
 
 #include "../CommonFunction/QikSort.h"
@@ -171,6 +180,12 @@ int DYNAMICMODELINFO::NetAnalysis()
 		}
 	}
 	cpGetErrorInfo()->CheckMessageType(13);
+	for (i = 0; i < iGetBusTotal(); i++)
+	{
+		if (m_BusDyn[i] == NULL)
+			continue;
+		m_BusDyn[i]->CheckInputData();
+	}
 	return 1;
 }
 
@@ -196,7 +211,7 @@ int DYNAMICMODELINFO::ReadFile(char*file)
 	}
 	DYNAMIC_MODEL_BASE*tModel;
 	while (fgets(Line, _MaxLineLen, fpfile))
-	{
+	{//读入动态模型
 		flag = sscanf(Line, "%9s", type);
 		if (flag < 1)
 			continue;
@@ -234,7 +249,7 @@ int DYNAMICMODELINFO::ReadFile(char*file)
 	int i, equipno;
 	EQUIPMENT_DYN_MODEL*tEqipModel;
 	for (i = 0; i < DynamicModelTotal; i++)
-	{
+	{//对动态模型进行连接，为读输出数据做准备
 		equipno = EquipSearch(DynamicModel[i]->EquipmentName);
 		if (equipno < 0)
 		{
@@ -252,7 +267,9 @@ int DYNAMICMODELINFO::ReadFile(char*file)
 		}
 	}
 	cpGetErrorInfo()->CheckMessageType(13);
-	char tEquipName[_MaxNameLen];
+
+	//读入输出数据和计算控制数据
+	char tEquipName[_MaxNameLen], tBusName[_MaxNameLen];
 	while (fgets(Line, _MaxLineLen, fpfile))
 	{
 		flag = sscanf(Line, "%9s", type);
@@ -263,7 +280,7 @@ int DYNAMICMODELINFO::ReadFile(char*file)
 		if (strncmp(type, "-999", 4) == 0)
 			break;
 		if (type[0] == 'O')
-		{
+		{//模型输出数据
 			flag = sscanf(Line, "%*[^,],%[^,]", tEquipName);
 			if (flag != 1)
 			{
@@ -281,6 +298,26 @@ int DYNAMICMODELINFO::ReadFile(char*file)
 				continue;
 			}
 			flag = tEqipModel->ReadOutLine(Line);
+			if (flag != 1)
+			{
+				sprintf(ErrorMessage[0], "输出数据读取失败：%s", Line);
+				cpGetErrorInfo()->PrintWarning(11, 1);
+			}
+			continue;
+		}
+		if (type[0] == 'B')
+		{//母线输出数据
+			flag = sscanf(Line, "%*[^,],%[^,]", tBusName);
+			if (flag != 1)
+			{
+				sprintf(ErrorMessage[0], "输出数据读取失败：%s", Line);
+				cpGetErrorInfo()->PrintWarning(-1, 1);
+				continue;
+			}
+			ReplaceName(tBusName, _MaxNameLen);
+			equipno = BusSearch(tBusName);
+			AddNewBusDyn(equipno);
+			flag = m_BusDyn[equipno]->ReadOutLine(Line);
 			if (flag != 1)
 			{
 				sprintf(ErrorMessage[0], "输出数据读取失败：%s", Line);
@@ -343,6 +380,12 @@ int DYNAMICMODELINFO::DynInitial()
 		Vy[i] = v*sin(sita);
 	}
 	FormJacobi();
+	for (i = 0; i < iGetBusTotal(); i++)
+	{
+		if (m_BusDyn[i] == NULL)
+			continue;
+		m_BusDyn[i]->DynInitial();
+	}
 	for (i = 0; i < DynamicModelTotal; i++)
 	{
 		DynamicModel[i]->DynInitial();

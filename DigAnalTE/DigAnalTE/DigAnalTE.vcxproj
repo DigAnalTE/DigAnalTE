@@ -15,6 +15,7 @@
     <ClCompile Include="CommonFunction\ErrorInfo.cpp" />
     <ClCompile Include="CommonFunction\HashTable.cpp" />
     <ClCompile Include="CommonFunction\QikSort.cpp" />
+    <ClCompile Include="DynamicModel\BusDynModel.cpp" />
     <ClCompile Include="DynamicModel\DynamicModelBase.cpp" />
     <ClCompile Include="DynamicModel\DynamicModelInfo.cpp" />
     <ClCompile Include="DynamicModel\GenEq1Constant.cpp" />
@@ -45,6 +46,7 @@
     <ClInclude Include="CommonFunction\ErrorInfo.h" />
     <ClInclude Include="CommonFunction\HashTable.h" />
     <ClInclude Include="CommonFunction\QikSort.h" />
+    <ClInclude Include="DynamicModel\BusDynModel.h" />
     <ClInclude Include="DynamicModel\DynamicModelBase.h" />
     <ClInclude Include="DynamicModel\DynamicModelInfo.h" />
     <ClInclude Include="DynamicModel\GenEq1Constant.h" />

@@ -4,6 +4,7 @@
 
 #include "../NetWorkInfo/NetWorkInfo.h"
 #include "DynamicModelBase.h"
+#include "BusDynModel.h"
 #include "../SpareMatrixLib/ComplexSpareMatrix.h"
 
 class DYNAMICMODELINFO : public NETWORKINFO
@@ -17,6 +18,9 @@ public://动态模型信息
 	int DynamicModelTotal;
 	DYNAMIC_MODEL_BASE *DynamicModel[_MaxDynamicModelNo];
 	int InsertNewDynamicModel(DYNAMIC_MODEL_BASE*);
+public://母线动态信息
+	BUSDYNMODEL *m_BusDyn[_MaxBusNo];
+	void AddNewBusDyn(int BusNo);
 	/*-------------------------函数部分-------------------------*/
 public://两个关键函数
 	//virtual void NetLink();

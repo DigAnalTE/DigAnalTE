@@ -105,7 +105,7 @@ void GenEq1Constant::DynBeforeStep()
 	real step;
 	step = pSolInfo->Step;
 	A_W = step / Tj;
-	A_Sita = step * 2 * 50 * 3.1415;
+	A_Sita = step * 2 * 50 * 3.1415f;
 	W = W0 + A_W*Pdelta0;
 	Sita = Sita0 + A_Sita*(W - 1);
 }
