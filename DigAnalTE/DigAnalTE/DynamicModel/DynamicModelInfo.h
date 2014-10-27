@@ -20,7 +20,7 @@ public://动态模型信息
 	int InsertNewDynamicModel(DYNAMIC_MODEL_BASE*);
 public://母线动态信息
 	BUSDYNMODEL *m_BusDyn[_MaxBusNo];
-	void AddNewBusDyn(int BusNo);
+	virtual void AddNewBusDyn(int BusNo);
 	/*-------------------------函数部分-------------------------*/
 public://两个关键函数
 	//virtual void NetLink();

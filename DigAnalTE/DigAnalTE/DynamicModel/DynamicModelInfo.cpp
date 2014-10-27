@@ -59,6 +59,7 @@ void DYNAMICMODELINFO::AddNewBusDyn(int busno)
 		return;
 	m_BusDyn[busno] = new BUSDYNMODEL;
 	m_BusDyn[busno]->BusNo = busno;
+	m_BusDyn[busno]->SetSolInfo(this);
 }
 
 #include "../CommonFunction/QikSort.h"

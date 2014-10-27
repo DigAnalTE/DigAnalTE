@@ -30,8 +30,6 @@ BUSDYNMODEL::BUSDYNMODEL()
 
 int BUSDYNMODEL::CheckInputData()
 {
-	if (pEquip == NULL)
-		return 0;
 	strcpy(EquipmentName, pSolInfo->cpGetBus(BusNo)->GetBusName());
 	return 1;
 }
@@ -41,7 +39,7 @@ int BUSDYNMODEL::DynInitial()
 	pSolInfo->GetVxVy(BusNo, Vx, Vy);
 	V = sqrt(Vx*Vx + Vy*Vy);
 
-	Sita = (real)atan2(Vx, Vy);
+	Sita = (real)atan2(Vy, Vx)*57.29578;
 
 	Frequency = 50;
 
@@ -56,11 +54,13 @@ void BUSDYNMODEL::DynBeforeStep()
 real BUSDYNMODEL::DynProcessStep()
 {
 	pSolInfo->GetVxVy(BusNo, Vx, Vy);
+	V = sqrt(Vx*Vx + Vy*Vy);
 	return 0;
 }
 
 void BUSDYNMODEL::DynAfterStep()
 {
 	pSolInfo->GetVxVy(BusNo, Vx, Vy);
-	Sita = (real)atan2(Vx, Vy);
+	V = sqrt(Vx*Vx + Vy*Vy);
+	Sita = (real)atan2(Vy, Vx)*57.29578;
 }
