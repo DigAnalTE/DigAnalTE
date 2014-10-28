@@ -3,6 +3,7 @@
 #include "BPAReadWrite.h"
 #include "BPAGenerator.h"
 #include "BPAMCModel.h"
+#include "BPABusDyn.h"
 #include "../../DigAnalTE/DigAnalTE/CommonFunction/ErrorInfo.h"
 #include "../../DigAnalTE/DigAnalTE/CommonFunction/QikSort.h"
 
@@ -12,6 +13,15 @@ BPA_DYNAMICMODELINFO::BPA_DYNAMICMODELINFO()
 {
 	Step = 0.02;
 	TotalTime = 6;
+}
+
+void BPA_DYNAMICMODELINFO::AddNewBusDyn(int busno)
+{
+	if (m_BusDyn[busno] != NULL)
+		return;
+	m_BusDyn[busno] = new BPABUSDYNMODEL;
+	m_BusDyn[busno]->BusNo = busno;
+	m_BusDyn[busno]->SetSolInfo(this);
 }
 
 class SortBusByName : public QikSortInterface
@@ -193,6 +203,22 @@ int BPA_DYNAMICMODELINFO::ReadBPAFile(char*datfile, char*swifile)
 				}
 			}
 			break;
+		case 'B':
+			if (LineST[i][1] == 'H')
+			{
+			}
+			else{
+				GetItemFromLine(LineST[i], tBusName, OUT_GEN_Para[0], OUT_GEN_Loca[0]);
+				GetItemFromLine(LineST[i], &tBaseKV, OUT_GEN_Para[1], OUT_GEN_Loca[1]);
+				equipno = BPABusSearch(tBusName, tBaseKV);
+				AddNewBusDyn(equipno);
+				flag = m_BusDyn[equipno]->ReadOutLine(LineST[i]);
+				if (flag != 1)
+				{
+					sprintf(ErrorMessage[0], "输出数据读取失败：%s", Line);
+					cpGetErrorInfo()->PrintWarning(11, 1);
+				}
+			}
 		}
 		if (flag == 1)IsRead[i] = 1;
 	}

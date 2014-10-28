@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="Src\BPABranch.cpp" />
     <ClCompile Include="Src\BPABus.cpp" />
+    <ClCompile Include="Src\BPABusDyn.cpp" />
     <ClCompile Include="Src\BPADynamicModelInfo.cpp" />
     <ClCompile Include="Src\BPAFault.cpp" />
     <ClCompile Include="Src\BPAGenerator.cpp" />
@@ -23,6 +24,7 @@
   <ItemGroup>
     <ClInclude Include="Src\BPABranch.h" />
     <ClInclude Include="Src\BPABus.h" />
+    <ClInclude Include="Src\BPABusDyn.h" />
     <ClInclude Include="Src\BPADynamicModelInfo.h" />
     <ClInclude Include="Src\BPAFault.h" />
     <ClInclude Include="Src\BPAGenerator.h" />

@@ -359,7 +359,7 @@ void TDSIMULATION::WriteCurve(char*file)
 		for (j = 0; j < tModel->GetVarientTotal(); j++)
 		{
 			if (tModel->Varient[j].outflag != 0)
-				OutputValue[OutputCount++] = *tModel->Varient[j].pValu;
+				fprintf(fp, ",%s-%s", tModel->GetEquipmentName(), tModel->Varient[j].OutName);
 		}
 	}
 	for (i = 0; i < pDyn->iGetEquipTotal(); i++)
@@ -384,5 +384,6 @@ void TDSIMULATION::WriteCurve(char*file)
 		}
 		fprintf(fp, ",%f", OutputValue[i]);
 	}
+	CloseFile(fp);
 }
 

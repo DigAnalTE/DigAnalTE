@@ -14,7 +14,7 @@ int BPAMCMODEL::ReadLine(char*line)
 
 int BPAMCMODEL::ReadOutLine(char*Line)
 {
-	if (Line[19] >= '1' && Line[19]<='9')
+	if (Line[19] >= '1' && Line[19] <= '9')
 	{
 		mVarient[0].outflag = 1;
 	}
@@ -26,7 +26,7 @@ int BPAMCMODEL::ReadOutLine(char*Line)
 	{
 		mVarient[2].outflag = 1;
 	}
-	if (Line[37] >= '1' && Line[37]<='9')
+	if (Line[37] >= '1' && Line[37] <= '9')
 	{
 		mVarient[3].outflag = 1;
 	}
@@ -114,7 +114,7 @@ int BPAMCMODEL::DynInitial()
 	EQI = Vy + R*Iy + Xd1*Ix;
 
 	Sita = (real)atan2(EQI, EQR);
-	dSita = Sita;
+	dSita = Sita*57.29578;
 
 	real Id, Iq, Ud, Uq;
 	Id = Ix*sin(Sita) - Iy*cos(Sita);
@@ -177,7 +177,9 @@ void BPAMCMODEL::DynAfterStep()
 	Sita0 = Sita;
 	Pdelta0 = Pdelta;
 	GenQ = Vy*Ix - Vx*Iy;
-	dSita = Sita;
+	dSita = Sita*57.29578;
+	while (dSita > 360)dSita -= 360;
+	while (dSita < -360)dSita += 360;
 	dF = (W - 1) * 50;
 }
 
