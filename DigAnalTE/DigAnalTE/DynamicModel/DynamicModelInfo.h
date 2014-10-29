@@ -30,8 +30,8 @@ public://两个关键函数
 
 	/*-------------------------暂态数据-------------------------*/
 public:
-	float TotalTime;
-	float Step, Tnow;
+	float TotalTime, Step0;//Step0是设定步长
+	float Step, Tnow;//Step是计算过程中的实时步长
 	int MaxIterNumber;
 	int FlagExit;//退出计算的符号
 	float NextEvent;//下一个事件的事件

@@ -11,7 +11,7 @@ DYNAMICMODELINFO::DYNAMICMODELINFO()
 	Vx = NULL; Vy = NULL; Ix = NULL; Iy = NULL;
 	bDynMatrixForm = 0; bDynInitial = 0;
 	TotalTime = 6.;
-	Tnow = 0; Step = 0.01f;
+	Tnow = 0; Step0 = 0.01f;
 	MaxIterNumber = 10;
 	FlagExit = 0;
 	NextEvent = 9999.;
@@ -343,7 +343,7 @@ int DYNAMICMODELINFO::ReadFile(char*file)
 int DYNAMICMODELINFO::ReadCalculateInfo(char*line)
 {
 	int flag;
-	flag = sscanf(line, "%*[^,],%f,%f", &TotalTime, &Step);
+	flag = sscanf(line, "%*[^,],%f,%f", &TotalTime, &Step0);
 	if (flag != 2)
 		return 0;
 	return 1;

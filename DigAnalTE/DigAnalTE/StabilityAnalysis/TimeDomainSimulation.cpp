@@ -137,8 +137,7 @@ int TDSIMULATION::Calculate(DYFAULTINFO*pFault)
 		return 0;
 	}
 
-	if (pDyn->Step < 0.0001)
-		pDyn->Step = 0.01f;
+	pDyn->Step = pDyn->Step0;
 	pDyn->Tnow = 0;
 	pDyn->NextEvent = 999.;
 	SaveOutputValue(pDyn->Tnow);
@@ -154,7 +153,7 @@ int TDSIMULATION::Calculate(DYFAULTINFO*pFault)
 			pDyn->Step = 0.f;
 		}
 		else{
-			pDyn->Step = 0.01f;
+			pDyn->Step = pDyn->Step0;
 			tNextTime = pFault->GetNextTime();
 			if (tNextTime < pDyn->NextEvent)tNextTime = pDyn->NextEvent;
 			if (tNextTime < pDyn->TotalTime)tNextTime = pDyn->TotalTime;

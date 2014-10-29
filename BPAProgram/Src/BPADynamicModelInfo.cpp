@@ -11,7 +11,7 @@
 
 BPA_DYNAMICMODELINFO::BPA_DYNAMICMODELINFO()
 {
-	Step = 0.02;
+	Step0 = 0.01;
 	TotalTime = 6;
 }
 
@@ -781,7 +781,7 @@ int BPA_DYNAMICMODELINFO::FF_ReadBPALine(char* Line)
 	GetItemFromLine(Line, &DT, SWI_FF_Para[0], SWI_FF_Loca[0]);
 	GetItemFromLine(Line, &ENDT, SWI_FF_Para[1], SWI_FF_Loca[1]);
 	if (fabs(DT) > 0.001)
-		Step = DT / 50;
+		Step0 = DT / 50;
 	if (fabs(ENDT) > 0.001)
 		TotalTime = ENDT / 50;
 	return 1;
