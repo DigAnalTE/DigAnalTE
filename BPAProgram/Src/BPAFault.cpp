@@ -117,7 +117,7 @@ int BPAFAULTLINE::ReadLine(char*line)
 		flagerr = 1;
 	}
 	if (fabs(Fault_R) < 0.0001)Fault_R = 0.;
-	if (fabs(Fault_X) < 0.0001)Fault_X = 0.0001f;
+	if (fabs(Fault_X) < 0.000001)Fault_X = 0.000001f;
 	if (type != 1 && type != -1)
 	{
 		sprintf(ErrorMessage[0], "ERROR: 三相短路数据目前只支持MDE=1和-1的情况");

@@ -37,12 +37,15 @@ public://潮流计算过程
 	virtual int AfterIterCal(int TypeChange = 0){ return 1; }//在每一次迭代完成后调用，用来更改计算状态的//返回值不为1，表示尚未收敛
 	//第三步：计算结束后的计算
 	virtual void UpdateValue(class NETWORKINFO*Topo);
-public://母线上连接的设备。完全是为了兼容BPA而设计，将来需要对所有的设备进行单独建模
+public://暂态计算部分
+	virtual void FormDynMatrix(class DYNAMICMODELINFO*);
+public://母线上连接的设备
 	//发电部分
 	float m_fGenP, m_fGenQ;
 	float m_fGenPmax;
 	float m_fGenQmax, m_fGenQmin;
 	//负荷部分
+	float m_fBusPLoadTotal, m_fBusQLoadTotal;//潮流计算完之后计算的总负荷
 	float m_fBusPPLoad, m_fBusQPLoad;
 	float m_fBusPLoadPer, m_fBusQLoadPer;
 	//电容电抗部分

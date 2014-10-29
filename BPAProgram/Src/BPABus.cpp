@@ -3,6 +3,7 @@
 #include "../../DigAnalTE/DigAnalTE/NetWorkInfo/NetWorkInfo.h"
 #include "BPAReadWrite.h"
 #include "../../DigAnalTE/DigAnalTE/CommonFunction/ErrorInfo.h"
+#include "../../DigAnalTE/DigAnalTE/DynamicModel/DynamicModelInfo.h"
 
 void BPABUS::JacElement(NETWORKINFO*Topo)
 {
@@ -39,6 +40,8 @@ void BPABUS::UpdateValue(NETWORKINFO*pNet)
 	bmva = pNet->GetBMVA();
 	m_fGenP = pNet->PPGen[BusNo] * bmva;
 	m_fGenQ = pNet->QPGen[BusNo] * bmva;
+	m_fBusPLoadTotal = (m_fBusPPLoad + m_fPP + m_fIP*m_fBusV + m_fZP*m_fBusV*m_fBusV)*m_fBusPLoadPer;
+	m_fBusQLoadTotal = (m_fBusQPLoad + m_fPQ + m_fIQ*m_fBusV + m_fZQ*m_fBusV*m_fBusV)*m_fBusQLoadPer;
 }
 
 int BPABUS::ReadLine(char* PFLine)
@@ -201,4 +204,12 @@ void BPABUS::OutputPFOFile(FILE*fp)
 		}
 	}
 	fprintf(fp, OutLine);
+}
+
+void BPABUS::FormDynMatrix(DYNAMICMODELINFO*tDyn)
+{
+	tDyn->ModifyNetMatrix(BusNo, m_fPerr / m_fBusV / m_fBusV, -m_fQerr / m_fBusV / m_fBusV);
+	tDyn->ModifyNetMatrix(BusNo, m_fGenP*(1 - m_fGenPper) / m_fBusV / m_fBusV, -m_fGenQ*(1 - m_fGenQper) / m_fBusV / m_fBusV);
+	tDyn->ModifyNetMatrix(BusNo, m_fBusPLoadTotal / m_fBusV / m_fBusV, -m_fBusQLoadTotal / m_fBusV / m_fBusV);
+	tDyn->ModifyNetMatrix(BusNo, m_fBusPalPLoad, -m_fBusPalQLoad);
 }

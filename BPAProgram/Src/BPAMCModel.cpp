@@ -89,10 +89,6 @@ void BPAMCMODEL::ModifyMatrix()
 	real gii, bii;
 	gii = R / (R*R + Xd1*Xd1); bii = -Xd1 / (R*R + Xd1*Xd1);
 	pSolInfo->ModifyNetMatrix(m_BusNo, m_BusNo, gii, bii);
-	//real V2;
-	//pSolInfo->GetVxVy(m_BusNo, Vx, Vy);
-	//V2 = Vx*Vx + Vy*Vy;
-	//pSolInfo->ModifyNetMatrix(m_BusNo, m_BusNo, -GenP / V2, GenQ / V2);
 }
 
 int BPAMCMODEL::DynInitial()
