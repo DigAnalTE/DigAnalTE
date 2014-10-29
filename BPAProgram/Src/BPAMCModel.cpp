@@ -106,8 +106,6 @@ int BPAMCMODEL::DynInitial()
 
 	Ix = (GenP*Vx + GenQ*Vy) / V2;
 	Iy = (GenP*Vy - GenQ*Vx) / V2;
-	OldIx = Ix;
-	OldIy = Iy;
 
 	real EQR, EQI;
 	EQR = Vx + R*Ix - Xd1*Iy;
@@ -160,15 +158,11 @@ real BPAMCMODEL::DynProcessStep()
 
 real BPAMCMODEL::DynCalculateCurrent()
 {
-	real err;
 	Ix = Eq1 / Xd1*sin(Sita);
 	Iy = -Eq1 / Xd1*cos(Sita);
-	err = fabs(Ix - OldIx) + fabs(Iy - OldIy);
-	OldIx = Ix;
-	OldIy = Iy;
-	pIx[m_BusNo] -= Eq1 / Xd1*sin(Sita);
-	pIy[m_BusNo] += Eq1 / Xd1*cos(Sita);
-	return err;
+	pIx[m_BusNo] -= Ix;
+	pIy[m_BusNo] -= Iy;
+	return 0;
 }
 
 void BPAMCMODEL::DynAfterStep()

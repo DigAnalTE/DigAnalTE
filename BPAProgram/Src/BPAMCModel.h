@@ -21,7 +21,7 @@ public:
 	real A_W, A_Sita;
 	real GenP, GenQ;
 	real Vx, Vy, Ix, Iy;
-	real OldW, OldIx, OldIy;//用于判断是否收敛
+	real OldW;//用于判断是否收敛
 	real dSita, dF;
 public://输出变量
 	DynVarient mVarient[6];
