@@ -50,15 +50,15 @@ BPAMCMODEL::BPAMCMODEL()
 	mVarient[1].outflag = 0;
 	strcpy(mVarient[2].IndexName, "PM");
 	strcpy(mVarient[2].OutName, "发电机机械功率");
-	mVarient[2].pValu = &PM;
+	mVarient[2].pValu = &PMout;
 	mVarient[2].outflag = 0;
 	strcpy(mVarient[3].IndexName, "PE");
 	strcpy(mVarient[3].OutName, "发电机电磁功率");
-	mVarient[3].pValu = &PE;
+	mVarient[3].pValu = &PEout;
 	mVarient[3].outflag = 0;
 	strcpy(mVarient[4].IndexName, "Q");
 	strcpy(mVarient[4].OutName, "发电机无功功率");
-	mVarient[4].pValu = &GenQ;
+	mVarient[4].pValu = &Qout;
 	mVarient[4].outflag = 0;
 	strcpy(mVarient[5].IndexName, "Sita");
 	strcpy(mVarient[5].OutName, "发电机角度");
@@ -101,6 +101,9 @@ int BPAMCMODEL::DynInitial()
 	pSolInfo->GetVxVy(m_BusNo, Vx, Vy);
 	V2 = Vx*Vx + Vy*Vy;
 	pEquip->GetInsertPQ(GenP, GenQ, 0);
+	PMout = GenP;
+	PEout = GenP;
+	Qout = GenQ;
 	GenP /= BMVA;
 	GenQ /= BMVA;
 
@@ -171,6 +174,9 @@ void BPAMCMODEL::DynAfterStep()
 	Sita0 = Sita;
 	Pdelta0 = Pdelta;
 	GenQ = Vy*Ix - Vx*Iy;
+	PMout = PM*pSolInfo->GetBMVA();
+	PEout = PE*pSolInfo->GetBMVA();
+	Qout = GenQ*pSolInfo->GetBMVA();
 	dSita = Sita*57.29578;
 	while (dSita > 360)dSita -= 360;
 	while (dSita < -360)dSita += 360;

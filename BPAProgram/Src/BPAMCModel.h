@@ -22,7 +22,7 @@ public:
 	real GenP, GenQ;
 	real Vx, Vy, Ix, Iy;
 	real OldW;//用于判断是否收敛
-	real dSita, dF;
+	real dSita, dF, PMout, PEout, Qout;
 public://输出变量
 	DynVarient mVarient[6];
 	virtual int GetVarientTotal(){ return 6; }
